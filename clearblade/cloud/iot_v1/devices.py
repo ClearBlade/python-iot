@@ -1,4 +1,3 @@
-from winreg import REG_QWORD
 from request_response import SendCommandToDeviceRequest
 from http_client import HttpClient
 
