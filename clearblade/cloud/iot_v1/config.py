@@ -1,0 +1,3 @@
+#TODO: need to take this from users via some method and save them
+AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJjNGQzZDRiNTBjZjRjZWFjYjQ4YmRlZTU4MjdkIiwic2lkIjoiYTZkZTRmNGItMDc1My00MzEzLTljNzItN2ZjNzg0MWUyNzEwIiwidXQiOjIsInR0IjoxLCJleHAiOi0xLCJpYXQiOjE2NjY4ODA3Mzh9.4KeK78tKf-aeZoZI75zkfhO1i1hFpCKtOpRIgDpBI88"
+SYSTEM_KEY = "bcd3d4b50c868db9b4efe5a8b1b201"
