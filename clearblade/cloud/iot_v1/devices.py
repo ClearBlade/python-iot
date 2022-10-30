@@ -1,5 +1,4 @@
-from request_response import SendCommandToDeviceRequest
-from http_client import SyncClient, AsyncClient
+from http_client import SyncClient
 
 class Device():
     """
@@ -23,6 +22,19 @@ class Device():
     def state(self):
         return self._state
 
+#classes to mock googles request & response
+class SendCommandToDeviceRequest():
+    def __init__(self, name, binary_data) -> None:
+        self._name = name
+        self._binary_data = binary_data
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def binary_data(self):
+        return self._binary_data
 
 class ClearBladeDeviceManager():
 
@@ -43,4 +55,3 @@ class ClearBladeDeviceManager():
 
     def delete(self):
         pass
-

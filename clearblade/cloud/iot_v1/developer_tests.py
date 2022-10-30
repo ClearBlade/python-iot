@@ -1,5 +1,5 @@
 from client import DeviceManagerClient
-from request_response import SendCommandToDeviceRequest
+from devices import SendCommandToDeviceRequest
 
 def test_device_manager_client():
     client = DeviceManagerClient()
