@@ -8,4 +8,3 @@ class DeviceManagerClient():
     def send_command_to_device(self,request:SendCommandToDeviceRequest):
         cb_device = ClearBladeDevice()
         return cb_device.send_command(request)
-
