@@ -34,6 +34,14 @@ class HttpClient():
         pass
     
     def post(self, request_params = {}, request_body = {}):
+        pass
+
+    def delete(self, request_params, request_body):
+        pass
+
+class SyncClient(HttpClient):
+    
+    def post(self, request_params = {}, request_body = {}):
         post_url = self._cb_api_url+ self._process_request_params(request_params=request_params)
         headers = self._headers()
         post_body = self._process_request_body(request_body=request_body)
@@ -42,8 +50,13 @@ class HttpClient():
 
         #send the request and return the response
         response = requests.request("POST",post_url, headers=headers,data=post_body)
-        print(response)
         return response
 
-    def delete(self, request_params, request_body):
+
+class AsyncClient():
+    def __init__(self) -> None:
+        super().__init__(self)
+
+    def post(self, request_params = {}, request_body={}):
         pass
+

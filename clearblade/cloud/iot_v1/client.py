@@ -1,4 +1,4 @@
-from devices import ClearBladeDevice
+from devices import ClearBladeDeviceManager
 from request_response import SendCommandToDeviceRequest
 
 class DeviceManagerClient():
@@ -6,5 +6,5 @@ class DeviceManagerClient():
         pass
 
     def send_command_to_device(self,request:SendCommandToDeviceRequest):
-        cb_device = ClearBladeDevice()
-        return cb_device.send_command(request)
+        cb_device_manager = ClearBladeDeviceManager()
+        return cb_device_manager.send_command(request)
