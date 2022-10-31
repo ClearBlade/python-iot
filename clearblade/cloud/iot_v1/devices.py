@@ -24,9 +24,12 @@ class Device():
 
 #classes to mock googles request & response
 class SendCommandToDeviceRequest():
-    def __init__(self, name, binary_data) -> None:
+    def __init__(self, name: str = None,
+                binary_data: bytes = None,
+                subfolder: str = None) -> None:
         self._name = name
         self._binary_data = binary_data
+        self._subfolder = subfolder
 
     @property
     def name(self):
@@ -36,9 +39,28 @@ class SendCommandToDeviceRequest():
     def binary_data(self):
         return self._binary_data
 
+    @property
+    def sub_folder(self):
+        return self._subfolder
+
 class ClearBladeDeviceManager():
 
-    def send_command(self, request: SendCommandToDeviceRequest):
+    def send_command(self,
+                    request: SendCommandToDeviceRequest,
+                    name: str = None,
+                    binary_data: bytes = None,
+                    subfolder: str = None):
+
+        has_flattened_params = any([name, binary_data, subfolder])
+        if request is not None and has_flattened_params:
+            raise ValueError(
+                "If the `request` argument is set, then none of "
+                "the individual field arguments should be set."
+            )
+
+        if request is None:
+            request = SendCommandToDeviceRequest(name, binary_data, subfolder)
+
         sync_client = SyncClient()
         params = {'name':request.name,'method':'sendCommandToDevice'}
         body = {'binaryData':request.binary_data.decode("utf-8")}
@@ -49,7 +71,7 @@ class ClearBladeDeviceManager():
 
     def list(self):
         pass
-    
+
     def get(self):
         pass
 
