@@ -5,8 +5,9 @@ from config import *
 class HttpClient():
     def __init__(self) -> None:
         #TODO: we will need to set this when user constructs the client. 
-        self._system_key = SYSTEM_KEY
-        self._auth_token = AUTH_TOKEN
+        self._system_key = get_system_key()
+        self._auth_token = get_auth_token()
+        print("System Key : {} \n Auth token : {}".format(self._system_key, self._auth_token))
         self._init_api_end_points()
 
     def _init_api_end_points(self):

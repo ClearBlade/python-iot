@@ -1,6 +1,8 @@
 #TODO: need to take this from users via some method and save them
-AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJjNGQzZDRiNTBjZjRjZWFjYjQ4YmRlZTU4MjdkIiwic2lkIjoiYTZkZTRmNGItMDc1My00MzEzLTljNzItN2ZjNzg0MWUyNzEwIiwidXQiOjIsInR0IjoxLCJleHAiOi0xLCJpYXQiOjE2NjY4ODA3Mzh9.4KeK78tKf-aeZoZI75zkfhO1i1hFpCKtOpRIgDpBI88"
-SYSTEM_KEY = "bcd3d4b50c868db9b4efe5a8b1b201"
+import os
 
-#AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI4NmRjYzliNDBjOWVkMmI4YWFmZmMwOWRhMmNkMDEiLCJzaWQiOiJmZTdkNWIyMy1hODg4LTQ2NGUtOGE4MC01ZWM1NTYwOTBjZTIiLCJ1dCI6MiwidHQiOjEsImV4cCI6LTEsImlhdCI6MTY2NTc0MjU5NX0.osrsmcqunC6IMfgLfZis0UlC4s7W4mmKe73mq_SSJ8Q"
-#SYSTEM_KEY = "fedbc9b40cde90befbd9b2dfde9d01"
+def get_auth_token():
+    return os.environ.get("AUTH_TOKEN")
+
+def get_system_key():
+    return os.environ.get("SYSTEM_KEY")
