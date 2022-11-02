@@ -1,4 +1,4 @@
-from http_client import SyncClient
+from http_client import SyncClient, AsyncClient
 
 class Device():
     """
@@ -45,12 +45,11 @@ class SendCommandToDeviceRequest():
 
 class ClearBladeDeviceManager():
 
-    def send_command(self,
-                    request: SendCommandToDeviceRequest,
-                    name: str = None,
-                    binary_data: bytes = None,
-                    subfolder: str = None):
-
+    def _prepare_for_send_command(self,
+                                  request: SendCommandToDeviceRequest,
+                                  name: str = None,
+                                  binary_data: bytes = None,
+                                  subfolder: str = None):
         has_flattened_params = any([name, binary_data, subfolder])
         if request is not None and has_flattened_params:
             raise ValueError(
@@ -60,11 +59,30 @@ class ClearBladeDeviceManager():
 
         if request is None:
             request = SendCommandToDeviceRequest(name, binary_data, subfolder)
-
-        sync_client = SyncClient()
         params = {'name':request.name,'method':'sendCommandToDevice'}
         body = {'binaryData':request.binary_data.decode("utf-8")}
+
+        return params,body
+
+    def send_command(self,
+                    request: SendCommandToDeviceRequest,
+                    name: str = None,
+                    binary_data: bytes = None,
+                    subfolder: str = None):
+
+        params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
+        sync_client = SyncClient()
         return sync_client.post(request_params=params, request_body=body)
+
+    async def send_command_async(self,
+                                 request: SendCommandToDeviceRequest = None,
+                                 name: str = None,
+                                 binary_data: str = None,
+                                 subfolder: str = None ):
+        params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
+        async_client = AsyncClient()
+        response = await async_client.post(request_params=params, request_body=body)
+        print(response)
 
     def create(self):
         pass
