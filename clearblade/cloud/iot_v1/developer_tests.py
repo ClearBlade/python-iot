@@ -16,7 +16,7 @@ async def test_send_command_async():
 
 def test_create_device():
     client = DeviceManagerClient()
-    device = Device(id="Python_9", name="Python_9")
+    device = Device(id="Python_10", name="Python_10")
 
     request = CreateDeviceRequest(device=device)
     response = client.create_device(request=request)
@@ -25,3 +25,4 @@ def test_create_device():
 if __name__ ==  '__main__':
     test_send_command()
     asyncio.run(test_send_command_async())
+    test_create_device()
