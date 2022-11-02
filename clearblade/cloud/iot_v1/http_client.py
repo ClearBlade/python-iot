@@ -1,6 +1,5 @@
 import json
 import httpx
-import requests
 from config import *
 
 class HttpClient():
@@ -9,11 +8,12 @@ class HttpClient():
         self._system_key = get_system_key()
         self._auth_token = get_auth_token()
 
+        print("System Key : {} \n Auth token : {}".format(self._system_key, self._auth_token))
+
         self._post_url : str = None
-        self._headers : dict = None
+        self._request_headers : dict = None
         self._post_body : dict = None
 
-        print("System Key : {} \n Auth token : {}".format(self._system_key, self._auth_token))
         self._init_api_end_points()
 
     def _init_api_end_points(self):
@@ -42,9 +42,9 @@ class HttpClient():
 
     def post(self, request_params = {}, request_body = {}):
         self._post_url = self._cb_api_url+ self._process_request_params(request_params=request_params)
-        self._headers = self._headers()
+        self._request_headers = self._headers()
         self._post_body = self._process_request_body(request_body=request_body)
-        print("post_url = {}\nheaders = {}\nbody= {}\n".format(post_url,headers,post_body))
+        print("post_url = {}\nheaders = {}\nbody= {}\n".format(self._post_url,self._request_headers,self._post_body))
 
     def delete(self, request_params, request_body):
         pass
@@ -54,7 +54,9 @@ class SyncClient(HttpClient):
     def post(self, request_params = {}, request_body = {}):
         super().post(request_params=request_params, request_body=request_body)
         #send the request and return the response
-        response = requests.request("POST",self._post_url, headers=self._headers,data=self._post_body)
+        httpx_sync_client = httpx.Client()
+        response = httpx_sync_client.request("POST", url=self._post_url,
+                                            headers=self._request_headers, data=self._post_body)
         return response
 
 
@@ -64,6 +66,6 @@ class AsyncClient(HttpClient):
         super().post(request_params=request_params, request_body=request_body)
         httpx_async_client= httpx.AsyncClient()
         response = await httpx_async_client.request("POST", url=self._post_url,
-                                                    headers=self._headers, data=self._post_body)
+                                                    headers=self._request_headers, data=self._post_body)
         await httpx_async_client.aclose()
         return response

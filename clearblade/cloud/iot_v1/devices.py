@@ -81,8 +81,7 @@ class ClearBladeDeviceManager():
                                  subfolder: str = None ):
         params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
         async_client = AsyncClient()
-        response = await async_client.post(request_params=params, request_body=body)
-        print(response)
+        return await async_client.post(request_params=params, request_body=body)
 
     def create(self):
         pass
