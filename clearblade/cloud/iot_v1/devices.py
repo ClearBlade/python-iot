@@ -145,16 +145,6 @@ class ClearBladeDeviceManager():
 
         return params,body
 
-    def send_command(self,
-                    request: SendCommandToDeviceRequest,
-                    name: str = None,
-                    binary_data: bytes = None,
-                    subfolder: str = None):
-
-        params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
-        sync_client = SyncClient()
-        return sync_client.post(request_params=params, request_body=body)
-
     def _create_device_body(self, device: Device) :
         return {'id':device.name, 'name':device.name, 
                 'credentials':device.credentials, 'lastErrorStatus':device.last_error_status,
@@ -164,6 +154,25 @@ class ClearBladeDeviceManager():
 
     def _create_device_from_response(self, json_response) -> Device :
         return Device.from_json(json=json_response)
+
+    def send_command(self,
+                    request: SendCommandToDeviceRequest,
+                    name: str = None,
+                    binary_data: bytes = None,
+                    subfolder: str = None):
+
+        params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
+        sync_client = SyncClient()
+        return sync_client.post(request_params=params, request_body=body)
+    
+    async def send_command_async(self,
+                                 request: SendCommandToDeviceRequest = None,
+                                 name: str = None,
+                                 binary_data: str = None,
+                                 subfolder: str = None ):
+        params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
+        async_client = AsyncClient()
+        return await async_client.post(request_params=params, request_body=body)
 
     def create(self, request: CreateDeviceRequest,
                      parent: str = None, 
@@ -178,14 +187,17 @@ class ClearBladeDeviceManager():
             return self._create_device_from_response(response.json())
         return None
 
-    async def send_command_async(self,
-                                 request: SendCommandToDeviceRequest = None,
-                                 name: str = None,
-                                 binary_data: str = None,
-                                 subfolder: str = None ):
-        params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
+    async def create_async(self, request: CreateDeviceRequest,
+                           parent: str = None, 
+                           device: Device = None) -> Device:
+        
         async_client = AsyncClient()
-        return await async_client.post(request_params=params, request_body=body)
+        body = self._create_device_body(request.device)
+        response = await async_client.post(request_body=body)
+        
+        if response.status_code is 200:
+            return self._create_device_from_response(response.json())
+        return None
 
     def list(self):
         pass

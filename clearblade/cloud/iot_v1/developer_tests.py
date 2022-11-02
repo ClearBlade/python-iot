@@ -17,12 +17,19 @@ async def test_send_command_async():
 def test_create_device():
     client = DeviceManagerClient()
     device = Device(id="Python_10", name="Python_10")
-
     request = CreateDeviceRequest(device=device)
     response = client.create_device(request=request)
     print(response)
 
+async def test_create_device_async():
+    async_client = DeviceManagerAsyncClient()
+    device = Device(id="Python_12", name="Python_12")
+    request = CreateDeviceRequest(device=device)
+    response = await async_client.create_device(request=request)
+    print(response)
+
 if __name__ ==  '__main__':
-    test_send_command()
-    asyncio.run(test_send_command_async())
-    test_create_device()
+    #test_send_command()
+    #asyncio.run(test_send_command_async())
+    #test_create_device()
+    asyncio.run(test_create_device_async())
