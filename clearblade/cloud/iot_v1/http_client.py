@@ -1,13 +1,19 @@
 import json
-import requests
+import httpx
 from config import *
 
 class HttpClient():
     def __init__(self) -> None:
-        #TODO: we will need to set this when user constructs the client. 
+        #TODO: we will need to set this when user constructs the client.
         self._system_key = get_system_key()
         self._auth_token = get_auth_token()
+
         print("System Key : {} \n Auth token : {}".format(self._system_key, self._auth_token))
+
+        self._post_url : str = None
+        self._request_headers : dict = None
+        self._post_body : dict = None
+
         self._init_api_end_points()
 
     def _init_api_end_points(self):
@@ -21,7 +27,7 @@ class HttpClient():
         self._cb_api_url = "{}:{}{}/{}/{}?".format(self._base_url,self._port,
                                                    self._api_version_webhook_path,
                                                    self._system_key,self._api_folder_name)
-        
+
     def _process_request_params(self, request_params = {}):
         return "&".join(f'{k}={v}'for k, v in request_params.items())
 
@@ -33,31 +39,33 @@ class HttpClient():
 
     def get(self, request_params, request_body):
         pass
-    
+
     def post(self, request_params = {}, request_body = {}):
-        pass
+        self._post_url = self._cb_api_url+ self._process_request_params(request_params=request_params)
+        self._request_headers = self._headers()
+        self._post_body = self._process_request_body(request_body=request_body)
+        print("post_url = {}\nheaders = {}\nbody= {}\n".format(self._post_url,self._request_headers,self._post_body))
 
     def delete(self, request_params, request_body):
         pass
 
 class SyncClient(HttpClient):
-    
+
     def post(self, request_params = {}, request_body = {}):
-        post_url = self._cb_api_url+ self._process_request_params(request_params=request_params)
-        headers = self._headers()
-        post_body = self._process_request_body(request_body=request_body)
-
-        print("post_url = {}\nheaders = {}\nbody= {}\n".format(post_url,headers,post_body))
-
+        super().post(request_params=request_params, request_body=request_body)
         #send the request and return the response
-        response = requests.request("POST",post_url, headers=headers,data=post_body)
+        httpx_sync_client = httpx.Client()
+        response = httpx_sync_client.request("POST", url=self._post_url,
+                                            headers=self._request_headers, data=self._post_body)
         return response
 
 
-class AsyncClient():
-    def __init__(self) -> None:
-        super().__init__(self)
+class AsyncClient(HttpClient):
 
-    def post(self, request_params = {}, request_body={}):
-        pass
-
+    async def post(self, request_params = {}, request_body={}):
+        super().post(request_params=request_params, request_body=request_body)
+        httpx_async_client= httpx.AsyncClient()
+        response = await httpx_async_client.request("POST", url=self._post_url,
+                                                    headers=self._request_headers, data=self._post_body)
+        await httpx_async_client.aclose()
+        return response
