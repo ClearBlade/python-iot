@@ -139,6 +139,35 @@ class ModifyCloudToDeviceConfigRequest(Request):
     def binary_data(self):
         return self._binary_data
 
+class DeviceConfig(Request):
+    def __init__(self, name,
+                 version,
+                 cloud_ack_time,
+                 device_ack_time,
+                 binary_data) -> None:
+        super().__init__(name)
+        self._version = version
+        self._cloud_ack_time = cloud_ack_time
+        self._device_ack_time = device_ack_time
+        self._binary_data = binary_data
+
+    def version(self):
+        return self._version
+
+    def cloud_ack_time(self):
+        return self._cloud_ack_time
+
+    def device_ack_time(self):
+        return self._device_ack_time
+
+    def binary_data(self):
+        return self._binary_data
+
+    @staticmethod
+    def from_json(json):
+        return DeviceConfig(version=json['version'], cloud_ack_time=json['cloudUpdateTime'],
+                            device_ack_time=json['deviceAckTime'], binary_data=json['binaryData'])
+
 class ClearBladeDeviceManager():
 
     def _prepare_for_send_command(self,
@@ -188,6 +217,9 @@ class ClearBladeDeviceManager():
         body = {'binaryData': request.binary_data.decode("utf-8"), 'versionToUpdate':request.version_to_update}
 
         return params, body
+
+    def _create_device_config(self, response):
+        return DeviceConfig.from_json(response)
 
     def send_command(self,
                     request: SendCommandToDeviceRequest,
@@ -242,7 +274,10 @@ class ClearBladeDeviceManager():
         params, body = self._prepare_modify_cloud_config_device(request=request, name=name,
                                                                 binary_data=binary_data, version_to_update=version_to_update)
         response = sync_client.post(request_params=params, request_body=body)
-        return response
+        if response.status_code is 200:
+            return self._create_device_config(response.json)
+        print("Error occurred , with status code {} respose text {}".format(response.status_code, response.text))
+        return None
 
     async def modify_cloud_device_config_async(self,
                                         request: ModifyCloudToDeviceConfigRequest,
@@ -253,7 +288,10 @@ class ClearBladeDeviceManager():
                                                                 binary_data=binary_data, version_to_update=version_to_update)
         async_client = AsyncClient()
         response = await async_client.post(request_params=params, request_body=body)
-        return response
+        if response.status_code is 200:
+            return self._create_device_config(response.json)
+        print("Error occurred , with status code {} respose text {}".format(response.status_code, response.text))
+        return None
 
     def list(self):
         pass
