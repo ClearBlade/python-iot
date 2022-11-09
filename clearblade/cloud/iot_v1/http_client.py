@@ -92,3 +92,11 @@ class AsyncClient(HttpClient):
                                             headers=self._request_headers)
         await httpx_async_client.aclose()
         return response
+
+    async def get(self, request_params):
+        super().get(request_params=request_params)
+        httpx_async_client= httpx.AsyncClient()
+        response = await httpx_async_client.request("GET", url=self._post_url,
+                                            headers=self._request_headers)
+        await httpx_async_client.aclose()
+        return response

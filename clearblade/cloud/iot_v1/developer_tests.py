@@ -32,7 +32,13 @@ def test_modify_cloud_to_device_config():
     client =  DeviceManagerClient()
     modify_cloud_config_device_request = ModifyCloudToDeviceConfigRequest(name='python_1', binary_data=b'QUJD', version_to_update=1)
     response = client.modify_cloud_to_device_config(request=modify_cloud_config_device_request)
-    print(response.text)
+    print(response)
+
+async def test_modify_cloud_to_device_config_async():
+    async_client =  DeviceManagerAsyncClient()
+    modify_cloud_config_device_request = ModifyCloudToDeviceConfigRequest(name='Python_101', binary_data=b'QUJD', version_to_update=2)
+    response = await async_client.modify_cloud_to_device_config(request=modify_cloud_config_device_request)
+    print(response)
 
 def test_delete_device():
     client =  DeviceManagerClient()
@@ -54,7 +60,7 @@ def test_get_device():
 
 async def test_get_device_async():
     async_client =  DeviceManagerAsyncClient()
-    get_device_request = GetDeviceRequest(name='Python_10')
+    get_device_request = GetDeviceRequest(name='Python_101')
     response = await async_client.get_device(request=get_device_request)
     print(response)
 
@@ -64,7 +70,8 @@ if __name__ ==  '__main__':
     #test_create_device()
     #asyncio.run(test_create_device_async())
     #test_modify_cloud_to_device_config()
+    #asyncio.run(test_modify_cloud_to_device_config_async())
     #test_delete_device()
     #asyncio.run(test_delete_device_async())
-    test_get_device()
-    #asyncio.run(test_get_device_async())
+    #test_get_device()
+    asyncio.run(test_get_device_async())

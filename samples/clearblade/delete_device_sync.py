@@ -6,5 +6,3 @@ async def sample_device_delete():
     request = iot_v1.DeleteDeviceRequest(name='Python_12')
 
     response = await client.delete_device(request)
-
-sample_device_delete()
