@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest
+from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest
 import asyncio
 
 def test_send_command():
@@ -64,6 +64,30 @@ async def test_get_device_async():
     response = await async_client.get_device(request=get_device_request)
     print(response)
 
+def test_bind_gateway_device():
+    client =  DeviceManagerClient()
+    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='Python_101',gatewayId='gateway1')
+    response = client.bind_device_to_gateway(request=bind_device_request)
+    print(response)
+
+async def test_bind_gateway_device_async():
+    async_client =  DeviceManagerAsyncClient()
+    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='mandar_device',gatewayId='gateway1')
+    response = await async_client.bind_device_to_gateway(request=bind_device_request)
+    print(response)
+
+def test_unbind_gateway_device():
+    client =  DeviceManagerClient()
+    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='Python_101',gatewayId='gateway1')
+    response = client.unbind_device_from_gateway(request=bind_device_request)
+    print(response)
+
+async def test_unbind_gateway_device_async():
+    async_client =  DeviceManagerAsyncClient()
+    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='mandar_device',gatewayId='gateway1')
+    response = await async_client.unbind_device_from_gateway(request=bind_device_request)
+    print(response)
+
 if __name__ ==  '__main__':
     #test_send_command()
     #asyncio.run(test_send_command_async())
@@ -74,4 +98,8 @@ if __name__ ==  '__main__':
     #test_delete_device()
     #asyncio.run(test_delete_device_async())
     #test_get_device()
-    asyncio.run(test_get_device_async())
+    #asyncio.run(test_get_device_async())
+    #test_bind_gateway_device()
+    #asyncio.run(test_bind_gateway_device_async())
+    #test_unbind_gateway_device()
+    asyncio.run(test_unbind_gateway_device_async())

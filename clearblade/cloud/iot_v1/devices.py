@@ -176,6 +176,19 @@ class GetDeviceRequest(Request):
     def __init__(self, name: str = None) -> None:
         super().__init__(name)
 
+class BindUnBindGatewayDeviceRequest(Request):
+    def __init__(self, deviceId: str = None,
+                       gatewayId: str = None) -> None:
+        self._deviceid=deviceId
+        self._gatewayid=gatewayId
+
+    def deviceId(self):
+        return self._deviceid
+
+    def gatewayId(self):
+        return self._gatewayid
+
+
 class ClearBladeDeviceManager():
 
     def _prepare_for_send_command(self,
@@ -337,5 +350,41 @@ class ClearBladeDeviceManager():
         async_client = AsyncClient()
         params = {'name':request.name}
         response = await async_client.delete(request_params=params)
+
+        return response
+    
+    def bindGatewayToDevice(self, 
+            request: BindUnBindGatewayDeviceRequest) :
+        sync_client = SyncClient()
+        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        params = {'method':'bindDeviceToGateway'}
+        response = sync_client.post(request_params=params, request_body=body)
+
+        return response
+
+    async def bindGatewayToDevice_async(self, 
+            request: BindUnBindGatewayDeviceRequest) :
+        async_client = AsyncClient()
+        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        params = {'method':'bindDeviceToGateway'}
+        response = await async_client.post(request_params=params, request_body=body)
+
+        return response
+
+    def unbindGatewayFromDevice(self, 
+            request: BindUnBindGatewayDeviceRequest) :
+        sync_client = SyncClient()
+        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        params = {'method':'unbindDeviceFromGateway'}
+        response = sync_client.post(request_params=params, request_body=body)
+
+        return response
+
+    async def unbindGatewayFromDevice_async(self, 
+            request: BindUnBindGatewayDeviceRequest) :
+        async_client = AsyncClient()
+        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        params = {'method':'unbindDeviceFromGateway'}
+        response = await async_client.post(request_params=params, request_body=body)
 
         return response
