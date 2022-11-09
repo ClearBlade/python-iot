@@ -21,6 +21,15 @@ class DeviceManagerClient():
                                                             version_to_update=version_to_update,
                                                             binary_data=binary_data)
 
+    def delete_device(self, request):
+        cb_device_manager = ClearBladeDeviceManager()
+        return cb_device_manager.delete(request=request)
+
+    def get_device(self, request):
+        cb_device_manager = ClearBladeDeviceManager()
+        return cb_device_manager.get(request=request)
+        
+
 
 class DeviceManagerAsyncClient():
 
@@ -42,3 +51,11 @@ class DeviceManagerAsyncClient():
                                                             name=name,
                                                             version_to_update=version_to_update,
                                                             binary_data=binary_data)
+
+    async def delete_device(self, request):
+        cb_device_manager = ClearBladeDeviceManager()
+        return await cb_device_manager.delete_async(request=request)
+
+    async def get_device(self, request):
+        cb_device_manager = ClearBladeDeviceManager()
+        return await cb_device_manager.get_async(request=request)

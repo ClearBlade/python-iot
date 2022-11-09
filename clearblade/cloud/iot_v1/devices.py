@@ -168,6 +168,14 @@ class DeviceConfig(Request):
         return DeviceConfig(version=json['version'], cloud_ack_time=json['cloudUpdateTime'],
                             device_ack_time=json['deviceAckTime'], binary_data=json['binaryData'])
 
+class DeleteDeviceRequest(Request):
+    def __init__(self, name: str = None) -> None:
+        super().__init__(name)
+
+class GetDeviceRequest(Request):
+    def __init__(self, name: str = None) -> None:
+        super().__init__(name)
+
 class ClearBladeDeviceManager():
 
     def _prepare_for_send_command(self,
@@ -296,8 +304,38 @@ class ClearBladeDeviceManager():
     def list(self):
         pass
 
-    def get(self):
-        pass
+    def get(self,
+            request: GetDeviceRequest) -> Device:
+        sync_client = SyncClient()
+        params = {'name':request.name}
+        response = sync_client.get(request_params=params)
+        
+        if response.status_code is 200:
+            return self._create_device_from_response(response.json())
+        return None
 
-    def delete(self):
-        pass
+    async def get_async(self,
+            request: GetDeviceRequest):
+        async_client = AsyncClient()
+        params = {'name':request.name}
+        response = await async_client.get(request_params=params)
+
+        if response.status_code is 200:
+            return self._create_device_from_response(response.json())
+        return None
+
+    def delete(self,
+               request: DeleteDeviceRequest):
+        sync_client = SyncClient()
+        params = {'name':request.name}
+        response = sync_client.delete(request_params=params)
+
+        return response
+
+    async def delete_async(self,
+               request: DeleteDeviceRequest):
+        async_client = AsyncClient()
+        params = {'name':request.name}
+        response = await async_client.delete(request_params=params)
+
+        return response
