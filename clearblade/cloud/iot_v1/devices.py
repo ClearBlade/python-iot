@@ -182,11 +182,23 @@ class BindUnBindGatewayDeviceRequest(Request):
         self._deviceid=deviceId
         self._gatewayid=gatewayId
 
+    @property
     def deviceId(self):
         return self._deviceid
 
+    @property
     def gatewayId(self):
         return self._gatewayid
+
+class SetDeviceStateRequest(Request):
+    def __init__(self, name: str = None,
+                binary_data: bytes = None) -> None:
+        super().__init__(name)
+        self._binary_data = binary_data
+
+    @property
+    def binary_data(self):
+        return self._binary_data
 
 
 class ClearBladeDeviceManager():
@@ -356,7 +368,7 @@ class ClearBladeDeviceManager():
     def bindGatewayToDevice(self, 
             request: BindUnBindGatewayDeviceRequest) :
         sync_client = SyncClient()
-        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'bindDeviceToGateway'}
         response = sync_client.post(request_params=params, request_body=body)
 
@@ -365,7 +377,7 @@ class ClearBladeDeviceManager():
     async def bindGatewayToDevice_async(self, 
             request: BindUnBindGatewayDeviceRequest) :
         async_client = AsyncClient()
-        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'bindDeviceToGateway'}
         response = await async_client.post(request_params=params, request_body=body)
 
@@ -374,7 +386,7 @@ class ClearBladeDeviceManager():
     def unbindGatewayFromDevice(self, 
             request: BindUnBindGatewayDeviceRequest) :
         sync_client = SyncClient()
-        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'unbindDeviceFromGateway'}
         response = sync_client.post(request_params=params, request_body=body)
 
@@ -383,8 +395,25 @@ class ClearBladeDeviceManager():
     async def unbindGatewayFromDevice_async(self, 
             request: BindUnBindGatewayDeviceRequest) :
         async_client = AsyncClient()
-        body = {'deviceId':request.deviceId(), 'gatewayId':request.gatewayId()}
+        body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'unbindDeviceFromGateway'}
         response = await async_client.post(request_params=params, request_body=body)
 
         return response
+
+    def setDeviceState(self,
+                    request: SetDeviceStateRequest):
+
+        body = {'binaryData':request.binary_data.decode("utf-8")}
+        params = {'name':request.name,'method':'setState'}
+
+        sync_client = SyncClient()
+        return sync_client.post(request_params=params, request_body=body)
+
+    async def setDeviceState_async(self,
+                                 request: SetDeviceStateRequest = None):
+        body = {'binaryData':request.binary_data.decode("utf-8")}
+        params = {'name':request.name,'method':'setState'}
+
+        async_client = AsyncClient()
+        return await async_client.post(request_params=params, request_body=body)

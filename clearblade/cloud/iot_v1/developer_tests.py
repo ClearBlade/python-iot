@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest
+from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest
 import asyncio
 
 def test_send_command():
@@ -88,6 +88,19 @@ async def test_unbind_gateway_device_async():
     response = await async_client.unbind_device_from_gateway(request=bind_device_request)
     print(response)
 
+def test_set_state():
+    client = DeviceManagerClient()
+    request = SetDeviceStateRequest(name='Rashmi_Registry_Test/Rashmi_Device_Test', binary_data=b'R2FyZ2l0ZXN0aW5n')
+    response = client.set_device_state(request)
+    print(response)
+
+async def test_set_state_async():
+    async_client = DeviceManagerAsyncClient()
+    request = SetDeviceStateRequest(name='Rashmi_Registry_Test/Rashmi_Device_Test', binary_data=b'c3RhdGV0ZXN0')
+    response = await async_client.set_device_state(request=request)
+    print(response)
+
+
 if __name__ ==  '__main__':
     #test_send_command()
     #asyncio.run(test_send_command_async())
@@ -102,4 +115,6 @@ if __name__ ==  '__main__':
     #test_bind_gateway_device()
     #asyncio.run(test_bind_gateway_device_async())
     #test_unbind_gateway_device()
-    asyncio.run(test_unbind_gateway_device_async())
+    #asyncio.run(test_unbind_gateway_device_async())
+    #test_set_state()
+    asyncio.run(test_set_state_async())

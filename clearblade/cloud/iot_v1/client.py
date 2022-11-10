@@ -37,7 +37,9 @@ class DeviceManagerClient():
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.unbindGatewayFromDevice(request=request)
 
-
+    def set_device_state(self, request : SetDeviceStateRequest):
+        cb_device_manager = ClearBladeDeviceManager()
+        return cb_device_manager.setDeviceState(request=request)
 
 class DeviceManagerAsyncClient():
 
@@ -75,3 +77,7 @@ class DeviceManagerAsyncClient():
     async def unbind_device_from_gateway(self, request : BindUnBindGatewayDeviceRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.unbindGatewayFromDevice_async(request=request)
+
+    async def set_device_state(self, request : SetDeviceStateRequest):
+        cb_device_manager = ClearBladeDeviceManager()
+        return await cb_device_manager.setDeviceState_async(request=request)

@@ -45,7 +45,9 @@ class HttpClient():
         if request_params.get('method') is not None:
             if request_params['method'] == 'bindDeviceToGateway' or request_params['method'] == 'unbindDeviceFromGateway':
                 self._api_folder_name = "cloudiot"
-                self._cb_api_url = "{}:{}{}/{}/{}?".format(self._base_url,self._port,
+            elif  request_params['method'] == 'setState':
+                self._api_folder_name = "cloudiotdevice_devices"
+            self._cb_api_url = "{}:{}{}/{}/{}?".format(self._base_url,self._port,
                                                     self._api_version_webhook_path,
                                                     self._system_key,self._api_folder_name)
 
