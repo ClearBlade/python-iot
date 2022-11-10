@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest, GetDeviceStatesList
+from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest, GetDeviceStatesList, GetDeviceConfigVersionsList
 import asyncio
 
 def test_send_command():
@@ -112,6 +112,17 @@ async def test_get_device_states_async():
     response = await async_client.list_device_states(request=request)
     print(response)
 
+def test_get_device_configVersions():
+    client = DeviceManagerClient()
+    request = GetDeviceConfigVersionsList(name='Rashmi_Device_Test', numVersions=3)
+    response = client.list_device_config_versions(request)
+    print(response)
+
+async def test_get_device_configVersions_async():
+    async_client = DeviceManagerAsyncClient()
+    request = GetDeviceConfigVersionsList(name='Rashmi_Device_Test', numVersions=3)
+    response = await async_client.list_device_config_versions(request=request)
+    print(response)
 
 if __name__ ==  '__main__':
     #test_send_command()
@@ -131,4 +142,6 @@ if __name__ ==  '__main__':
     #test_set_state()
     #asyncio.run(test_set_state_async())
     #test_get_device_states()
-    asyncio.run(test_get_device_states_async())
+    #asyncio.run(test_get_device_states_async())
+    #test_get_device_configVersions()
+    asyncio.run(test_get_device_configVersions_async())

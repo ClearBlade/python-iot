@@ -210,6 +210,16 @@ class GetDeviceStatesList(Request):
     def numStates(self):
         return self._numstates
 
+class GetDeviceConfigVersionsList(Request):
+    def __init__(self, name: str = None,
+                numVersions: int = None) -> None:
+        super().__init__(name)
+        self._numversions = numVersions
+
+    @property
+    def numVersions(self):
+        return self._numversions
+
 class ClearBladeDeviceManager():
 
     def _prepare_for_send_command(self,
@@ -442,6 +452,26 @@ class ClearBladeDeviceManager():
         async_client = AsyncClient()
         params = {'name':request.name, 'numStates':request.numStates}
         response = await async_client.getStateList(request_params=params)
+
+        if response.status_code is 200:
+            return response.json()
+        return None
+
+    def getDeviceConfigVersionsList(self,
+            request: GetDeviceConfigVersionsList):
+        sync_client = SyncClient()
+        params = {'name':request.name, 'numVersions':request.numVersions}
+        response = sync_client.getConfigVersionsList(request_params=params)
+        
+        if response.status_code is 200:
+            return response.json()
+        return None
+
+    async def getDeviceConfigVersionsList_async(self,
+            request: GetDeviceConfigVersionsList):
+        async_client = AsyncClient()
+        params = {'name':request.name, 'numVersions':request.numVersions}
+        response = await async_client.getConfigVersionsList(request_params=params)
 
         if response.status_code is 200:
             return response.json()
