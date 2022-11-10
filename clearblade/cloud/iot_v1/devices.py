@@ -200,6 +200,15 @@ class SetDeviceStateRequest(Request):
     def binary_data(self):
         return self._binary_data
 
+class GetDeviceStatesList(Request):
+    def __init__(self, name: str = None,
+                numStates: int = None) -> None:
+        super().__init__(name)
+        self._numstates = numStates
+
+    @property
+    def numStates(self):
+        return self._numstates
 
 class ClearBladeDeviceManager():
 
@@ -417,3 +426,23 @@ class ClearBladeDeviceManager():
 
         async_client = AsyncClient()
         return await async_client.post(request_params=params, request_body=body)
+
+    def getDeviceSatesList(self,
+            request: GetDeviceStatesList):
+        sync_client = SyncClient()
+        params = {'name':request.name, 'numStates':request.numStates}
+        response = sync_client.getStateList(request_params=params)
+        
+        if response.status_code is 200:
+            return response.json()
+        return None
+
+    async def getDeviceSatesList_async(self,
+            request: GetDeviceRequest):
+        async_client = AsyncClient()
+        params = {'name':request.name, 'numStates':request.numStates}
+        response = await async_client.getStateList(request_params=params)
+
+        if response.status_code is 200:
+            return response.json()
+        return None

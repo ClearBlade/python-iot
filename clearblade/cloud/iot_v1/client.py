@@ -40,6 +40,10 @@ class DeviceManagerClient():
     def set_device_state(self, request : SetDeviceStateRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.setDeviceState(request=request)
+    
+    def list_device_states(self, request : GetDeviceStatesList):
+        cb_device_manager = ClearBladeDeviceManager()
+        return cb_device_manager.getDeviceSatesList(request=request)
 
 class DeviceManagerAsyncClient():
 
@@ -81,3 +85,7 @@ class DeviceManagerAsyncClient():
     async def set_device_state(self, request : SetDeviceStateRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.setDeviceState_async(request=request)
+
+    async def list_device_states(self, request : GetDeviceStatesList):
+        cb_device_manager = ClearBladeDeviceManager()
+        return await cb_device_manager.getDeviceSatesList_async(request=request)

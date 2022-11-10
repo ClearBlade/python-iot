@@ -41,6 +41,14 @@ class HttpClient():
         self._post_url = self._cb_api_url+ self._process_request_params(request_params=request_params)
         self._request_headers = self._headers()        
 
+    def getStateList(self, request_params):
+        self._api_folder_name = "cloudiot_devices_states"
+        self._cb_api_url = "{}:{}{}/{}/{}?".format(self._base_url,self._port,
+                                                    self._api_version_webhook_path,
+                                                    self._system_key,self._api_folder_name)
+        self._post_url = self._cb_api_url+ self._process_request_params(request_params=request_params)
+        self._request_headers = self._headers()        
+
     def post(self, request_params = {}, request_body = {}):
         if request_params.get('method') is not None:
             if request_params['method'] == 'bindDeviceToGateway' or request_params['method'] == 'unbindDeviceFromGateway':
@@ -84,6 +92,13 @@ class SyncClient(HttpClient):
                                             headers=self._request_headers)
         return response
 
+    def getStateList(self, request_params = {}):
+        super().getStateList(request_params=request_params)
+        httpx_sync_client = httpx.Client()
+        response = httpx_sync_client.request("GET", url=self._post_url,
+                                            headers=self._request_headers)
+        return response
+
 class AsyncClient(HttpClient):
 
     async def post(self, request_params = {}, request_body={}):
@@ -104,6 +119,14 @@ class AsyncClient(HttpClient):
 
     async def get(self, request_params):
         super().get(request_params=request_params)
+        httpx_async_client= httpx.AsyncClient()
+        response = await httpx_async_client.request("GET", url=self._post_url,
+                                            headers=self._request_headers)
+        await httpx_async_client.aclose()
+        return response
+
+    async def getStateList(self, request_params = {}):
+        super().getStateList(request_params=request_params)
         httpx_async_client= httpx.AsyncClient()
         response = await httpx_async_client.request("GET", url=self._post_url,
                                             headers=self._request_headers)

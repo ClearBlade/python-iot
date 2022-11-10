@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest
+from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest, GetDeviceStatesList
 import asyncio
 
 def test_send_command():
@@ -100,6 +100,18 @@ async def test_set_state_async():
     response = await async_client.set_device_state(request=request)
     print(response)
 
+def test_get_device_states():
+    client = DeviceManagerClient()
+    request = GetDeviceStatesList(name='Rashmi_Device_Test', numStates=3)
+    response = client.list_device_states(request)
+    print(response)
+
+async def test_get_device_states_async():
+    async_client = DeviceManagerAsyncClient()
+    request = GetDeviceStatesList(name='Rashmi_Device_Test', numStates=3)
+    response = await async_client.list_device_states(request=request)
+    print(response)
+
 
 if __name__ ==  '__main__':
     #test_send_command()
@@ -117,4 +129,6 @@ if __name__ ==  '__main__':
     #test_unbind_gateway_device()
     #asyncio.run(test_unbind_gateway_device_async())
     #test_set_state()
-    asyncio.run(test_set_state_async())
+    #asyncio.run(test_set_state_async())
+    #test_get_device_states()
+    asyncio.run(test_get_device_states_async())
