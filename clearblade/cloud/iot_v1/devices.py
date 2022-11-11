@@ -220,6 +220,50 @@ class GetDeviceConfigVersionsList(Request):
     def numVersions(self):
         return self._numversions
 
+class ListDevicesRequest(Request):
+    def __init__(self, parent:str = None ,
+                 deviceNumIds: str = None,
+                 deviceIds: str = None,
+                 fieldMask: str = None,
+                 gatewayListOptions: dict = None,
+                 pageSize: int = None,
+                 pageToken: str = None) -> None:
+        self._parent = parent
+        self._device_num_ids = deviceNumIds
+        self._device_ids = deviceIds
+        self._field_mask = fieldMask
+        self._gateway_list_options = gatewayListOptions
+        self._page_size = pageSize
+        self._page_token = pageToken
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @property
+    def device_num_ids(self):
+        return self._device_num_ids
+
+    @property
+    def device_ids(self):
+        return self._device_ids
+
+    @property
+    def field_mask(self):
+        return self._field_mask
+
+    @property
+    def gateway_list_options(self):
+        return self._gateway_list_options
+
+    @property
+    def page_size(self):
+        return self._page_size
+
+    @property
+    def page_token(self):
+        return self._page_token
+
 class ClearBladeDeviceManager():
 
     def _prepare_for_send_command(self,
@@ -272,6 +316,13 @@ class ClearBladeDeviceManager():
 
     def _create_device_config(self, response):
         return DeviceConfig.from_json(response)
+
+    def _create_device_list_from_response(self, json_response):
+        devicesList = []
+        print(json_response['devices'])
+        for deviceJson in json_response['devices']:
+            devicesList.append(Device.from_json(json=deviceJson))
+        return devicesList
 
     def send_command(self,
                     request: SendCommandToDeviceRequest,
@@ -472,6 +523,32 @@ class ClearBladeDeviceManager():
         async_client = AsyncClient()
         params = {'name':request.name, 'numVersions':request.numVersions}
         response = await async_client.getConfigVersionsList(request_params=params)
+
+        if response.status_code is 200:
+            return response.json()
+        return None
+
+    def getDevicesList(self,
+            request: ListDevicesRequest):
+        sync_client = SyncClient()
+        params = {'parent':request.parent}
+        body = {'deviceNumIds':request.device_num_ids, 'deviceIds':request.device_ids,
+            'fieldMask':request.field_mask, 'gatewayListOptions':request.gateway_list_options,
+            'pageSize':request.page_size, 'pageToken':request.page_token}
+        response = sync_client.list(request_body=body, request_params=params)
+        
+        if response.status_code is 200:
+            return response.json()
+        return None
+
+    async def getDevicesList_async(self,
+            request: ListDevicesRequest):
+        async_client = AsyncClient()
+        params = {'parent':request.parent}
+        body = {'deviceNumIds':request.device_num_ids, 'deviceIds':request.device_ids,
+            'fieldMask':request.field_mask, 'gatewayListOptions':request.gateway_list_options,
+            'pageSize':request.page_size, 'pageToken':request.page_token}
+        response = await async_client.list(request_body=body, request_params=params)
 
         if response.status_code is 200:
             return response.json()
