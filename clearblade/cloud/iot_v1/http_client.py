@@ -62,6 +62,11 @@ class HttpClient():
         self._request_headers = self._headers()
         self._post_body = self._process_request_body(request_body=request_body)
 
+    def update(self, request_params = {}, request_body = {}):
+        self._post_url = self._cb_api_url+ self._process_request_params(request_params=request_params)
+        self._request_headers = self._headers()
+        self._post_body = self._process_request_body(request_body=request_body)
+
     def post(self, request_params = {}, request_body = {}):
         if request_params.get('method') is not None:
             if request_params['method'] == 'bindDeviceToGateway' or request_params['method'] == 'unbindDeviceFromGateway':
@@ -124,7 +129,14 @@ class SyncClient(HttpClient):
         response = httpx_sync_client.request("GET", url=self._post_url,
                                             headers=self._request_headers)
         return response
-        
+
+    def update(self, request_params = {}, request_body = {}):
+        super().update(request_body=request_body, request_params=request_params)
+        httpx_sync_client = httpx.Client()
+        response = httpx_sync_client.request("PATCH", url=self._post_url,
+                                            headers=self._request_headers, data=self._post_body)
+        return response
+
 
 class AsyncClient(HttpClient):
 
@@ -174,4 +186,11 @@ class AsyncClient(HttpClient):
         response = await httpx_async_client.request("GET", url=self._post_url,
                                             headers=self._request_headers)
         await httpx_async_client.aclose()
+        return response
+
+    async def update(self, request_params = {}, request_body = {}):
+        super().update(request_body=request_body, request_params=request_params)
+        httpx_async_client= httpx.AsyncClient()
+        response = await httpx_async_client.request("PATCH", url=self._post_url,
+                                            headers=self._request_headers, data=self._post_body)
         return response

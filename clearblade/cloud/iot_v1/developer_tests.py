@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest, GetDeviceStatesList, GetDeviceConfigVersionsList, ListDevicesRequest
+from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest, GetDeviceStatesList, GetDeviceConfigVersionsList, ListDevicesRequest, UpdateDeviceRequest
 import asyncio
 
 def test_send_command():
@@ -136,6 +136,17 @@ async def test_get_devices_list_async():
     response = await async_client.list_devices(request=get_devices_list_request)
     print(response)
 
+def test_update_device():
+    client =  DeviceManagerClient()
+    update_device_request = UpdateDeviceRequest(name='Rashmi_Device_Test',id='Rashmi_Device_Test',logLevel='NONE',blocked=True, updateMask='logLevel')
+    response = client.update_device(request=update_device_request)
+    print(response)
+
+async def test_update_device_async():
+    async_client = DeviceManagerAsyncClient()
+    update_device_request = UpdateDeviceRequest(name='Rashmi_Device_Test',id='Rashmi_Device_Test',logLevel='ERROR',blocked=True, updateMask='logLevel')
+    response = await async_client.update_device(request=update_device_request)
+    print(response)
 
 if __name__ ==  '__main__':
     #test_send_command()
@@ -159,4 +170,6 @@ if __name__ ==  '__main__':
     #test_get_device_configVersions()
     #asyncio.run(test_get_device_configVersions_async())
     #test_get_devices_list()
-    asyncio.run(test_get_devices_list_async())
+    #asyncio.run(test_get_devices_list_async())
+    #test_update_device()
+    asyncio.run(test_update_device_async())

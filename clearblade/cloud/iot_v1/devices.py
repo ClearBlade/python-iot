@@ -264,6 +264,44 @@ class ListDevicesRequest(Request):
     def page_token(self):
         return self._page_token
 
+class UpdateDeviceRequest(Request):
+    def __init__(self, id: str = None, name: str = None, numId: str=None,
+                 credentials: list=None, blocked: bool = None,
+                 logLevel: str = None, metadata: dict = None, gatewayConfig : dict = None,
+                 updateMask: str = None) -> None:
+        self._id = id
+        self._name = name
+        self._num_id = numId
+        self._credentials = credentials
+        self._blocked = blocked
+        self._log_level = logLevel
+        self._meta_data = metadata
+        self._gateway_config = gatewayConfig
+        self._update_mask = updateMask
+
+    def _prepare_params_body_for_update(self):
+        params = {'name': self._name}
+        if self._update_mask is not None:
+            params['updateMask'] = self._update_mask
+        
+        body = {}
+        if self._id is not None:
+            body['id'] = self._id
+        if self._name is not None:
+            body['name'] = self._name
+        if self._log_level is not None:
+            body['logLevel'] = self._log_level
+        if self._gateway_config is not None:
+            body['gatewayConfig'] = self._gateway_config
+        if self._meta_data is not None:
+            body['metadata'] = self._meta_data
+        if self._blocked is not None:
+            body['blocked'] = self._blocked
+        if self._credentials is not None:
+            body['credentials'] = self._credentials
+
+        return params, body
+
 class ClearBladeDeviceManager():
 
     def _prepare_for_send_command(self,
@@ -549,6 +587,26 @@ class ClearBladeDeviceManager():
             'fieldMask':request.field_mask, 'gatewayListOptions':request.gateway_list_options,
             'pageSize':request.page_size, 'pageToken':request.page_token}
         response = await async_client.list(request_body=body, request_params=params)
+
+        if response.status_code is 200:
+            return response.json()
+        return None
+
+    def updateDevice(self,
+            request: UpdateDeviceRequest):
+        sync_client = SyncClient()
+        params, body = request._prepare_params_body_for_update()
+        response = sync_client.update(request_body=body, request_params=params)
+        
+        if response.status_code is 200:
+            return response.json()
+        return None
+
+    async def updateDevice_async(self,
+            request: UpdateDeviceRequest):
+        async_client = AsyncClient()
+        params, body = request._prepare_params_body_for_update()
+        response = await async_client.update(request_body=body, request_params=params)
 
         if response.status_code is 200:
             return response.json()
