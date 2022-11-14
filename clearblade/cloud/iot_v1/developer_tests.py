@@ -4,7 +4,7 @@ import asyncio
 
 def test_send_command():
     client = DeviceManagerClient()
-    request = SendCommandToDeviceRequest(name='python_1', binary_data=b'R2FyZ2l0ZXN0aW5n')
+    request = SendCommandToDeviceRequest(name='python_1', binary_data=b'QUJD')
     response = client.send_command_to_device(request)
     print(response)
 
@@ -137,8 +137,8 @@ async def test_update_device_async():
     print(response)
 
 if __name__ ==  '__main__':
-    #test_send_command()
-    #asyncio.run(test_send_command_async())
+    test_send_command()
+    asyncio.run(test_send_command_async())
     #test_create_device()
     #asyncio.run(test_create_device_async())
     #test_modify_cloud_to_device_config()
@@ -155,7 +155,7 @@ if __name__ ==  '__main__':
     #asyncio.run(test_get_device_states_async())
     #test_get_device_configVersions()
     #asyncio.run(test_get_device_configVersions_async())
-    test_get_devices_list()
+    #test_get_devices_list()
     #asyncio.run(test_get_devices_list_async())
     #test_update_device()
     #asyncio.run(test_update_device_async())

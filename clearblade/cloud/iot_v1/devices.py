@@ -1,4 +1,8 @@
 from http_client import SyncClient, AsyncClient
+from config import ClearBladeConfig
+import os
+from exceptions import UnConfiguredEnvironment
+import json
 
 class Device():
     """
@@ -253,7 +257,7 @@ class ListDevicesRequest(Request):
     @property
     def page_token(self):
         return self._page_token
-    
+
     def _prepare_params_for_list(self):
         params = {'parent':self.parent}
         if self.page_size is not None:
@@ -288,7 +292,7 @@ class UpdateDeviceRequest(Request):
         params = {'name': self._name}
         if self._update_mask is not None:
             params['updateMask'] = self._update_mask
-        
+
         body = {}
         if self._id is not None:
             body['id'] = self._id
@@ -308,6 +312,65 @@ class UpdateDeviceRequest(Request):
         return params, body
 
 class ClearBladeDeviceManager():
+
+    def __init__(self) -> None:
+        #create the ClearBladeConfig object and pass
+        self._admin_cb_config = None
+        self._regional_cb_config = None
+
+    def _get_admin_clearblade_config(self):
+        if self._admin_cb_config:
+            return self._admin_cb_config
+
+        service_account_file_path = os.environ.get("CLEARBLADE_CONFIGURATION")
+        if not service_account_file_path:
+            #raise UnConfiguredEnvironment()
+            service_account_file_path = "C:\\Users\\GDas\\Downloads\\ingress_clearblade_service-credentials.json"
+
+        service_account_data = None
+        #parse the file and get all te required details.
+        with open(service_account_file_path, mode='r') as service_account_file:
+            service_account_data = json.load(service_account_file)
+
+        if service_account_data is None:
+            #TODO: raise exception
+            return None
+
+        system_key = service_account_data['systemKey']
+        auth_token = service_account_data['token']
+        api_url = service_account_data['url']
+        project = service_account_data['project']
+
+        self._admin_cb_config = ClearBladeConfig(system_key=system_key, auth_token=auth_token,
+                                                 api_url=api_url, project=project)
+
+        return self._admin_cb_config
+
+    def _get_regional_config(self, region:str = None, registry:str = None):
+        if self._regional_cb_config:
+            return self._regional_cb_config
+
+        self._admin_cb_config = self._get_admin_clearblade_config()
+        region = "us-central1"
+        registry = "gargi_python"
+
+        sync_client = SyncClient(clearblade_config=self._admin_cb_config)
+        request_body = {'region':region,'registry':registry, 'project':self._admin_cb_config.project}
+        response = sync_client.post(api_name="getRegistryCredentials", is_webhook_folder=False, request_body=request_body)
+        print(response)
+
+        if response.status_code != 200:
+            #TODO: raise some exceptions
+            return None
+
+        response_json = response.json()
+        system_key = response_json['systemKey']
+        auth_token = response_json['serviceAccountToken']
+        api_url = response_json['url']
+
+        self._regional_cb_config = ClearBladeConfig(system_key=system_key, auth_token=auth_token, api_url=api_url,
+                                                    region=region, project=self._admin_cb_config.project)
+        return self._regional_cb_config
 
     def _prepare_for_send_command(self,
                                   request: SendCommandToDeviceRequest,
@@ -374,17 +437,21 @@ class ClearBladeDeviceManager():
                     subfolder: str = None):
 
         params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
-        sync_client = SyncClient()
-        return sync_client.post(request_params=params, request_body=body)
+        regional_config = self._get_regional_config()
+        sync_client = SyncClient(clearblade_config=regional_config)
+        return sync_client.post(api_name="cloudiot_devices", request_params=params, request_body=body)
 
     async def send_command_async(self,
                                  request: SendCommandToDeviceRequest = None,
                                  name: str = None,
                                  binary_data: str = None,
                                  subfolder: str = None ):
+
         params, body = self._prepare_for_send_command(request, name, binary_data, subfolder)
-        async_client = AsyncClient()
-        return await async_client.post(request_params=params, request_body=body)
+        async_client = AsyncClient(clearblade_config=self._get_regional_config())
+        return await async_client.post(api_name="cloudiot_devices",
+                                       request_params=params,
+                                       request_body=body)
 
     def create(self, request: CreateDeviceRequest,
                      parent: str = None,
@@ -395,7 +462,7 @@ class ClearBladeDeviceManager():
 
         # return the device only if status code is 200
         # other wise return None
-        if response.status_code is 200:
+        if response.status_code == 200:
             return self._create_device_from_response(response.json())
         return None
 
@@ -407,7 +474,7 @@ class ClearBladeDeviceManager():
         body = self._create_device_body(request.device)
         response = await async_client.post(request_body=body)
 
-        if response.status_code is 200:
+        if response.status_code == 200:
             return self._create_device_from_response(response.json())
         return None
 
@@ -420,9 +487,10 @@ class ClearBladeDeviceManager():
         params, body = self._prepare_modify_cloud_config_device(request=request, name=name,
                                                                 binary_data=binary_data, version_to_update=version_to_update)
         response = sync_client.post(request_params=params, request_body=body)
-        if response.status_code is 200:
+
+        if response.status_code == 200:
             return self._create_device_config(response.json)
-        print("Error occurred , with status code {} respose text {}".format(response.status_code, response.text))
+
         return None
 
     async def modify_cloud_device_config_async(self,
@@ -434,9 +502,8 @@ class ClearBladeDeviceManager():
                                                                 binary_data=binary_data, version_to_update=version_to_update)
         async_client = AsyncClient()
         response = await async_client.post(request_params=params, request_body=body)
-        if response.status_code is 200:
+        if response.status_code == 200:
             return self._create_device_config(response.json)
-        print("Error occurred , with status code {} respose text {}".format(response.status_code, response.text))
         return None
 
     def list(self):
@@ -447,8 +514,8 @@ class ClearBladeDeviceManager():
         sync_client = SyncClient()
         params = {'name':request.name}
         response = sync_client.get(request_params=params)
-        
-        if response.status_code is 200:
+
+        if response.status_code == 200:
             return self._create_device_from_response(response.json())
         return None
 
@@ -458,7 +525,7 @@ class ClearBladeDeviceManager():
         params = {'name':request.name}
         response = await async_client.get(request_params=params)
 
-        if response.status_code is 200:
+        if response.status_code == 200:
             return self._create_device_from_response(response.json())
         return None
 
@@ -466,61 +533,56 @@ class ClearBladeDeviceManager():
                request: DeleteDeviceRequest):
         sync_client = SyncClient()
         params = {'name':request.name}
-        response = sync_client.delete(request_params=params)
-
+        response = sync_client.delete(api_name="cloudiot_devices",request_params=params)
         return response
 
     async def delete_async(self,
                request: DeleteDeviceRequest):
         async_client = AsyncClient()
         params = {'name':request.name}
-        response = await async_client.delete(request_params=params)
-
+        response = await async_client.delete(api_name="cloudiot_devices", request_params=params)
         return response
-    
-    def bindGatewayToDevice(self, 
+
+    def bindGatewayToDevice(self,
             request: BindUnBindGatewayDeviceRequest) :
         sync_client = SyncClient()
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'bindDeviceToGateway'}
-        response = sync_client.post(request_params=params, request_body=body)
+        response = sync_client.post(api_name="cloudiot", request_params=params, request_body=body)
 
         return response
 
-    async def bindGatewayToDevice_async(self, 
+    async def bindGatewayToDevice_async(self,
             request: BindUnBindGatewayDeviceRequest) :
         async_client = AsyncClient()
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'bindDeviceToGateway'}
-        response = await async_client.post(request_params=params, request_body=body)
-
+        response = await async_client.post(api_name="cloudiot", request_params=params, request_body=body)
         return response
 
-    def unbindGatewayFromDevice(self, 
+    def unbindGatewayFromDevice(self,
             request: BindUnBindGatewayDeviceRequest) :
         sync_client = SyncClient()
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'unbindDeviceFromGateway'}
-        response = sync_client.post(request_params=params, request_body=body)
-
+        response = sync_client.post(api_name="cloudiot", request_params=params, request_body=body)
         return response
 
-    async def unbindGatewayFromDevice_async(self, 
+    async def unbindGatewayFromDevice_async(self,
             request: BindUnBindGatewayDeviceRequest) :
         async_client = AsyncClient()
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'unbindDeviceFromGateway'}
-        response = await async_client.post(request_params=params, request_body=body)
-
+        response = await async_client.post(api_name="cloudiot",request_params=params, request_body=body)
         return response
 
     def getDeviceSatesList(self,
             request: GetDeviceStatesList):
         sync_client = SyncClient()
         params = {'name':request.name, 'numStates':request.numStates}
-        response = sync_client.getStateList(request_params=params)
-        
-        if response.status_code is 200:
+        response = sync_client.get(api_name="cloudiot_devices_states",request_params=params)
+
+        if response.status_code == 200:
             return response.json()
         return None
 
@@ -528,9 +590,9 @@ class ClearBladeDeviceManager():
             request: GetDeviceRequest):
         async_client = AsyncClient()
         params = {'name':request.name, 'numStates':request.numStates}
-        response = await async_client.getStateList(request_params=params)
+        response = await async_client.get(request_params=params)
 
-        if response.status_code is 200:
+        if response.status_code == 200:
             return response.json()
         return None
 
@@ -538,9 +600,9 @@ class ClearBladeDeviceManager():
             request: GetDeviceConfigVersionsList):
         sync_client = SyncClient()
         params = {'name':request.name, 'numVersions':request.numVersions}
-        response = sync_client.getConfigVersionsList(request_params=params)
-        
-        if response.status_code is 200:
+        response = sync_client.get(api_name="cloudiot_devices_configVersions",request_params=params)
+
+        if response.status_code == 200:
             return response.json()
         return None
 
@@ -548,9 +610,9 @@ class ClearBladeDeviceManager():
             request: GetDeviceConfigVersionsList):
         async_client = AsyncClient()
         params = {'name':request.name, 'numVersions':request.numVersions}
-        response = await async_client.getConfigVersionsList(request_params=params)
+        response = await async_client.get(api_name="cloudiot_devices_configVersions", request_params=params)
 
-        if response.status_code is 200:
+        if response.status_code == 200:
             return response.json()
         return None
 
@@ -558,9 +620,9 @@ class ClearBladeDeviceManager():
             request: ListDevicesRequest):
         sync_client = SyncClient()
         params = request._prepare_params_for_list()
-        response = sync_client.list(request_params=params)
-        
-        if response.status_code is 200:
+        response = sync_client.get(api_name="cloudiot_devices",request_params=params)
+
+        if response.status_code == 200:
             return response.json()
         return None
 
@@ -568,9 +630,9 @@ class ClearBladeDeviceManager():
             request: ListDevicesRequest):
         async_client = AsyncClient()
         params = request._prepare_params_for_list()
-        response = await async_client.list(request_params=params)
+        response = await async_client.list(api_name="cloudiot_devices",request_params=params)
 
-        if response.status_code is 200:
+        if response.status_code == 200:
             return response.json()
         return None
 
@@ -578,9 +640,9 @@ class ClearBladeDeviceManager():
             request: UpdateDeviceRequest):
         sync_client = SyncClient()
         params, body = request._prepare_params_body_for_update()
-        response = sync_client.update(request_body=body, request_params=params)
-        
-        if response.status_code is 200:
+        response = sync_client.patch(api_name= "",request_body=body, request_params=params)
+
+        if response.status_code == 200:
             return response.json()
         return None
 
@@ -588,8 +650,8 @@ class ClearBladeDeviceManager():
             request: UpdateDeviceRequest):
         async_client = AsyncClient()
         params, body = request._prepare_params_body_for_update()
-        response = await async_client.update(request_body=body, request_params=params)
+        response = await async_client.patch(api_name="",request_body=body, request_params=params)
 
-        if response.status_code is 200:
+        if response.status_code == 200:
             return response.json()
         return None

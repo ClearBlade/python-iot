@@ -1,15 +1,31 @@
-#TODO: need to take this from users via some method and save them
-import os
-from exceptions import UnConfiguredEnvironment
+class ClearBladeConfig:
+    def __init__(self, system_key:str = None,
+                 auth_token:str = None,
+                 api_url:str = None,
+                 region:str = None,
+                 project:str = None ) -> None:
+        self._system_key = system_key
+        self._auth_token = auth_token
+        self._api_url = api_url
+        self._region = region
+        self._project = project
 
-def get_auth_token():
-    auth_token =  os.environ.get("AUTH_TOKEN")
-    if not auth_token:
-        raise UnConfiguredEnvironment()
-    return auth_token
+    @property
+    def system_key(self):
+        return self._system_key
 
-def get_system_key():
-    system_key =  os.environ.get("SYSTEM_KEY")
-    if not system_key:
-        raise UnConfiguredEnvironment()
-    return system_key
+    @property
+    def token(self):
+        return self._auth_token
+
+    @property
+    def api_url(self):
+        return self._api_url
+
+    @property
+    def project(self):
+        return self._project
+
+    @property
+    def region(self):
+        return self._region
