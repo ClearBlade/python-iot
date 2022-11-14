@@ -190,16 +190,6 @@ class BindUnBindGatewayDeviceRequest(Request):
     def gatewayId(self):
         return self._gatewayid
 
-class SetDeviceStateRequest(Request):
-    def __init__(self, name: str = None,
-                binary_data: bytes = None) -> None:
-        super().__init__(name)
-        self._binary_data = binary_data
-
-    @property
-    def binary_data(self):
-        return self._binary_data
-
 class GetDeviceStatesList(Request):
     def __init__(self, name: str = None,
                 numStates: int = None) -> None:
@@ -263,6 +253,21 @@ class ListDevicesRequest(Request):
     @property
     def page_token(self):
         return self._page_token
+    
+    def _prepare_params_for_list(self):
+        params = {'parent':self.parent}
+        if self.page_size is not None:
+            params['pageSize'] = self.page_size
+        if self.device_num_ids is not None:
+            params['deviceNumIds'] = self.device_num_ids
+        if self.device_ids is not None:
+            params['deviceIds'] = self.device_ids
+        if self.field_mask is not None:
+            params['fieldMask'] = self.field_mask
+        if self.gateway_list_options is not None:
+            params['gatewayListOptions'] = self.gateway_list_options
+        if self.page_token is not None:
+            params['pageToken'] = self.page_token
 
 class UpdateDeviceRequest(Request):
     def __init__(self, id: str = None, name: str = None, numId: str=None,
@@ -509,23 +514,6 @@ class ClearBladeDeviceManager():
 
         return response
 
-    def setDeviceState(self,
-                    request: SetDeviceStateRequest):
-
-        body = {'binaryData':request.binary_data.decode("utf-8")}
-        params = {'name':request.name,'method':'setState'}
-
-        sync_client = SyncClient()
-        return sync_client.post(request_params=params, request_body=body)
-
-    async def setDeviceState_async(self,
-                                 request: SetDeviceStateRequest = None):
-        body = {'binaryData':request.binary_data.decode("utf-8")}
-        params = {'name':request.name,'method':'setState'}
-
-        async_client = AsyncClient()
-        return await async_client.post(request_params=params, request_body=body)
-
     def getDeviceSatesList(self,
             request: GetDeviceStatesList):
         sync_client = SyncClient()
@@ -569,11 +557,8 @@ class ClearBladeDeviceManager():
     def getDevicesList(self,
             request: ListDevicesRequest):
         sync_client = SyncClient()
-        params = {'parent':request.parent}
-        body = {'deviceNumIds':request.device_num_ids, 'deviceIds':request.device_ids,
-            'fieldMask':request.field_mask, 'gatewayListOptions':request.gateway_list_options,
-            'pageSize':request.page_size, 'pageToken':request.page_token}
-        response = sync_client.list(request_body=body, request_params=params)
+        params = request._prepare_params_for_list()
+        response = sync_client.list(request_params=params)
         
         if response.status_code is 200:
             return response.json()
@@ -582,11 +567,8 @@ class ClearBladeDeviceManager():
     async def getDevicesList_async(self,
             request: ListDevicesRequest):
         async_client = AsyncClient()
-        params = {'parent':request.parent}
-        body = {'deviceNumIds':request.device_num_ids, 'deviceIds':request.device_ids,
-            'fieldMask':request.field_mask, 'gatewayListOptions':request.gateway_list_options,
-            'pageSize':request.page_size, 'pageToken':request.page_token}
-        response = await async_client.list(request_body=body, request_params=params)
+        params = request._prepare_params_for_list()
+        response = await async_client.list(request_params=params)
 
         if response.status_code is 200:
             return response.json()

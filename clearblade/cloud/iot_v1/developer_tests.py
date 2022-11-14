@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, SetDeviceStateRequest, GetDeviceStatesList, GetDeviceConfigVersionsList, ListDevicesRequest, UpdateDeviceRequest
+from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, GetDeviceStatesList, GetDeviceConfigVersionsList, ListDevicesRequest, UpdateDeviceRequest
 import asyncio
 
 def test_send_command():
@@ -88,18 +88,6 @@ async def test_unbind_gateway_device_async():
     response = await async_client.unbind_device_from_gateway(request=bind_device_request)
     print(response)
 
-def test_set_state():
-    client = DeviceManagerClient()
-    request = SetDeviceStateRequest(name='Rashmi_Registry_Test/Rashmi_Device_Test', binary_data=b'R2FyZ2l0ZXN0aW5n')
-    response = client.set_device_state(request)
-    print(response)
-
-async def test_set_state_async():
-    async_client = DeviceManagerAsyncClient()
-    request = SetDeviceStateRequest(name='Rashmi_Registry_Test/Rashmi_Device_Test', binary_data=b'c3RhdGV0ZXN0')
-    response = await async_client.set_device_state(request=request)
-    print(response)
-
 def test_get_device_states():
     client = DeviceManagerClient()
     request = GetDeviceStatesList(name='Rashmi_Device_Test', numStates=3)
@@ -126,7 +114,7 @@ async def test_get_device_configVersions_async():
 
 def test_get_devices_list():
     client =  DeviceManagerClient()
-    get_devices_list_request = ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1')
+    get_devices_list_request = ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1', pageSize=2)
     response = client.list_devices(request=get_devices_list_request)
     print(response)
 
@@ -163,13 +151,11 @@ if __name__ ==  '__main__':
     #asyncio.run(test_bind_gateway_device_async())
     #test_unbind_gateway_device()
     #asyncio.run(test_unbind_gateway_device_async())
-    #test_set_state()
-    #asyncio.run(test_set_state_async())
     #test_get_device_states()
     #asyncio.run(test_get_device_states_async())
     #test_get_device_configVersions()
     #asyncio.run(test_get_device_configVersions_async())
-    #test_get_devices_list()
+    test_get_devices_list()
     #asyncio.run(test_get_devices_list_async())
     #test_update_device()
-    asyncio.run(test_update_device_async())
+    #asyncio.run(test_update_device_async())
