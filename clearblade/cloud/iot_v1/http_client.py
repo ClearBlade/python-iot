@@ -68,7 +68,7 @@ class SyncClient(HttpClient):
              is_webhook_folder:bool = True,
              request_params = {}, request_body = {}):
         super().post(api_name=api_name, is_webhook_folder=is_webhook_folder,
-                     request_params=request_params, request_body=request_body)
+                     request_body=request_body)
         #send the request and return the response
         httpx_sync_client = httpx.Client()
         response = httpx_sync_client.request("POST", url=self._post_url,

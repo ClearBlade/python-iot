@@ -314,7 +314,7 @@ class UpdateDeviceRequest(Request):
 class ClearBladeDeviceManager():
 
     def __init__(self) -> None:
-        #create the ClearBladeConfig object and pass
+        #create the ClearBladeConfig object
         self._admin_cb_config = None
         self._regional_cb_config = None
 
@@ -324,8 +324,8 @@ class ClearBladeDeviceManager():
 
         service_account_file_path = os.environ.get("CLEARBLADE_CONFIGURATION")
         if not service_account_file_path:
-            #raise UnConfiguredEnvironment()
-            service_account_file_path = "C:\\Users\\GDas\\Downloads\\ingress_clearblade_service-credentials.json"
+            raise UnConfiguredEnvironment()
+            #service_account_file_path = "C:\\Users\\GDas\\Downloads\\ingress_clearblade_service-credentials.json"
 
         service_account_data = None
         #parse the file and get all te required details.

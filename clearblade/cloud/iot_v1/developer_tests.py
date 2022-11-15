@@ -138,7 +138,7 @@ async def test_update_device_async():
 
 if __name__ ==  '__main__':
     test_send_command()
-    asyncio.run(test_send_command_async())
+    #asyncio.run(test_send_command_async())
     #test_create_device()
     #asyncio.run(test_create_device_async())
     #test_modify_cloud_to_device_config()
