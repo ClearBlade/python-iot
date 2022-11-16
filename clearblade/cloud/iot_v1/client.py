@@ -1,4 +1,5 @@
 from devices import *
+from registry import *
 
 class DeviceManagerClient():
 
@@ -52,6 +53,10 @@ class DeviceManagerClient():
     def update_device(self, request : UpdateDeviceRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.updateDevice(request=request)
+
+    def list_device_registries(self, request: ListDeviceRegistriesRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return cb_registry_manager.list(request=request)
 
 
 class DeviceManagerAsyncClient():
