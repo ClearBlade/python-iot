@@ -78,7 +78,6 @@ class DeviceRegistry:
     def credentials(self):
         return self._credentials
     
-
 class ListDeviceRegistriesRequest:
     def __init__(self, parent:str = None, 
                  page_size:int = None, 
