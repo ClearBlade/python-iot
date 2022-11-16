@@ -180,6 +180,19 @@ async def test_delete_registry_async():
     response = await async_client.delete_device_registry(request=request)
     print(response)
 
+def test_update_registry():
+    client = DeviceManagerClient()
+    registry = DeviceRegistry(id='deleteTest5', name='deleteTest5', mqttConfig={'mqttEnabledState':'MQTT_DISABLED'},logLevel='ERROR')
+    request = UpdateDeviceRegistryRequest(name="projects/ingressdevelopmentenv/locations/us-central1/registries/deleteTest5", updateMask='mqttConfig.mqtt_enabled_state,logLevel', device_registry=registry)
+    response = client.update_device_registry(request=request)
+    print(response)
+
+async def test_update_registry_async():
+    async_client = DeviceManagerAsyncClient()
+    registry = DeviceRegistry(id='deleteTest5', name='deleteTest5', mqttConfig={'mqttEnabledState':'MQTT_ENABLED'},logLevel='DEBUG')
+    request = UpdateDeviceRegistryRequest(name="projects/ingressdevelopmentenv/locations/us-central1/registries/deleteTest5", updateMask='mqttConfig.mqtt_enabled_state,logLevel', device_registry=registry)
+    response = await async_client.update_device_registry(request=request)
+    print(response)
 
 if __name__ ==  '__main__':
     #test_send_command()
@@ -208,6 +221,8 @@ if __name__ ==  '__main__':
     #test_get_registry()
     #asyncio.run(test_get_registry_async())
     #test_create_registry()
-    asyncio.run(test_create_registry_async())
+    #asyncio.run(test_create_registry_async())
     #test_delete_registry()
     #asyncio.run(test_delete_registry_async())
+    #test_update_registry()
+    asyncio.run(test_update_registry_async())

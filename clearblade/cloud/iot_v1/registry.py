@@ -20,7 +20,7 @@ class DeviceRegistry:
                  stateNotificationConfig:dict = {'pubsubTopicName': ''},
                  mqttConfig:dict = {'mqttEnabledState':'MQTT_ENABLED'},
                  httpConfig:dict = {'httpEnabledState':'HTTP_ENABLED'},
-                 logLevel:str = 'NONE', credentials:list = []) -> None:
+                 logLevel:str = None, credentials:list = []) -> None:
         self._id = id
         self._name = name
         self._event_notification_configs = eventNotificationConfigs
@@ -32,15 +32,16 @@ class DeviceRegistry:
 
     @staticmethod
     def from_json(registry_json):
-        event_notification_configs_json = registry_json['eventNotificationConfigs']
-        event_notification_configs = []
+        if "eventNotificationConfigs" in registry_json:
+            event_notification_configs_json = registry_json['eventNotificationConfigs']
+            event_notification_configs = []
 
-        for event_notification_config_json in event_notification_configs_json:
-            if "subfolderMatches" in event_notification_config_json:
-                event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'], event_notification_config_json["subfolderMatches"])
-            else:
-                event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'])
-            event_notification_configs.append(event_notification_config)
+            for event_notification_config_json in event_notification_configs_json:
+                if "subfolderMatches" in event_notification_config_json:
+                    event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'], event_notification_config_json["subfolderMatches"])
+                else:
+                    event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'])
+                event_notification_configs.append(event_notification_config)
 
         return DeviceRegistry(id=registry_json['id'], name=registry_json['name'],
                               eventNotificationConfigs=event_notification_configs,
@@ -48,7 +49,7 @@ class DeviceRegistry:
                               mqttConfig=registry_json['mqttConfig'],
                               httpConfig=registry_json['httpConfig'],
                               credentials=registry_json['credentials'],
-                              logLevel=registry_json['loglevel'])
+                              logLevel=registry_json['logLevel'])
 
     @property
     def id(self):
@@ -93,6 +94,26 @@ class CreateDeviceRegistryRequest:
     @property
     def parent(self) -> str:
         return self._parent
+
+    @property
+    def device_registry(self)-> DeviceRegistry:
+        return self._device_registry
+
+class UpdateDeviceRegistryRequest:
+    def __init__(self, name:str = None,
+                 updateMask:str = None,
+                 device_registry:DeviceRegistry = None) -> None:
+        self._name = name
+        self._update_mask = updateMask
+        self._device_registry = device_registry
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def update_mask(self) -> str:
+        return self._update_mask
 
     @property
     def device_registry(self)-> DeviceRegistry:
@@ -155,7 +176,7 @@ class ListDeviceRegistriesResponse:
 class ClearBladeRegistryManager():
     def __init__(self) -> None:
         self._cb_config = ClearBladeConfigManager()
-        self._cb_config.registry_name = "MandarTest1"
+        self._cb_config.registry_name = "deleteTest5"
 
     def _create_registry_body(self, registry: DeviceRegistry) :
         registry_json = {'id':registry.id, 'name':registry.name}
@@ -242,3 +263,21 @@ class ClearBladeRegistryManager():
         async_client = AsyncClient(clearblade_config=self._cb_config.admin_config)
         response = await async_client.delete(api_name = "cloudiot",request_params=params)
         return response
+
+    def patch(self,
+        request: UpdateDeviceRegistryRequest = None)->DeviceRegistry:
+        body = self._create_registry_body(request.device_registry)
+        params = {'name':request.name, 'updateMask': request.update_mask}
+        sync_client = SyncClient(clearblade_config=self._cb_config.regional_config)
+        response = sync_client.patch(api_name = "cloudiot",request_body=body,request_params=params)
+        print(response.json())
+        return DeviceRegistry.from_json(response.json())
+
+    async def patch_async(self,
+        request: UpdateDeviceRegistryRequest = None)->DeviceRegistry:
+        body = self._create_registry_body(request.device_registry)
+        params = {'name':request.name, 'updateMask': request.update_mask}
+        async_client = AsyncClient(clearblade_config=await self._cb_config.regional_config_async)
+        response = await async_client.patch(api_name = "cloudiot",request_body=body,request_params=params)
+        print(response.json())
+        return DeviceRegistry.from_json(response.json())
