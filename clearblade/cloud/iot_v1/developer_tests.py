@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, GetDeviceStatesList, GetDeviceConfigVersionsList, ListDevicesRequest, UpdateDeviceRequest
+from device_types import *
 from registry import *
 import asyncio
 
@@ -116,7 +116,9 @@ async def test_get_device_configVersions_async():
 def test_get_devices_list():
     client =  DeviceManagerClient()
     get_devices_list_request = ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1', pageSize=2)
-    response = client.list_devices(request=get_devices_list_request)
+    page_result = client.list_devices(request=get_devices_list_request)
+    for response in page_result:
+       print(page_result)
     print(response)
 
 async def test_get_devices_list_async():
@@ -161,8 +163,8 @@ if __name__ ==  '__main__':
     #asyncio.run(test_get_device_states_async())
     #test_get_device_configVersions()
     #asyncio.run(test_get_device_configVersions_async())
-    #test_get_devices_list()
+    test_get_devices_list()
     #asyncio.run(test_get_devices_list_async())
     #test_update_device()
     #asyncio.run(test_update_device_async())
-    test_list_registries()
+    #test_list_registries()
