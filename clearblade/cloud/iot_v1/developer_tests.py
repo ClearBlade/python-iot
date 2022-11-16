@@ -142,6 +142,18 @@ def test_list_registries():
     request = ListDeviceRegistriesRequest(parent="projects/ingressdevelopmentenv/locations/us-central1")
     response = client.list_device_registries(request=request)
 
+def test_get_registry():
+    client = DeviceManagerClient()
+    request = GetDeviceRegistryRequest()
+    response = client.get_device_registry(request=request)
+    print(response)
+
+async def test_get_registry_async():
+    async_client = DeviceManagerAsyncClient()
+    request = GetDeviceRegistryRequest()
+    response = await async_client.get_device_registry(request=request)
+    print(response)
+
 if __name__ ==  '__main__':
     #test_send_command()
     #asyncio.run(test_send_command_async())
@@ -165,4 +177,6 @@ if __name__ ==  '__main__':
     #asyncio.run(test_get_devices_list_async())
     #test_update_device()
     #asyncio.run(test_update_device_async())
-    test_list_registries()
+    #test_list_registries()
+    #test_get_registry()
+    asyncio.run(test_get_registry_async())

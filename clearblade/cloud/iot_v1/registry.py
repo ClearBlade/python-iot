@@ -2,7 +2,7 @@ from http_client import SyncClient, AsyncClient
 from config_manager import ClearBladeConfigManager
 
 class EventNotificationConfig:
-    def __init__(self, pub_sub_topic_name, subfolder_matches) -> None:
+    def __init__(self, pub_sub_topic_name, subfolder_matches=None) -> None:
         self._pub_sub_topic_name = pub_sub_topic_name
         self._sub_folder_matches = subfolder_matches
 
@@ -32,12 +32,15 @@ class DeviceRegistry:
 
     @staticmethod
     def from_json(registry_json):
-        event_notification_configs_json = registry_json['event_notification_configs']
+        event_notification_configs_json = registry_json['eventNotificationConfigs']
         event_notification_configs = []
 
         for event_notification_config_json in event_notification_configs_json:
-           event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'])
-           event_notification_configs.append(event_notification_config)
+            if "subfolderMatches" in event_notification_config_json:
+                event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'], event_notification_config_json["subfolderMatches"])
+            else:
+                event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'])
+            event_notification_configs.append(event_notification_config)
 
         return DeviceRegistry(id=registry_json['id'], name=registry_json['name'],
                               event_notification_configs=event_notification_configs,
@@ -92,6 +95,15 @@ class CreateDeviceRegistryRequest:
     def device_registry(self)-> DeviceRegistry:
         return self._device_registry
 
+class GetDeviceRegistryRequest:
+    def __init__(self, name:str = None) -> None:
+        self._name = name
+    
+    @property
+    def name(self):
+        return self._name
+
+
 class ListDeviceRegistriesRequest:
     def __init__(self, parent:str = None,
                  page_size:int = None,
@@ -132,6 +144,7 @@ class ListDeviceRegistriesResponse:
 class ClearBladeRegistryManager():
     def __init__(self) -> None:
         self._cb_config = ClearBladeConfigManager()
+        self._cb_config.registry_name = "MandarTest1"
 
     def _prepare_params_for_registry_list(self, request:ListDeviceRegistriesRequest):
         request_params = {'parent':request.parent}
@@ -144,8 +157,19 @@ class ClearBladeRegistryManager():
     def create(self)->DeviceRegistry:
         pass
 
-    def get(self):
-        pass
+    def get(self,
+            request: GetDeviceRegistryRequest = None):
+        sync_client = SyncClient(clearblade_config=self._cb_config.regional_config)
+        response = sync_client.get(api_name = "cloudiot")
+        print(response.json())
+        return DeviceRegistry.from_json(response.json())
+
+    async def get_async(self,
+            request: GetDeviceRegistryRequest = None):
+        async_client = AsyncClient(clearblade_config=await self._cb_config.regional_config_async)
+        response = await async_client.get(api_name = "cloudiot")
+        print(response.json())
+        return DeviceRegistry.from_json(response.json())
 
     def list(self,
             request: ListDeviceRegistriesRequest = None):

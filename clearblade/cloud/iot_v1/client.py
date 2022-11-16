@@ -57,6 +57,10 @@ class DeviceManagerClient():
     def list_device_registries(self, request: ListDeviceRegistriesRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.list(request=request)
+    
+    def get_device_registry(self, request=GetDeviceRegistryRequest):    
+        cb_registry_manager = ClearBladeRegistryManager()
+        return cb_registry_manager.get(request=request)
 
 
 class DeviceManagerAsyncClient():
@@ -111,3 +115,7 @@ class DeviceManagerAsyncClient():
     async def update_device(self, request : UpdateDeviceRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.updateDevice_async(request=request)
+
+    async def get_device_registry(self, request=GetDeviceRegistryRequest):    
+        cb_registry_manager = ClearBladeRegistryManager()
+        return await cb_registry_manager.get_async(request=request)
