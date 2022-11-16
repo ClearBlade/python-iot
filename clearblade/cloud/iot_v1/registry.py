@@ -9,16 +9,16 @@ class EventNotificationConfig:
     @property
     def pub_sub_topic_name(self):
         return self._pub_sub_topic_name
-        
+
     @property
     def sub_folder_matches(self):
         return self._sub_folder_matches
 
 class DeviceRegistry:
-    def __init__(self, id:str = None, name:str = None, 
-                 event_notification_configs:list = [EventNotificationConfig], 
+    def __init__(self, id:str = None, name:str = None,
+                 event_notification_configs:list = [EventNotificationConfig],
                  state_notification_config:dict = {'pub_sub_topic_name':None},
-                 mqtt_config:dict = {'mqttEnabledState':None}, 
+                 mqtt_config:dict = {'mqttEnabledState':None},
                  http_config:dict = {'httpEnabledState':None},
                  log_level:str = None, credentials:list = []) -> None:
         self._id = id
@@ -38,8 +38,8 @@ class DeviceRegistry:
         for event_notification_config_json in event_notification_configs_json:
            event_notification_config = EventNotificationConfig(event_notification_config_json['pubsubTopicName'])
            event_notification_configs.append(event_notification_config)
-     
-        return DeviceRegistry(id=registry_json['id'], name=registry_json['name'], 
+
+        return DeviceRegistry(id=registry_json['id'], name=registry_json['name'],
                               event_notification_configs=event_notification_configs,
                               state_notification_config=registry_json['stateNotificationConfig'],
                               mqtt_config=registry_json['mqttConfig'],
@@ -77,10 +77,24 @@ class DeviceRegistry:
     @property
     def credentials(self):
         return self._credentials
-    
+
+class CreateDeviceRegistryRequest:
+    def __init__(self, parent:str = None,
+                 device_registry:DeviceRegistry = None) -> None:
+        self._parent = parent
+        self._device_registry = device_registry
+
+    @property
+    def parent(self) -> str:
+        return self._parent
+
+    @property
+    def device_registry(self)-> DeviceRegistry:
+        return self._device_registry
+
 class ListDeviceRegistriesRequest:
-    def __init__(self, parent:str = None, 
-                 page_size:int = None, 
+    def __init__(self, parent:str = None,
+                 page_size:int = None,
                  page_token:str = None) -> None:
         self._parent = parent
         self._page_size = page_size
@@ -114,7 +128,7 @@ class ListDeviceRegistriesResponse:
     @property
     def next_page_token(self):
         return self._next_page_token
-    
+
 class ClearBladeRegistryManager():
     def __init__(self) -> None:
         self._cb_config = ClearBladeConfigManager()
@@ -127,22 +141,22 @@ class ClearBladeRegistryManager():
             request_params['page_token'] = request.page_token
         return request_params
 
-    def create(self):
+    def create(self)->DeviceRegistry:
         pass
 
     def get(self):
         pass
 
-    def list(self, 
+    def list(self,
             request: ListDeviceRegistriesRequest = None):
 
-        request_params = self._prepare_params_for_registry_list(request=request)    
+        request_params = self._prepare_params_for_registry_list(request=request)
         sync_client = SyncClient(clearblade_config=self._cb_config.admin_config)
         response = sync_client.get(api_name = "cloudiot",request_params=request_params)
         print(response.json())
 
     def list_async(self):
-        request_params = self._prepare_params_for_registry_list(request=request)    
+        request_params = self._prepare_params_for_registry_list(request=request)
         async_client = AsyncClient(clearblade_config= self._cb_config.admin_config)
         response = async_client.get(api_name = "cloudiot",request_params=request_params)
         print(response.json())
