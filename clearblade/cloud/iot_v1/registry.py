@@ -43,11 +43,12 @@ class DeviceRegistry:
             event_notification_configs.append(event_notification_config)
 
         return DeviceRegistry(id=registry_json['id'], name=registry_json['name'],
-                              event_notification_configs=event_notification_configs,
-                              state_notification_config=registry_json['stateNotificationConfig'],
-                              mqtt_config=registry_json['mqttConfig'],
-                              http_config=registry_json['httpConfig'],
-                              credentials=registry_json['credentials'])
+                              eventNotificationConfigs=event_notification_configs,
+                              stateNotificationConfig=registry_json['stateNotificationConfig'],
+                              mqttConfig=registry_json['mqttConfig'],
+                              httpConfig=registry_json['httpConfig'],
+                              credentials=registry_json['credentials'],
+                              logLevel=registry_json['loglevel'])
 
     @property
     def id(self):
@@ -87,7 +88,7 @@ class CreateDeviceRegistryRequest:
         self._parent = parent
         self._device_registry = device_registry
         if device_registry.name.startswith('projects') == False:
-            device_registry.name = parent + '/registries/' + device_registry.name
+            device_registry._name = parent + '/registries/' + device_registry.name
 
     @property
     def parent(self) -> str:
@@ -195,7 +196,7 @@ class ClearBladeRegistryManager():
         body = self._create_registry_body(request.device_registry)
         params = {'parent':request.parent}
         print(body)
-        async_client = AsyncClient(clearblade_config=await self._cb_config.admin_config)
+        async_client = AsyncClient(clearblade_config=self._cb_config.admin_config)
         response = await async_client.post(api_name = "cloudiot",request_body=body,request_params=params)
         print(response.json())
         return DeviceRegistry.from_json(response.json())
@@ -238,6 +239,6 @@ class ClearBladeRegistryManager():
     async def delete_async(self,
             request: DeleteDeviceRegistryRequest = None):
         params = {'name':request.name}
-        async_client = AsyncClient(clearblade_config=await self._cb_config.admin_config)
+        async_client = AsyncClient(clearblade_config=self._cb_config.admin_config)
         response = await async_client.delete(api_name = "cloudiot",request_params=params)
         return response

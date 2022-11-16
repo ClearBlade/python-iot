@@ -130,8 +130,8 @@ class DeviceManagerAsyncClient():
 
     async def create_device_registry(self, request=CreateDeviceRegistryRequest):    
         cb_registry_manager = ClearBladeRegistryManager()
-        return cb_registry_manager.create_async(request=request)
+        return await cb_registry_manager.create_async(request=request)
 
     async def delete_device_registry(self, request=DeleteDeviceRegistryRequest):    
         cb_registry_manager = ClearBladeRegistryManager()
-        return cb_registry_manager.delete_async(request=request)
+        return await cb_registry_manager.delete_async(request=request)

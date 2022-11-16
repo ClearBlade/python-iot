@@ -71,10 +71,11 @@ class SyncClient(HttpClient):
                      request_body=request_body)
         #send the request and return the response
         httpx_sync_client = httpx.Client()
+        timeout = httpx.Timeout(10.0, read=None)
         response = httpx_sync_client.request("POST", url=self._post_url,
                                             headers=self._request_headers,
                                             params=request_params,
-                                            data=self._post_body)
+                                            data=self._post_body, timeout=timeout)
         return response
 
     def delete(self, api_name:str = None, request_params:dict = None):
@@ -111,10 +112,11 @@ class AsyncClient(HttpClient):
         super().post(api_name=api_name, is_webhook_folder=is_webhook_folder,
                      request_body=request_body)
         httpx_async_client= httpx.AsyncClient()
+        timeout = httpx.Timeout(10.0, read=None)
         response = await httpx_async_client.request("POST", url=self._post_url,
                                                     headers=self._request_headers,
                                                     params=request_params,
-                                                    data=self._post_body)
+                                                    data=self._post_body, timeout=timeout)
         await httpx_async_client.aclose()
         return response
 
