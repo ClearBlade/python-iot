@@ -105,7 +105,10 @@ def test_get_device_configVersions():
     client = DeviceManagerClient()
     request = ListDeviceConfigVersionsRequest(name='Python_6', numVersions=1)
     response = client.list_device_config_versions(request)
-    print(response)
+    device_configs = response.device_configs
+    for device_config in device_configs:
+        print("Device version = {} Device Ack Time {} \n".format(device_config.version, 
+        device_config.cloud_ack_time))
 
 async def test_get_device_configVersions_async():
     async_client = DeviceManagerAsyncClient()
@@ -214,7 +217,7 @@ if __name__ ==  '__main__':
     #test_get_device_states()
     #asyncio.run(test_get_device_states_async())
     test_get_device_configVersions()
-    #asyncio.run(test_get_device_configVersions_async())
+    asyncio.run(test_get_device_configVersions_async())
     #test_get_devices_list()
     #asyncio.run(test_get_devices_list_async())
     #test_update_device()

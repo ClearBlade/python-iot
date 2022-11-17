@@ -177,7 +177,7 @@ class ClearBladeDeviceManager():
 
     async def get_device_list_async(self, request: ListDevicesRequest):
         params = request._prepare_params_for_list()
-        async_client = AsyncClient(clearblade_config=self._config_manager.regional_config)
+        async_client = AsyncClient(clearblade_config=self._config_manager.regional_config_async)
         response = await async_client.get(api_name="cloudiot_devices",request_params=params)
 
         if response.status_code == 200:
@@ -315,7 +315,7 @@ class ClearBladeDeviceManager():
     async def config_versions_list_async(self,
                                          request: ListDeviceConfigVersionsRequest):
         params = {'name':request.name, 'numVersions':request.numVersions}
-        async_client = AsyncClient(clearblade_config= await self._config_manager.regional_config)
+        async_client = AsyncClient(clearblade_config= await self._config_manager.regional_config_async)
         response = await async_client.get(api_name="cloudiot_devices_configVersions", request_params=params)
 
         if response.status_code == 200:

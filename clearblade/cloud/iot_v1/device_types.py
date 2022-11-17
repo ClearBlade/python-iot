@@ -151,15 +151,19 @@ class DeviceConfig(Request):
         self._device_ack_time = device_ack_time
         self._binary_data = binary_data
 
+    @property
     def version(self):
         return self._version
 
+    @property
     def cloud_ack_time(self):
         return self._cloud_ack_time
 
+    @property
     def device_ack_time(self):
         return self._device_ack_time
 
+    @property
     def binary_data(self):
         return self._binary_data
 
@@ -240,13 +244,14 @@ class ListDeviceConfigVersionsResponse():
         return self._device_configs
 
     @staticmethod
-    def from_json(device_configs_json):
+    def from_json(response_json):
+        device_configs_json = response_json['deviceConfigs']
         deviceConfigs = []
         for device_config_json in device_configs_json:
             deviceConfig = DeviceConfig.from_json(device_config_json)
             deviceConfigs.append(deviceConfig)
 
-        return ListDeviceConfigVersionsResponse(device_configs=deviceConfig)
+        return ListDeviceConfigVersionsResponse(device_configs=deviceConfigs)
 
 class UpdateDeviceRequest(Request):
     def __init__(self, id: str = None, name: str = None, numId: str=None,
