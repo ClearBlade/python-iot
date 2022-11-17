@@ -144,6 +144,58 @@ def test_list_registries():
     request = ListDeviceRegistriesRequest(parent="projects/ingressdevelopmentenv/locations/us-central1")
     response = client.list_device_registries(request=request)
 
+def test_get_registry():
+    client = DeviceManagerClient()
+    request = GetDeviceRegistryRequest()
+    response = client.get_device_registry(request=request)
+    print(response)
+
+async def test_get_registry_async():
+    async_client = DeviceManagerAsyncClient()
+    request = GetDeviceRegistryRequest()
+    response = await async_client.get_device_registry(request=request)
+    print(response)
+
+def test_create_registry():
+    client = DeviceManagerClient()
+    registry = DeviceRegistry(id='deleteTest5', name='deleteTest5', mqttConfig={'mqttEnabledState':'MQTT_ENABLED'},httpConfig={'httpEnabledState':'HTTP_ENABLED'},logLevel='ERROR', eventNotificationConfigs=[{'pubsubTopicName':'projects/ingressdevelopmentenv/topics/deleting'}])
+    request = CreateDeviceRegistryRequest(parent="projects/ingressdevelopmentenv/locations/us-central1",device_registry=registry)
+    response = client.create_device_registry(request=request)
+    print(response)
+
+async def test_create_registry_async():
+    async_client = DeviceManagerAsyncClient()
+    registry = DeviceRegistry(id='deletetest3', name='deletetest3', mqttConfig={'mqttEnabledState':'MQTT_ENABLED'},httpConfig={'httpEnabledState':'HTTP_ENABLED'},logLevel='ERROR', eventNotificationConfigs=[{'pubsubTopicName':'projects/ingressdevelopmentenv/topics/deleting'}])
+    request = CreateDeviceRegistryRequest(parent="projects/ingressdevelopmentenv/locations/us-central1",device_registry=registry)
+    response = await async_client.create_device_registry(request=request)
+    print(response)
+
+def test_delete_registry():
+    client = DeviceManagerClient()
+    request = DeleteDeviceRegistryRequest(name="projects/ingressdevelopmentenv/locations/us-central1/registries/deleteTest2")
+    response = client.delete_device_registry(request=request)
+    print(response)
+
+async def test_delete_registry_async():
+    async_client = DeviceManagerAsyncClient()
+    request = DeleteDeviceRegistryRequest(name="projects/ingressdevelopmentenv/locations/us-central1/registries/deleteTest3")
+    response = await async_client.delete_device_registry(request=request)
+    print(response)
+
+def test_update_registry():
+    client = DeviceManagerClient()
+    registry = DeviceRegistry(id='deleteTest5', name='deleteTest5', mqttConfig={'mqttEnabledState':'MQTT_DISABLED'},logLevel='ERROR')
+    request = UpdateDeviceRegistryRequest(name="projects/ingressdevelopmentenv/locations/us-central1/registries/deleteTest5", updateMask='mqttConfig.mqtt_enabled_state,logLevel', device_registry=registry)
+    response = client.update_device_registry(request=request)
+    print(response)
+
+async def test_update_registry_async():
+    async_client = DeviceManagerAsyncClient()
+    registry = DeviceRegistry(id='deleteTest5', name='deleteTest5', mqttConfig={'mqttEnabledState':'MQTT_ENABLED'},logLevel='DEBUG')
+    request = UpdateDeviceRegistryRequest(name="projects/ingressdevelopmentenv/locations/us-central1/registries/deleteTest5", updateMask='mqttConfig.mqtt_enabled_state,logLevel', device_registry=registry)
+    response = await async_client.update_device_registry(request=request)
+    print(response)
+
 if __name__ ==  '__main__':
     #test_send_command()
     #asyncio.run(test_send_command_async())
@@ -168,3 +220,11 @@ if __name__ ==  '__main__':
     #test_update_device()
     #asyncio.run(test_update_device_async())
     #test_list_registries()
+    #test_get_registry()
+    #asyncio.run(test_get_registry_async())
+    #test_create_registry()
+    #asyncio.run(test_create_registry_async())
+    #test_delete_registry()
+    #asyncio.run(test_delete_registry_async())
+    #test_update_registry()
+    #asyncio.run(test_update_registry_async())
