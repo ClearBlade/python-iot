@@ -121,3 +121,11 @@ class ClearBladeConfigManager:
     @registry_name.setter
     def registry_name(self, registry_name):
         self._registry_name = registry_name
+
+    @property
+    def region_name(self):
+        return self._region_name
+
+    @region_name.setter
+    def region_name(self, region_name):
+        self._region_name = region_name

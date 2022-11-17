@@ -2,6 +2,7 @@ from http_client import SyncClient, AsyncClient
 from config_manager import ClearBladeConfigManager
 from pagers import ListDevicesPager, ListDevicesAsyncPager
 from device_types import *
+from utils import find_project_region_registry_from_parent
 
 class ClearBladeDeviceManager():
 
@@ -67,6 +68,13 @@ class ClearBladeDeviceManager():
         for deviceJson in json_response['devices']:
             devicesList.append(Device.from_json(json=deviceJson))
         return devicesList
+
+    def _set_project_location_region(self, data):
+        if 'locations' in data:
+            self._config_manager.region_name = data['locations']
+
+        if 'registries' in data:
+            self._config_manager.registry_name = data['registries']
 
     def send_command(self,
                     request: SendCommandToDeviceRequest,
@@ -241,33 +249,34 @@ class ClearBladeDeviceManager():
 
 
     def bindGatewayToDevice(self,
-            request: BindUnBindGatewayDeviceRequest) :
-        sync_client = SyncClient()
+                            request: BindDeviceToGatewayRequest) :
+
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'bindDeviceToGateway'}
+        sync_client = SyncClient(clearblade_config= self._config_manager.regional_config)
         response = sync_client.post(api_name="cloudiot", request_params=params, request_body=body)
 
         return response
 
     async def bindGatewayToDevice_async(self,
-            request: BindUnBindGatewayDeviceRequest) :
-        async_client = AsyncClient()
+                                        request: BindDeviceToGatewayRequest) :
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'bindDeviceToGateway'}
+        async_client = AsyncClient(clearblade_config=await self._config_manager.regional_config_async)
         response = await async_client.post(api_name="cloudiot", request_params=params, request_body=body)
         return response
 
     def unbindGatewayFromDevice(self,
-            request: BindUnBindGatewayDeviceRequest) :
-        sync_client = SyncClient()
+                                request: UnbindDeviceFromGatewayRequest) :
+        sync_client = SyncClient(clearblade_config= self._config_manager.regional_config)
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'unbindDeviceFromGateway'}
         response = sync_client.post(api_name="cloudiot", request_params=params, request_body=body)
         return response
 
     async def unbindGatewayFromDevice_async(self,
-            request: BindUnBindGatewayDeviceRequest) :
-        async_client = AsyncClient()
+                                            request: UnbindDeviceFromGatewayRequest) :
+        async_client = AsyncClient(clearblade_config=await self._config_manager.regional_config_async)
         body = {'deviceId':request.deviceId, 'gatewayId':request.gatewayId}
         params = {'method':'unbindDeviceFromGateway'}
         response = await async_client.post(api_name="cloudiot",request_params=params, request_body=body)
@@ -293,22 +302,22 @@ class ClearBladeDeviceManager():
             return response.json()
         return None
 
-    def getDeviceConfigVersionsList(self,
-            request: GetDeviceConfigVersionsList):
-        sync_client = SyncClient()
+    def config_versions_list(self,
+                             request: ListDeviceConfigVersionsRequest):
         params = {'name':request.name, 'numVersions':request.numVersions}
+        sync_client = SyncClient(clearblade_config=self._config_manager.regional_config)
         response = sync_client.get(api_name="cloudiot_devices_configVersions",request_params=params)
 
         if response.status_code == 200:
-            return response.json()
+            return ListDeviceConfigVersionsResponse.from_json(response.json())
         return None
 
-    async def getDeviceConfigVersionsList_async(self,
-            request: GetDeviceConfigVersionsList):
-        async_client = AsyncClient()
+    async def config_versions_list_async(self,
+                                         request: ListDeviceConfigVersionsRequest):
         params = {'name':request.name, 'numVersions':request.numVersions}
+        async_client = AsyncClient(clearblade_config= await self._config_manager.regional_config)
         response = await async_client.get(api_name="cloudiot_devices_configVersions", request_params=params)
 
         if response.status_code == 200:
-            return response.json()
+            return ListDeviceConfigVersionsResponse.from_json(response.json())
         return None

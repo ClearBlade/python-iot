@@ -1,3 +1,5 @@
+from utils import get_value
+
 class Device():
     """
     Data class for Clearblade Device
@@ -163,8 +165,11 @@ class DeviceConfig(Request):
 
     @staticmethod
     def from_json(json):
-        return DeviceConfig(version=json['version'], cloud_ack_time=json['cloudUpdateTime'],
-                            device_ack_time=json['deviceAckTime'], binary_data=json['binaryData'])
+        return DeviceConfig(name='',
+                            version=get_value(json, 'version'),
+                            cloud_ack_time=get_value(json,'cloudUpdateTime'),
+                            device_ack_time=get_value(json, 'deviceAckTime'),
+                            binary_data=get_value(json,'binaryData'))
 
 class DeleteDeviceRequest(Request):
     def __init__(self, name: str = None) -> None:
@@ -175,10 +180,16 @@ class GetDeviceRequest(Request):
         super().__init__(name)
 
 class BindUnBindGatewayDeviceRequest(Request):
-    def __init__(self, deviceId: str = None,
-                       gatewayId: str = None) -> None:
+    def __init__(self, parent:str = None,
+                 deviceId: str = None,
+                 gatewayId: str = None) -> None:
+        self._parent = parent
         self._deviceid=deviceId
         self._gatewayid=gatewayId
+
+    @property
+    def parent(self):
+        return self._parent
 
     @property
     def deviceId(self):
@@ -187,6 +198,18 @@ class BindUnBindGatewayDeviceRequest(Request):
     @property
     def gatewayId(self):
         return self._gatewayid
+
+class BindDeviceToGatewayRequest(BindUnBindGatewayDeviceRequest):
+    def __init__(self, parent: str = None,
+                 deviceId: str = None,
+                 gatewayId: str = None) -> None:
+        super().__init__(parent, deviceId, gatewayId)
+
+class UnbindDeviceFromGatewayRequest(BindUnBindGatewayDeviceRequest):
+    def __init__(self, parent: str = None,
+                 deviceId: str = None,
+                 gatewayId: str = None) -> None:
+        super().__init__(parent, deviceId, gatewayId)
 
 class GetDeviceStatesList(Request):
     def __init__(self, name: str = None,
@@ -198,7 +221,7 @@ class GetDeviceStatesList(Request):
     def numStates(self):
         return self._numstates
 
-class GetDeviceConfigVersionsList(Request):
+class ListDeviceConfigVersionsRequest(Request):
     def __init__(self, name: str = None,
                 numVersions: int = None) -> None:
         super().__init__(name)
@@ -208,6 +231,22 @@ class GetDeviceConfigVersionsList(Request):
     def numVersions(self):
         return self._numversions
 
+class ListDeviceConfigVersionsResponse():
+    def __init__(self, device_configs) -> None:
+        self._device_configs = device_configs
+
+    @property
+    def device_configs(self):
+        return self._device_configs
+
+    @staticmethod
+    def from_json(device_configs_json):
+        deviceConfigs = []
+        for device_config_json in device_configs_json:
+            deviceConfig = DeviceConfig.from_json(device_config_json)
+            deviceConfigs.append(deviceConfig)
+
+        return ListDeviceConfigVersionsResponse(device_configs=deviceConfig)
 
 class UpdateDeviceRequest(Request):
     def __init__(self, id: str = None, name: str = None, numId: str=None,
