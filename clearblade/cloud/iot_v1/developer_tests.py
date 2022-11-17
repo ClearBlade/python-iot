@@ -1,5 +1,5 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
-from devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device, ModifyCloudToDeviceConfigRequest, DeleteDeviceRequest, GetDeviceRequest, BindUnBindGatewayDeviceRequest, GetDeviceStatesList, GetDeviceConfigVersionsList, ListDevicesRequest, UpdateDeviceRequest
+from device_types import *
 from registry import *
 import asyncio
 
@@ -67,25 +67,25 @@ async def test_get_device_async():
 
 def test_bind_gateway_device():
     client =  DeviceManagerClient()
-    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='Python_101',gatewayId='gateway1')
+    bind_device_request = BindDeviceToGatewayRequest(deviceId='Python_101',gatewayId='gateway1')
     response = client.bind_device_to_gateway(request=bind_device_request)
     print(response)
 
 async def test_bind_gateway_device_async():
     async_client =  DeviceManagerAsyncClient()
-    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='mandar_device',gatewayId='gateway1')
+    bind_device_request = BindDeviceToGatewayRequest(deviceId='mandar_device',gatewayId='gateway1')
     response = await async_client.bind_device_to_gateway(request=bind_device_request)
     print(response)
 
 def test_unbind_gateway_device():
     client =  DeviceManagerClient()
-    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='Python_101',gatewayId='gateway1')
+    bind_device_request = UnbindDeviceFromGatewayRequest(deviceId='Python_101',gatewayId='gateway1')
     response = client.unbind_device_from_gateway(request=bind_device_request)
     print(response)
 
 async def test_unbind_gateway_device_async():
     async_client =  DeviceManagerAsyncClient()
-    bind_device_request = BindUnBindGatewayDeviceRequest(deviceId='mandar_device',gatewayId='gateway1')
+    bind_device_request = UnbindDeviceFromGatewayRequest(deviceId='mandar_device',gatewayId='gateway1')
     response = await async_client.unbind_device_from_gateway(request=bind_device_request)
     print(response)
 
@@ -103,27 +103,29 @@ async def test_get_device_states_async():
 
 def test_get_device_configVersions():
     client = DeviceManagerClient()
-    request = GetDeviceConfigVersionsList(name='Rashmi_Device_Test', numVersions=3)
+    request = ListDeviceConfigVersionsRequest(name='Python_6', numVersions=1)
     response = client.list_device_config_versions(request)
     print(response)
 
 async def test_get_device_configVersions_async():
     async_client = DeviceManagerAsyncClient()
-    request = GetDeviceConfigVersionsList(name='Rashmi_Device_Test', numVersions=3)
+    request = ListDeviceConfigVersionsRequest(name='Python_6', numVersions=1)
     response = await async_client.list_device_config_versions(request=request)
     print(response)
 
 def test_get_devices_list():
     client =  DeviceManagerClient()
     get_devices_list_request = ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1', pageSize=2)
-    response = client.list_devices(request=get_devices_list_request)
-    print(response)
+    page_result = client.list_devices(request=get_devices_list_request)
+    for response in page_result:
+       print(response)
 
 async def test_get_devices_list_async():
     async_client = DeviceManagerAsyncClient()
     get_devices_list_request = ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1')
-    response = await async_client.list_devices(request=get_devices_list_request)
-    print(response)
+    page_result = await async_client.list_devices(request=get_devices_list_request)
+    async for response in page_result:
+        print(response)
 
 def test_update_device():
     client =  DeviceManagerClient()
@@ -211,7 +213,7 @@ if __name__ ==  '__main__':
     #asyncio.run(test_unbind_gateway_device_async())
     #test_get_device_states()
     #asyncio.run(test_get_device_states_async())
-    #test_get_device_configVersions()
+    test_get_device_configVersions()
     #asyncio.run(test_get_device_configVersions_async())
     #test_get_devices_list()
     #asyncio.run(test_get_devices_list_async())
@@ -225,4 +227,4 @@ if __name__ ==  '__main__':
     #test_delete_registry()
     #asyncio.run(test_delete_registry_async())
     #test_update_registry()
-    asyncio.run(test_update_registry_async())
+    #asyncio.run(test_update_registry_async())

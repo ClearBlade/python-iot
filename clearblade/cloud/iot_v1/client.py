@@ -1,5 +1,6 @@
 from devices import *
 from registry import *
+from device_types import *
 
 class DeviceManagerClient():
 
@@ -30,29 +31,29 @@ class DeviceManagerClient():
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.get(request=request)
 
-    def bind_device_to_gateway(self, request : BindUnBindGatewayDeviceRequest):
+    def bind_device_to_gateway(self, request : BindDeviceToGatewayRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.bindGatewayToDevice(request=request)
 
-    def unbind_device_from_gateway(self, request : BindUnBindGatewayDeviceRequest):
+    def unbind_device_from_gateway(self, request : UnbindDeviceFromGatewayRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.unbindGatewayFromDevice(request=request)
 
     def list_device_states(self, request : GetDeviceStatesList):
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.getDeviceSatesList(request=request)
-    
-    def list_device_config_versions(self, request : GetDeviceConfigVersionsList):
+
+    def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return cb_device_manager.getDeviceConfigVersionsList(request=request)
-    
+        return cb_device_manager.config_versions_list(request=request)
+
     def list_devices(self, request : ListDevicesRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return cb_device_manager.getDevicesList(request=request)
-    
+        return cb_device_manager.list(request=request)
+
     def update_device(self, request : UpdateDeviceRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return cb_device_manager.updateDevice(request=request)
+        return cb_device_manager.update(request=request)
 
     def list_device_registries(self, request: ListDeviceRegistriesRequest):
         cb_registry_manager = ClearBladeRegistryManager()
@@ -103,29 +104,29 @@ class DeviceManagerAsyncClient():
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.get_async(request=request)
 
-    async def bind_device_to_gateway(self, request : BindUnBindGatewayDeviceRequest):
+    async def bind_device_to_gateway(self, request : BindDeviceToGatewayRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.bindGatewayToDevice_async(request=request)
 
-    async def unbind_device_from_gateway(self, request : BindUnBindGatewayDeviceRequest):
+    async def unbind_device_from_gateway(self, request : UnbindDeviceFromGatewayRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.unbindGatewayFromDevice_async(request=request)
 
     async def list_device_states(self, request : GetDeviceStatesList):
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.getDeviceSatesList_async(request=request)
-    
-    async def list_device_config_versions(self, request : GetDeviceConfigVersionsList):
+
+    async def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return await cb_device_manager.getDeviceConfigVersionsList_async(request=request)
+        return await cb_device_manager.config_versions_list_async(request=request)
 
     async def list_devices(self, request : ListDevicesRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return await cb_device_manager.getDevicesList_async(request=request)
+        return await cb_device_manager.list_async(request=request)
 
     async def update_device(self, request : UpdateDeviceRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return await cb_device_manager.updateDevice_async(request=request)
+        return await cb_device_manager.update_async(request=request)
 
     async def get_device_registry(self, request=GetDeviceRegistryRequest):    
         cb_registry_manager = ClearBladeRegistryManager()
