@@ -1,5 +1,70 @@
 from device_types import Device, ListDevicesResponse, ListDevicesRequest
+from registry_types import DeviceRegistry, ListDeviceRegistriesRequest, ListDeviceRegistriesResponse
 from typing import Any, Awaitable, AsyncIterator, Callable
+
+class ListDeviceRegistryPager:
+    def __init__(self, method, 
+                 request: ListDeviceRegistriesRequest, 
+                 response:ListDeviceRegistriesResponse) -> None:
+        self._method = method
+        self._request = request
+        self._response = response
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._response, name)
+
+    @property
+    def pages(self):
+        yield self._response
+        is_next_page_token = self._response.next_page_token and self._response.next_page_token != 0
+        while is_next_page_token:
+            # call the method to fetch the next page.
+            self._request.page_token = self._response.next_page_token
+            self._response = self._method(request = self._request)
+            yield self._response
+
+    def __iter__(self):
+        for page in self.pages:
+            yield from page.device_registries
+
+    def __repr__(self) -> str:
+        return "{0}<{1!r}>".format(self.__class__.__name__, self._response)
+
+class ListDeviceRegistriesAsyncPager:
+
+    def __init__(
+        self,
+        method: Callable[..., Awaitable[ListDeviceRegistriesResponse]],
+        request: ListDeviceRegistriesRequest,
+        response: ListDeviceRegistriesResponse
+        ):
+        self._method = method
+        self._request = request
+        self._response = response
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._response, name)
+
+    @property
+    async def pages(self) -> AsyncIterator[ListDeviceRegistriesResponse]:
+        yield self._response
+        is_next_page_token = self._response.next_page_token and self._response.next_page_token != 0
+
+        while is_next_page_token:
+            self._request.page_token = self._response.next_page_token
+            self._response = await self._method(self._request)
+            yield self._response
+
+    def __aiter__(self) -> AsyncIterator[DeviceRegistry]:
+        async def async_generator():
+            async for page in self.pages:
+                for response in page.device_registries:
+                    yield response
+
+        return async_generator()
+
+    def __repr__(self) -> str:
+        return "{0}<{1!r}>".format(self.__class__.__name__, self._response)
 
 class ListDevicesPager:
 

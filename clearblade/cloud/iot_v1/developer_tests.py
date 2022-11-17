@@ -1,6 +1,7 @@
 from client import DeviceManagerClient, DeviceManagerAsyncClient
 from device_types import *
 from registry import *
+from registry_types import *
 import asyncio
 
 def test_send_command():
@@ -146,6 +147,15 @@ def test_list_registries():
     client = DeviceManagerClient()
     request = ListDeviceRegistriesRequest(parent="projects/ingressdevelopmentenv/locations/us-central1")
     response = client.list_device_registries(request=request)
+    for page_result in response:
+        print(page_result)
+
+async def test_list_registries_async():
+    client = DeviceManagerAsyncClient()
+    request = ListDeviceRegistriesRequest(parent="projects/ingressdevelopmentenv/locations/us-central1")
+    response = await client.list_device_registries(request=request)
+    async for page_result in response:
+        print(page_result)
 
 def test_get_registry():
     client = DeviceManagerClient()
@@ -216,13 +226,14 @@ if __name__ ==  '__main__':
     #asyncio.run(test_unbind_gateway_device_async())
     #test_get_device_states()
     #asyncio.run(test_get_device_states_async())
-    test_get_device_configVersions()
-    asyncio.run(test_get_device_configVersions_async())
+    #test_get_device_configVersions()
+    #asyncio.run(test_get_device_configVersions_async())
     #test_get_devices_list()
     #asyncio.run(test_get_devices_list_async())
     #test_update_device()
     #asyncio.run(test_update_device_async())
-    #test_list_registries()
+    test_list_registries()
+    asyncio.run(test_list_registries_async())
     #test_get_registry()
     #asyncio.run(test_get_registry_async())
     #test_create_registry()

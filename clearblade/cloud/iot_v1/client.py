@@ -1,6 +1,7 @@
 from devices import *
 from registry import *
 from device_types import *
+from registry_types import *
 
 class DeviceManagerClient():
 
@@ -127,6 +128,10 @@ class DeviceManagerAsyncClient():
     async def update_device(self, request : UpdateDeviceRequest):
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.update_async(request=request)
+
+    async def list_device_registries(self, request: ListDeviceRegistriesRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return await cb_registry_manager.list_async(request=request)
 
     async def get_device_registry(self, request=GetDeviceRegistryRequest):    
         cb_registry_manager = ClearBladeRegistryManager()
