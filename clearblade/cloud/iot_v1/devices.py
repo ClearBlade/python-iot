@@ -1,6 +1,6 @@
 from http_client import SyncClient, AsyncClient
 from config_manager import ClearBladeConfigManager
-from pagers import ListDevicesPager
+from pagers import ListDevicesPager, ListDevicesAsyncPager
 from device_types import *
 
 class ClearBladeDeviceManager():
@@ -162,22 +162,26 @@ class ClearBladeDeviceManager():
              request: ListDevicesRequest):
 
         device_list_response = self.get_device_list_response(request=request)
-        #devices = device_list_response.devices
-        #yield from devices
-
         if device_list_response:
             return ListDevicesPager(method=self.get_device_list_response,
                                     request=request, response=device_list_response)
         return None
 
-    async def list_async(self,
-                         request: ListDevicesRequest):
-        async_client = AsyncClient(clearblade_config=self._config_manager.regional_config)
+    async def get_device_list_async(self, request: ListDevicesRequest):
         params = request._prepare_params_for_list()
-        response = await async_client.list(api_name="cloudiot_devices",request_params=params)
+        async_client = AsyncClient(clearblade_config=self._config_manager.regional_config)
+        response = await async_client.get(api_name="cloudiot_devices",request_params=params)
 
         if response.status_code == 200:
-            return response.json()
+            return ListDevicesResponse.from_json(response.json())
+        return None
+
+    async def list_async(self,
+                         request: ListDevicesRequest):
+        device_list_response = await self.get_device_list_async(request=request)
+        if device_list_response:
+            return ListDevicesAsyncPager(method= self.get_device_list_async,
+                                         request=request, response=device_list_response)
         return None
 
     def get(self,

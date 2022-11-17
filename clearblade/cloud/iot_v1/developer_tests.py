@@ -118,14 +118,14 @@ def test_get_devices_list():
     get_devices_list_request = ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1', pageSize=2)
     page_result = client.list_devices(request=get_devices_list_request)
     for response in page_result:
-       print(page_result)
-    print(response)
+       print(response)
 
 async def test_get_devices_list_async():
     async_client = DeviceManagerAsyncClient()
     get_devices_list_request = ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1')
-    response = await async_client.list_devices(request=get_devices_list_request)
-    print(response)
+    page_result = await async_client.list_devices(request=get_devices_list_request)
+    async for response in page_result:
+        print(response)
 
 def test_update_device():
     client =  DeviceManagerClient()
@@ -164,7 +164,7 @@ if __name__ ==  '__main__':
     #test_get_device_configVersions()
     #asyncio.run(test_get_device_configVersions_async())
     test_get_devices_list()
-    #asyncio.run(test_get_devices_list_async())
+    asyncio.run(test_get_devices_list_async())
     #test_update_device()
     #asyncio.run(test_update_device_async())
     #test_list_registries()
