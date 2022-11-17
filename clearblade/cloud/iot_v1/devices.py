@@ -9,8 +9,7 @@ class ClearBladeDeviceManager():
     def __init__(self) -> None:
         #create the ClearBladeConfig object
         self._config_manager = ClearBladeConfigManager()
-        self._config_manager.registry_name = "gargi_python"
-
+        
     def _prepare_for_send_command(self,
                                   request: SendCommandToDeviceRequest,
                                   name: str = None,

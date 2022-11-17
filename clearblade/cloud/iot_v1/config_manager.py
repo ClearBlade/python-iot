@@ -9,7 +9,7 @@ class ClearBladeConfigManager:
         self._admin_config:ClearBladeConfig = None
         self._regional_config:ClearBladeConfig = None
         self._region_name:str = "us-central1"
-        self._registry_name:str = None
+        self._registry_name:str = os.environ.get("CLEARBLADE_REGISTRY")
 
     def _set_admin_clearblade_config(self):
         if self._admin_config:
