@@ -89,6 +89,24 @@ class Device():
 
 #classes to mock googles request & response
 
+class DeviceState():
+    def __init__(self, updated_time: str =None, binary_data:str = None) -> None:
+        self._updated_time = updated_time
+        self._binary_data = binary_data
+
+    @property
+    def updated_time(self):
+        return self._updated_time
+
+    @property
+    def binary_data(self):
+        return self._binary_data
+
+    @staticmethod
+    def from_json(response_json):
+        return DeviceState(updated_time=get_value(response_json, 'updateTime'),
+                           binary_data=get_value(response_json, 'binaryData'))
+
 class Request():
     def __init__(self, name) -> None:
         self._name = name
@@ -215,15 +233,35 @@ class UnbindDeviceFromGatewayRequest(BindUnBindGatewayDeviceRequest):
                  gatewayId: str = None) -> None:
         super().__init__(parent, deviceId, gatewayId)
 
-class GetDeviceStatesList(Request):
+class ListDeviceStatesRequest(Request):
     def __init__(self, name: str = None,
-                numStates: int = None) -> None:
+                num_states: int = None) -> None:
         super().__init__(name)
-        self._numstates = numStates
+        self._num_states = num_states
 
     @property
-    def numStates(self):
-        return self._numstates
+    def num_states(self):
+        return self._num_states
+
+class ListDeviceStatesResponse():
+    def __init__(self, device_states:list[DeviceState] = []) -> None:
+        self._device_states = device_states
+
+    @property
+    def device_states(self):
+        return self._device_states
+
+    @staticmethod
+    def from_json(response_json):
+        device_states_json = get_value(response_json, 'deviceStates')
+        device_states = []
+        for device_state_json in device_states_json:
+            device_state = DeviceState.from_json(device_state_json)
+            device_states.append(device_state)
+
+        return ListDeviceStatesResponse(device_states=device_states)
+
+
 
 class ListDeviceConfigVersionsRequest(Request):
     def __init__(self, name: str = None,

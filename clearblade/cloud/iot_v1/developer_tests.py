@@ -92,13 +92,13 @@ async def test_unbind_gateway_device_async():
 
 def test_get_device_states():
     client = DeviceManagerClient()
-    request = GetDeviceStatesList(name='Rashmi_Device_Test', numStates=3)
+    request = ListDeviceStatesRequest(name='Python_5', num_states=3)
     response = client.list_device_states(request)
     print(response)
 
 async def test_get_device_states_async():
     async_client = DeviceManagerAsyncClient()
-    request = GetDeviceStatesList(name='Rashmi_Device_Test', numStates=3)
+    request = ListDeviceStatesRequest(name='Python_6', num_states=3)
     response = await async_client.list_device_states(request=request)
     print(response)
 
@@ -224,11 +224,11 @@ if __name__ ==  '__main__':
     #asyncio.run(test_bind_gateway_device_async())
     #test_unbind_gateway_device()
     #asyncio.run(test_unbind_gateway_device_async())
-    #test_get_device_states()
+    test_get_device_states()
     #asyncio.run(test_get_device_states_async())
     #test_get_device_configVersions()
     #asyncio.run(test_get_device_configVersions_async())
-    test_get_devices_list()
+    #test_get_devices_list()
     #asyncio.run(test_get_devices_list_async())
     #test_update_device()
     #asyncio.run(test_update_device_async())

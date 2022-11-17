@@ -2,7 +2,6 @@ from http_client import SyncClient, AsyncClient
 from config_manager import ClearBladeConfigManager
 from pagers import ListDevicesPager, ListDevicesAsyncPager
 from device_types import *
-from utils import find_project_region_registry_from_parent
 
 class ClearBladeDeviceManager():
 
@@ -281,24 +280,24 @@ class ClearBladeDeviceManager():
         response = await async_client.post(api_name="cloudiot",request_params=params, request_body=body)
         return response
 
-    def getDeviceSatesList(self,
-            request: GetDeviceStatesList):
-        sync_client = SyncClient()
-        params = {'name':request.name, 'numStates':request.numStates}
+    def states_list(self,
+                          request: ListDeviceStatesRequest):
+        params = {'name':request.name, 'numStates':request.num_states}
+        sync_client = SyncClient(clearblade_config=self._config_manager.regional_config)
         response = sync_client.get(api_name="cloudiot_devices_states",request_params=params)
 
         if response.status_code == 200:
-            return response.json()
+            return ListDeviceStatesResponse.from_json(response.json())
         return None
 
-    async def getDeviceSatesList_async(self,
-            request: GetDeviceRequest):
-        async_client = AsyncClient()
-        params = {'name':request.name, 'numStates':request.numStates}
+    async def states_list_async(self,
+                                       request: ListDeviceStatesRequest):
+        params = {'name':request.name, 'numStates':request.num_states}
+        async_client = AsyncClient(clearblade_config=self._config_manager.regional_config)
         response = await async_client.get(request_params=params)
 
         if response.status_code == 200:
-            return response.json()
+            return ListDeviceStatesResponse.from_json(response.json())
         return None
 
     def config_versions_list(self,

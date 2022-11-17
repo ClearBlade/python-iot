@@ -40,9 +40,9 @@ class DeviceManagerClient():
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.unbindGatewayFromDevice(request=request)
 
-    def list_device_states(self, request : GetDeviceStatesList):
+    def list_device_states(self, request : ListDeviceStatesRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return cb_device_manager.getDeviceSatesList(request=request)
+        return cb_device_manager.states_list(request=request)
 
     def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest):
         cb_device_manager = ClearBladeDeviceManager()
@@ -113,9 +113,9 @@ class DeviceManagerAsyncClient():
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.unbindGatewayFromDevice_async(request=request)
 
-    async def list_device_states(self, request : GetDeviceStatesList):
+    async def list_device_states(self, request : ListDeviceStatesRequest):
         cb_device_manager = ClearBladeDeviceManager()
-        return await cb_device_manager.getDeviceSatesList_async(request=request)
+        return await cb_device_manager.states_list_async(request=request)
 
     async def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest):
         cb_device_manager = ClearBladeDeviceManager()
