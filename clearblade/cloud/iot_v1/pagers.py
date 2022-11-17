@@ -21,7 +21,7 @@ class ListDevicesPager:
 
     def __iter__(self):
         for page in self.pages:
-            yield from page.devices()
+            yield from page.devices
 
     def __repr__(self) -> str:
         return "{0}<{1!r}>".format(self.__class__.__name__, self._response)

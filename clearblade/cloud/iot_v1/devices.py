@@ -150,10 +150,9 @@ class ClearBladeDeviceManager():
 
     def get_device_list_response(self, request:ListDevicesRequest):
         sync_client = SyncClient(clearblade_config= self._config_manager.regional_config)
+
         params = request._prepare_params_for_list()
         response = sync_client.get(api_name="cloudiot_devices",request_params=params)
-
-        print(response.text)
 
         if response.status_code == 200:
             return ListDevicesResponse.from_json(response.json())

@@ -322,9 +322,11 @@ class ListDevicesResponse():
     def raw_pages(self):
         return self
 
+    @property
     def devices(self):
         return self._devices
 
+    @property
     def next_page_token(self):
         return self._next_page_token
 
