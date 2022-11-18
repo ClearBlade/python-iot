@@ -8,7 +8,7 @@ class ClearBladeConfigManager:
     def __init__(self) -> None:
         self._admin_config:ClearBladeConfig = None
         self._regional_config:ClearBladeConfig = None
-        self._region_name:str = "us-central1"
+        self._region_name:str = os.environ.get("CLEARBLADE_REGION")
         self._registry_name:str = os.environ.get("CLEARBLADE_REGISTRY")
 
     def _set_admin_clearblade_config(self):
@@ -82,7 +82,6 @@ class ClearBladeConfigManager:
         response = await async_client.post(api_name="getRegistryCredentials",
                                            is_webhook_folder=False,
                                            request_body=request_body)
-        print(response)
 
         if response.status_code != 200:
             #TODO: raise some exceptions

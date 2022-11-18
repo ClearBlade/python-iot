@@ -1,4 +1,5 @@
 from utils import get_value
+from typing import List
 
 class Device():
     """
@@ -244,7 +245,7 @@ class ListDeviceStatesRequest(Request):
         return self._num_states
 
 class ListDeviceStatesResponse():
-    def __init__(self, device_states:list[DeviceState] = []) -> None:
+    def __init__(self, device_states:List[DeviceState] = []) -> None:
         self._device_states = device_states
 
     @property

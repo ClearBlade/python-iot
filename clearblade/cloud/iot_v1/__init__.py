@@ -1,8 +1,36 @@
 from clearblade.cloud.iot_v1.client import DeviceManagerClient, DeviceManagerAsyncClient
-from clearblade.cloud.iot_v1.devices import SendCommandToDeviceRequest, CreateDeviceRequest, Device
+from clearblade.cloud.iot_v1.device_types import *
+from clearblade.cloud.iot_v1.registry_types import *
+from clearblade.cloud.iot_v1.pagers import *
 
 __all__ = ("DeviceManagerClient",
            "DeviceManagerAsyncClient",
+           "Device",
+           "DeviceState",
+           "DeviceConfig",
            "SendCommandToDeviceRequest",
            "CreateDeviceRequest",
-           "Device")
+           "ModifyCloudToDeviceConfigRequest",
+           "DeleteDeviceRequest",
+           "GetDeviceRequest",
+           "BindDeviceToGatewayRequest",
+           "UnBindDeviceToGatewayRequest",
+           "ListDeviceStatesRequest",
+           "ListDeviceStatesResponse",
+           "ListDeviceConfigVersionsRequest",
+           "ListDeviceConfigVersionsResponse",
+           "UpdateDeviceRequest",
+           "ListDevicesRequest",
+           "ListDevicesResponse",
+           "EventNotificationConfig",
+           "DeviceRegistry",
+           "CreateDeviceRegistryRequest",
+           "UpdateDeviceRegistryRequest",
+           "GetDeviceRegistryRequest",
+           "DeleteDeviceRegistryRequest",
+           "ListDeviceRegistriesRequest",
+           "ListDeviceRegistriesResponse",
+           "ListDeviceRegistryPager",
+           "ListDeviceRegistriesAsyncPager",
+           "ListDevicesPager",
+           "ListDevicesAsyncPager")
