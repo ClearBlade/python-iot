@@ -33,7 +33,7 @@ class ClearBladeDeviceManager():
                 'credentials':device.credentials, 'lastErrorStatus':device.last_error_status,
                 'config':device.config, 'state':device.state,
                 'loglevel':device.log_level, 'metadata':device.meta_data,
-                'gatewayConfig':device.config}
+                'gatewayConfig':device.gateway_config}
 
     def _create_device_from_response(self, json_response) -> Device :
         return Device.from_json(json=json_response)
