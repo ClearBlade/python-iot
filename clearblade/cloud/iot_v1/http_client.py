@@ -16,6 +16,9 @@ class HttpClient():
         self._request_headers : dict = None
         self._post_body : dict = None
 
+    def _get_time_out(self):
+        return httpx.Timeout(timeout=10.0, read=None)
+
     def _get_api_url(self, api_name:str = None, is_web_hook:bool = True) -> str:
         api_web_hook_path = "api/v/4/webhook/execute"
         if not is_web_hook:
@@ -55,6 +58,10 @@ class HttpClient():
         self._post_body = self._process_request_body(request_body=request_body)
 
 class SyncClient(HttpClient):
+
+    def __init__(self, clearblade_config: ClearBladeConfig = None) -> None:
+        super().__init__(clearblade_config)
+        self._sync_client = httpx.Client(timeout=self._get_time_out())
 
     def get(self, api_name:str = None, request_params:dict = {}):
         super().get(api_name=api_name)
@@ -97,6 +104,10 @@ class SyncClient(HttpClient):
         return response
 
 class AsyncClient(HttpClient):
+
+    def __init__(self, clearblade_config: ClearBladeConfig = None) -> None:
+        super().__init__(clearblade_config)
+        self._async_client = httpx.AsyncClient(timeout=self._get_time_out())
 
     async def get(self, api_name:str = None, request_params:dict = {}):
         super().get(api_name=api_name)
