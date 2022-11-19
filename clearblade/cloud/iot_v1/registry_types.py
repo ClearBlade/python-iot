@@ -31,9 +31,9 @@ class DeviceRegistry:
 
     @staticmethod
     def from_json(registry_json):
+        event_notification_configs = []
         if "eventNotificationConfigs" in registry_json:
             event_notification_configs_json = registry_json['eventNotificationConfigs']
-            event_notification_configs = []
 
             for event_notification_config_json in event_notification_configs_json:
                 if "subfolderMatches" in event_notification_config_json:
@@ -87,8 +87,6 @@ class CreateDeviceRegistryRequest:
                  device_registry:DeviceRegistry = None) -> None:
         self._parent = parent
         self._device_registry = device_registry
-        if device_registry.name.startswith('projects') == False:
-            device_registry._name = parent + '/registries/' + device_registry.name
 
     @property
     def parent(self) -> str:

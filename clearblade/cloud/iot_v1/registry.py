@@ -9,18 +9,18 @@ class ClearBladeRegistryManager():
         self._cb_config.registry_name = "deleteTest5"
 
     def _create_registry_body(self, registry: DeviceRegistry) :
-        registry_json = {'id':registry.id, 'name':registry.name}
-        if registry.credentials is not None:
+        registry_json = {'id':registry.id}
+        if registry.credentials:
             registry_json['credentials']=registry.credentials
-        if registry.http_config is not None:
+        if registry.http_config:
             registry_json['httpConfig']=registry.http_config
-        if registry.mqtt_config is not None:
+        if registry.mqtt_config:
             registry_json['mqttConfig']=registry.mqtt_config
-        if registry.state_notification_config is not None:
+        if registry.state_notification_config:
             registry_json['stateNotificationConfig']=registry.state_notification_config
-        if registry.event_notification_configs is not None:
+        if registry.event_notification_configs:
             registry_json['eventNotificationConfigs']=registry.event_notification_configs
-        if registry.log_level is not None:
+        if registry.log_level:
             registry_json['loglevel']=registry.log_level
         return registry_json
             
@@ -36,10 +36,8 @@ class ClearBladeRegistryManager():
         request: CreateDeviceRegistryRequest = None)->DeviceRegistry:
         body = self._create_registry_body(request.device_registry)
         params = {'parent':request.parent}
-        print(body)
         sync_client = SyncClient(clearblade_config=self._cb_config.admin_config)
         response = sync_client.post(api_name = "cloudiot",request_body=body,request_params=params)
-        print(response.json())
         return DeviceRegistry.from_json(response.json())
 
     async def create_async(self,
