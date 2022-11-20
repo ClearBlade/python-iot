@@ -240,6 +240,7 @@ if __name__ ==  '__main__':
     
     #test_update_device()
     #asyncio.run(test_update_device_async())
+    #test_list_registries()
     #test_get_registry()
     #asyncio.run(test_get_registry_async())
     #test_create_registry()
