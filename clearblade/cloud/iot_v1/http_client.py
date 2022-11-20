@@ -9,9 +9,6 @@ class HttpClient():
         self._clearblade_config = clearblade_config
         self._system_key = self._clearblade_config.system_key
         self._auth_token = self._clearblade_config.token
-
-        print("System Key : {} \n Auth token : {}".format(self._system_key, self._auth_token))
-
         self._post_url : str = None
         self._request_headers : dict = None
         self._post_body : dict = None
