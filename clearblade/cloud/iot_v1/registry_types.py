@@ -1,4 +1,4 @@
-from utils import get_value
+from .utils import get_value
 
 class EventNotificationConfig:
     def __init__(self, pub_sub_topic_name, subfolder_matches=None) -> None:

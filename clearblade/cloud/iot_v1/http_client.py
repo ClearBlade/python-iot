@@ -1,6 +1,6 @@
 import json
 import httpx
-from config import *
+from .config import *
 
 class HttpClient():
     def __init__(self,

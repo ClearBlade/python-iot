@@ -1,7 +1,7 @@
-from http_client import SyncClient, AsyncClient
-from config_manager import ClearBladeConfigManager
-from registry_types import *
-from pagers import ListDeviceRegistryPager, ListDeviceRegistriesAsyncPager
+from .http_client import SyncClient, AsyncClient
+from .config_manager import ClearBladeConfigManager
+from .registry_types import *
+from .pagers import ListDeviceRegistryPager, ListDeviceRegistriesAsyncPager
 
 class ClearBladeRegistryManager():
     def __init__(self) -> None:
