@@ -1,3 +1,7 @@
+from typing import Any
+from exceptions import UnConfiguredEnvironment
+import os
+
 def find_project_region_registry_from_parent(parent):
     #projects/ingressdevelopmentenv/locations/us-central1/registries/gargi_python
     if not parent:
@@ -18,5 +22,15 @@ def get_value(json_data, key):
     if key in json_data:
         return json_data[key]
     return None
+
+class SingletonMetaClass(type):
+
+    _instances = {}
+
+    def __call__(cls, *args: Any, **kwds: Any) -> Any:
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwds)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
 
 
