@@ -6,7 +6,6 @@ from pagers import ListDeviceRegistryPager, ListDeviceRegistriesAsyncPager
 class ClearBladeRegistryManager():
     def __init__(self) -> None:
         self._cb_config = ClearBladeConfigManager()
-        self._cb_config.registry_name = "deleteTest5"
 
     def _create_registry_body(self, registry: DeviceRegistry) :
         registry_json = {'id':registry.id}
