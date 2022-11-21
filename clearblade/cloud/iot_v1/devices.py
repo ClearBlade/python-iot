@@ -8,7 +8,7 @@ class ClearBladeDeviceManager():
     def __init__(self) -> None:
         #create the ClearBladeConfig object
         self._config_manager = ClearBladeConfigManager()
-        
+
     def _prepare_for_send_command(self,
                                   request: SendCommandToDeviceRequest,
                                   name: str = None,
@@ -62,7 +62,6 @@ class ClearBladeDeviceManager():
 
     def _create_device_list_from_response(self, json_response):
         devicesList = []
-        print(json_response['devices'])
         for deviceJson in json_response['devices']:
             devicesList.append(Device.from_json(json=deviceJson))
         return devicesList

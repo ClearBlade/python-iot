@@ -22,7 +22,7 @@ class ClearBladeRegistryManager():
         if registry.log_level:
             registry_json['loglevel']=registry.log_level
         return registry_json
-            
+
     def _prepare_params_for_registry_list(self, request:ListDeviceRegistriesRequest):
         request_params = {'parent':request.parent}
         if request.page_size:
@@ -43,24 +43,20 @@ class ClearBladeRegistryManager():
         request: CreateDeviceRegistryRequest = None)->DeviceRegistry:
         body = self._create_registry_body(request.device_registry)
         params = {'parent':request.parent}
-        print(body)
         async_client = AsyncClient(clearblade_config=self._cb_config.admin_config)
         response = await async_client.post(api_name = "cloudiot",request_body=body,request_params=params)
-        print(response.json())
         return DeviceRegistry.from_json(response.json())
 
     def get(self,
             request: GetDeviceRegistryRequest = None):
         sync_client = SyncClient(clearblade_config=self._cb_config.regional_config)
         response = sync_client.get(api_name = "cloudiot")
-        print(response.json())
         return DeviceRegistry.from_json(response.json())
 
     async def get_async(self,
                         request: GetDeviceRegistryRequest = None):
         async_client = AsyncClient(clearblade_config=await self._cb_config.regional_config_async)
         response = await async_client.get(api_name = "cloudiot")
-        print(response.json())
         return DeviceRegistry.from_json(response.json())
 
     def get_device_registry_list(self, request: ListDeviceRegistriesRequest):
@@ -77,7 +73,7 @@ class ClearBladeRegistryManager():
 
         list_device_registry_response = self.get_device_registry_list(request=request)
         if list_device_registry_response:
-            return ListDeviceRegistryPager(method=self.get_device_registry_list, 
+            return ListDeviceRegistryPager(method=self.get_device_registry_list,
                                            request=request,
                                            response=list_device_registry_response)
 
@@ -93,7 +89,7 @@ class ClearBladeRegistryManager():
     async def list_async(self, request: ListDeviceRegistriesRequest):
         list_device_registry_response = await self.get_device_registry_list_async(request=request)
         if list_device_registry_response:
-            return ListDeviceRegistriesAsyncPager(method=self.get_device_registry_list_async, 
+            return ListDeviceRegistriesAsyncPager(method=self.get_device_registry_list_async,
                                                   request=request,
                                                   response=list_device_registry_response)
         return None
@@ -118,7 +114,6 @@ class ClearBladeRegistryManager():
         params = {'name':request.name, 'updateMask': request.update_mask}
         sync_client = SyncClient(clearblade_config=self._cb_config.regional_config)
         response = sync_client.patch(api_name = "cloudiot",request_body=body,request_params=params)
-        print(response.json())
         return DeviceRegistry.from_json(response.json())
 
     async def patch_async(self,
@@ -127,5 +122,4 @@ class ClearBladeRegistryManager():
         params = {'name':request.name, 'updateMask': request.update_mask}
         async_client = AsyncClient(clearblade_config=await self._cb_config.regional_config_async)
         response = await async_client.patch(api_name = "cloudiot",request_body=body,request_params=params)
-        print(response.json())
         return DeviceRegistry.from_json(response.json())
