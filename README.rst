@@ -72,6 +72,10 @@ Windows
 Next Steps
 ~~~~~~~~~~
 
-- clone the github repository and make sure ./clearblade is in your python path
+- clone the github repository
+
+- and execute the setup.py file , 
+.. code-block:: console
+    python setup.py install
 
 - mostly if you change you imports from from google.cloud to clearblade.cloud everything else should work.

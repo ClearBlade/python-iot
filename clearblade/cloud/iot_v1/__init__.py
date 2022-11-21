@@ -1,7 +1,7 @@
-from clearblade.cloud.iot_v1.client import DeviceManagerClient, DeviceManagerAsyncClient
-from clearblade.cloud.iot_v1.device_types import *
-from clearblade.cloud.iot_v1.registry_types import *
-from clearblade.cloud.iot_v1.pagers import *
+from .client import DeviceManagerClient, DeviceManagerAsyncClient
+from .device_types import *
+from .registry_types import *
+from .pagers import *
 
 __all__ = ("DeviceManagerClient",
            "DeviceManagerAsyncClient",

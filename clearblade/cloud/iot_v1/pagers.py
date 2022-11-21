@@ -1,5 +1,5 @@
-from device_types import Device, ListDevicesResponse, ListDevicesRequest
-from registry_types import DeviceRegistry, ListDeviceRegistriesRequest, ListDeviceRegistriesResponse
+from .device_types import Device, ListDevicesResponse, ListDevicesRequest
+from .registry_types import DeviceRegistry, ListDeviceRegistriesRequest, ListDeviceRegistriesResponse
 from typing import Any, Awaitable, AsyncIterator, Callable
 
 class ListDeviceRegistryPager:

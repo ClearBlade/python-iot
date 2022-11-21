@@ -1,4 +1,4 @@
-from utils import get_value
+from .utils import get_value
 from typing import List
 
 class Device():

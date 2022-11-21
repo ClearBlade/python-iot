@@ -1,7 +1,7 @@
-from http_client import SyncClient, AsyncClient
-from config_manager import ClearBladeConfigManager
-from pagers import ListDevicesPager, ListDevicesAsyncPager
-from device_types import *
+from .http_client import SyncClient, AsyncClient
+from .config_manager import ClearBladeConfigManager
+from .pagers import ListDevicesPager, ListDevicesAsyncPager
+from .device_types import *
 
 class ClearBladeDeviceManager():
 

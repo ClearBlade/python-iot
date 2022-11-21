@@ -1,7 +1,7 @@
-from devices import *
-from registry import *
-from device_types import *
-from registry_types import *
+from .devices import *
+from .registry import *
+from .device_types import *
+from .registry_types import *
 
 class DeviceManagerClient():
 
