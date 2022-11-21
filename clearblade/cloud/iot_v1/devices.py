@@ -280,7 +280,7 @@ class ClearBladeDeviceManager():
         return response
 
     def states_list(self,
-                          request: ListDeviceStatesRequest):
+                    request: ListDeviceStatesRequest):
         params = {'name':request.name, 'numStates':request.num_states}
         sync_client = SyncClient(clearblade_config=self._config_manager.regional_config)
         response = sync_client.get(api_name="cloudiot_devices_states",request_params=params)
@@ -293,7 +293,7 @@ class ClearBladeDeviceManager():
                                        request: ListDeviceStatesRequest):
         params = {'name':request.name, 'numStates':request.num_states}
         async_client = AsyncClient(clearblade_config=self._config_manager.regional_config)
-        response = await async_client.get(request_params=params)
+        response = await async_client.get(api_name="cloudiot_devices_states", request_params=params)
 
         if response.status_code == 200:
             return ListDeviceStatesResponse.from_json(response.json())
