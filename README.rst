@@ -73,9 +73,9 @@ Next Steps
 
 - clone the github repository
 
-- and execute the setup.py file ,
+- and execute the setup.py file
 
-.. code-block:: console
+.. code-block:: python
     python setup.py install
 
 - mostly if you change you imports from from google.cloud to clearblade.cloud everything else should work.
