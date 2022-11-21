@@ -1,5 +1,4 @@
 from .config import ClearBladeConfig
-from .exceptions import UnConfiguredEnvironment
 from .http_client import SyncClient, AsyncClient
 import os
 import json
