@@ -6,10 +6,9 @@ Quick Start
 
 In order to use this library, you first need to go through the following steps:
 
-1. `set an environment variable CLEARBLADE_CONFIGURATION which should point to your service account json file`_
-2. `set an environment variable CLEARBLADE_REGISTRY which should be the name of registry we want to work upon.`_
-3. `set an environment variable CLEARBLADE_REGION which should point to the region`_
-4. `pip install httpx`_
+1. set an environment variable CLEARBLADE_CONFIGURATION which should point to your service account json file.
+2. set an environment variable CLEARBLADE_REGISTRY which should be the name of registry we want to work upon.
+3. set an environment variable CLEARBLADE_REGION which should point to the region.
 
 Installation
 ~~~~~~~~~~~~
@@ -74,7 +73,8 @@ Next Steps
 
 - clone the github repository
 
-- and execute the setup.py file , 
+- and execute the setup.py file ,
+
 .. code-block:: console
     python setup.py install
 
