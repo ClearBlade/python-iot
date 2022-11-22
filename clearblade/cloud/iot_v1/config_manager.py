@@ -1,5 +1,4 @@
 from .config import ClearBladeConfig
-from .exceptions import UnConfiguredEnvironment
 from .http_client import SyncClient, AsyncClient
 import os
 import json
@@ -16,9 +15,6 @@ class ClearBladeConfigManager:
             return
 
         service_account_file_path = os.environ.get("CLEARBLADE_CONFIGURATION")
-        if not service_account_file_path:
-            raise UnConfiguredEnvironment()
-
         service_account_data = None
         #parse the file and get all te required details.
         with open(service_account_file_path, mode='r') as service_account_file:

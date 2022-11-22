@@ -144,7 +144,7 @@ class CreateDeviceRequest(Request):
 
 class ModifyCloudToDeviceConfigRequest(Request):
     def __init__(self, name:str = None ,
-                 version_to_update: int = -1,
+                 version_to_update: str = "",
                  binary_data: bytes = None) -> None:
         super().__init__(name)
         self._version_to_update = version_to_update

@@ -1,6 +1,4 @@
 from typing import Any
-from exceptions import UnConfiguredEnvironment
-import os
 
 def find_project_region_registry_from_parent(parent):
     #projects/ingressdevelopmentenv/locations/us-central1/registries/gargi_python

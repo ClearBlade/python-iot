@@ -6,4 +6,4 @@ def sample_get_devices_list():
     request = iot_v1.ListDevicesRequest(parent='projects/ingressdevelopmentenv/locations/us-central1')
     response = client.list_devices(request=request)
     for page_result in response:
-        print(response)
+        print(page_result)

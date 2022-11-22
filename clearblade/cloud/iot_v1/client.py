@@ -15,7 +15,7 @@ class DeviceManagerClient():
 
     def modify_cloud_to_device_config(self, request: ModifyCloudToDeviceConfigRequest,
                                       name: str = None,
-                                      version_to_update = -1,
+                                      version_to_update = "",
                                       binary_data:bytes = None):
 
         cb_device_manager = ClearBladeDeviceManager()
@@ -59,20 +59,37 @@ class DeviceManagerClient():
     def list_device_registries(self, request: ListDeviceRegistriesRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.list(request=request)
-    
-    def get_device_registry(self, request=GetDeviceRegistryRequest):    
+<<<<<<< HEAD
+
+    def get_device_registry(self, request=GetDeviceRegistryRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.get(request=request)
-    
-    def create_device_registry(self, request=CreateDeviceRegistryRequest):    
+
+    def create_device_registry(self, request=CreateDeviceRegistryRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.create(request=request)
 
-    def delete_device_registry(self, request=DeleteDeviceRegistryRequest):    
+    def delete_device_registry(self, request=DeleteDeviceRegistryRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.delete(request=request)
 
-    def update_device_registry(self, request=UpdateDeviceRegistryRequest):    
+    def update_device_registry(self, request=UpdateDeviceRegistryRequest):
+=======
+
+    def get_device_registry(self, request=GetDeviceRegistryRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return cb_registry_manager.get(request=request)
+
+    def create_device_registry(self, request=CreateDeviceRegistryRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return cb_registry_manager.create(request=request)
+
+    def delete_device_registry(self, request=DeleteDeviceRegistryRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return cb_registry_manager.delete(request=request)
+
+    def update_device_registry(self, request=UpdateDeviceRegistryRequest):
+>>>>>>> development
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.patch(request=request)
 
@@ -88,7 +105,11 @@ class DeviceManagerAsyncClient():
 
     async def modify_cloud_to_device_config(self, request: ModifyCloudToDeviceConfigRequest,
                                             name: str = None,
+<<<<<<< HEAD
                                             version_to_update = -1,
+=======
+                                            version_to_update = "",
+>>>>>>> development
                                             binary_data:bytes = None):
 
         cb_device_manager = ClearBladeDeviceManager()
@@ -133,18 +154,34 @@ class DeviceManagerAsyncClient():
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.list_async(request=request)
 
-    async def get_device_registry(self, request=GetDeviceRegistryRequest):    
+<<<<<<< HEAD
+    async def get_device_registry(self, request=GetDeviceRegistryRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.get_async(request=request)
 
-    async def create_device_registry(self, request=CreateDeviceRegistryRequest):    
+    async def create_device_registry(self, request=CreateDeviceRegistryRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.create_async(request=request)
 
-    async def delete_device_registry(self, request=DeleteDeviceRegistryRequest):    
+    async def delete_device_registry(self, request=DeleteDeviceRegistryRequest):
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.delete_async(request=request)
 
-    async def update_device_registry(self, request=UpdateDeviceRegistryRequest):    
+    async def update_device_registry(self, request=UpdateDeviceRegistryRequest):
+=======
+    async def get_device_registry(self, request=GetDeviceRegistryRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return await cb_registry_manager.get_async(request=request)
+
+    async def create_device_registry(self, request=CreateDeviceRegistryRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return await cb_registry_manager.create_async(request=request)
+
+    async def delete_device_registry(self, request=DeleteDeviceRegistryRequest):
+        cb_registry_manager = ClearBladeRegistryManager()
+        return await cb_registry_manager.delete_async(request=request)
+
+    async def update_device_registry(self, request=UpdateDeviceRegistryRequest):
+>>>>>>> development
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.patch_async(request=request)
