@@ -2,9 +2,105 @@ from .utils import get_value
 from typing import List
 
 class Device():
+    r"""The device resource.
+
+    Attributes:
+        id (str):
+            The user-defined device identifier. The
+            device ID must be unique within a device
+            registry.
+        name (str):
+            The resource path name. For example,
+            ``projects/p1/locations/us-central1/registries/registry0/devices/dev0``
+            or
+            ``projects/p1/locations/us-central1/registries/registry0/devices/{num_id}``.
+            When ``name`` is populated as a response from the service,
+            it always ends in the device numeric ID.
+        num_id (int):
+            [Output only] A server-defined unique numeric ID for the
+            device. This is a more compact way to identify devices, and
+            it is globally unique.
+        credentials (Sequence):
+            The credentials used to authenticate this device. To allow
+            credential rotation without interruption, multiple device
+            credentials can be bound to this device. No more than 3
+            credentials can be bound to a single device at a time. When
+            new credentials are added to a device, they are verified
+            against the registry credentials. For details, see the
+            description of the ``DeviceRegistry.credentials`` field.
+        last_heartbeat_time (str):
+            [Output only] The last time an MQTT ``PINGREQ`` was
+            received. This field applies only to devices connecting
+            through MQTT. MQTT clients usually only send ``PINGREQ``
+            messages if the connection is idle, and no other messages
+            have been sent. Timestamps are periodically collected and
+            written to storage; they may be stale by a few minutes.
+        last_event_time (str):
+            [Output only] The last time a telemetry event was received.
+            Timestamps are periodically collected and written to
+            storage; they may be stale by a few minutes.
+        last_state_time (str):
+            [Output only] The last time a state event was received.
+            Timestamps are periodically collected and written to
+            storage; they may be stale by a few minutes.
+        last_config_ack_time (str):
+            [Output only] The last time a cloud-to-device config version
+            acknowledgment was received from the device. This field is
+            only for configurations sent through MQTT.
+        last_config_send_time (str):
+            [Output only] The last time a cloud-to-device config version
+            was sent to the device.
+        blocked (bool):
+            If a device is blocked, connections or
+            requests from this device will fail. Can be used
+            to temporarily prevent the device from
+            connecting if, for example, the sensor is
+            generating bad data and needs maintenance.
+        last_error_time (str):
+            [Output only] The time the most recent error occurred, such
+            as a failure to publish to Cloud Pub/Sub. This field is the
+            timestamp of 'last_error_status'.
+        last_error_status (str):
+            [Output only] The error message of the most recent error,
+            such as a failure to publish to Cloud Pub/Sub.
+            'last_error_time' is the timestamp of this field. If no
+            errors have occurred, this field has an empty message and
+            the status code 0 == OK. Otherwise, this field is expected
+            to have a status code other than OK.
+        config (clearblade.cloud.iot_v1.device_types.DeviceConfig):
+            The most recent device configuration, which is eventually
+            sent from Cloud IoT Core to the device. If not present on
+            creation, the configuration will be initialized with an
+            empty payload and version value of ``1``. To update this
+            field after creation, use the
+            ``DeviceManager.ModifyCloudToDeviceConfig`` method.
+        state (clearblade.cloud.iot_v1.device_types.DeviceState):
+            [Output only] The state most recently received from the
+            device. If no state has been reported, this field is not
+            present.
+        log_level (google.cloud.iot_v1.types.LogLevel):
+            **Beta Feature**
+
+            The logging verbosity for device activity. If unspecified,
+            DeviceRegistry.log_level will be used.
+        metadata (Mapping[str, str]):
+            The metadata key-value pairs assigned to the device. This
+            metadata is not interpreted or indexed by Cloud IoT Core. It
+            can be used to add contextual information for the device.
+
+            Keys must conform to the regular expression
+            [a-zA-Z][a-zA-Z0-9-_.+~%]+ and be less than 128 bytes in
+            length.
+
+            Values are free-form strings. Each value must be less than
+            or equal to 32 KB in size.
+
+            The total size of all keys and values must be less than 256
+            KB, and the maximum number of key-value pairs is 500.
+        gateway_config (google.cloud.iot_v1.types.GatewayConfig):
+            Gateway-related configuration and state.
     """
-    Data class for Clearblade Device
-    """
+
     #TODO: find a better way to construct the Device object. I dont like so much parameter in a constructor
     def __init__(self, id: str = None, name: str = None, num_id: str=None,
                  credentials: list=[], last_heartbeat_time: str = None, last_event_time: str = None,
@@ -35,13 +131,15 @@ class Device():
 
     @staticmethod
     def from_json(json):
+        device_state:DeviceState = DeviceState.from_json(get_value(json,'state'))
+        device_config:DeviceConfig = DeviceConfig.from_json(get_value(json, 'config'))
         return Device(id= json['id'], name= json['name'], num_id= json['numId'],
                       credentials= json['credentials'], last_heartbeat_time= json['lastHeartbeatTime'],
                       last_event_time= json['lastEventTime'], last_state_time= json['lastStateTime'],
                       last_config_ack_time= json['lastConfigAckTime'], last_config_send_time= json['lastConfigSendTime'],
                       blocked= json['blocked'], last_error_time= json['lastErrorTime'],
-                      last_error_status_code= json['lastErrorStatus'], config= json['config'],
-                      state= json['state'], log_level= json['logLevel'], meta_data= json['metadata'],
+                      last_error_status_code= json['lastErrorStatus'], config= device_config,
+                      state= device_state, log_level= json['logLevel'], meta_data= json['metadata'],
                       gateway_config= json['gatewayConfig'])
 
     @property
