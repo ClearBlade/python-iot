@@ -333,39 +333,301 @@ class DeviceManagerClient():
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.unbindGatewayFromDevice(request=request)
 
-    def list_device_states(self, request : ListDeviceStatesRequest):
+    def list_device_states(self, request : ListDeviceStatesRequest) -> ListDeviceStatesResponse :
+        r"""Lists the last few versions of the device state in
+        descending order (i.e.: newest first).
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_list_device_states():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDeviceStatesRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                response = client.list_device_states(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.ListDeviceStatesRequest):
+                The request object. Request for `ListDeviceStates`.
+        Returns:
+            clearblade.cloud.iot_v1.device_types.ListDeviceStatesResponse:
+                Response for ListDeviceStates.
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.states_list(request=request)
 
-    def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest):
+    def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest) -> ListDeviceConfigVersionsResponse:
+        r"""Lists the last few versions of the device
+        configuration in descending order (i.e.: newest first).
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_list_device_config_versions():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDeviceConfigVersionsRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                response = client.list_device_config_versions(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.ListDeviceConfigVersionsRequest):
+                The request object. Request for
+                `ListDeviceConfigVersions`.
+
+        Returns:
+            clearblade.cloud.iot_v1.device_types.ListDeviceConfigVersionsResponse:
+                Response for ListDeviceConfigVersions.
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.config_versions_list(request=request)
 
-    def list_devices(self, request : ListDevicesRequest):
+    def list_devices(self, request : ListDevicesRequest) -> ListDevicesPager:
+        r"""List devices in a device registry.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_list_devices():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDevicesRequest(
+                    parent="parent_value",
+                )
+
+                # Make the request
+                page_result = client.list_devices(request=request)
+
+                # Handle the response
+                for response in page_result:
+                    print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.ListDevicesRequest):
+                The request object. Request for `ListDevices`.
+
+        Returns:
+            clearblade.cloud.iot_v1.services.device_manager.pagers.ListDevicesPager:
+                Response for ListDevices.
+
+                Iterating over this object will yield results and
+                resolve additional pages automatically.
+
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.list(request=request)
 
-    def update_device(self, request : UpdateDeviceRequest):
+    def update_device(self, request : UpdateDeviceRequest)->Device:
+        r"""Updates a device.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_update_device():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.UpdateDeviceRequest(
+                )
+
+                # Make the request
+                response = client.update_device(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (Union[clearblade.cloud.iot_v1.device_types.UpdateDeviceRequest, dict]):
+                The request object. Request for `UpdateDevice`.
+        Returns:
+            clearblade.cloud.iot_v1.device_types.Device:
+                The device resource.
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return cb_device_manager.update(request=request)
 
-    def list_device_registries(self, request: ListDeviceRegistriesRequest):
+    def list_device_registries(self, request: ListDeviceRegistriesRequest)-> ListDeviceRegistryPager:
+        r"""Lists device registries.
+
+        .. code-block:: python
+            from clearblade.cloud import iot_v1
+
+            def sample_list_device_registries():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDeviceRegistriesRequest(
+                    parent="parent_value",
+                )
+
+                # Make the request
+                page_result = client.list_device_registries(request=request)
+
+                # Handle the response
+                for response in page_result:
+                    print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.ListDeviceRegistriesRequest):
+                The request object. Request for `ListDeviceRegistries`.
+        Returns:
+            clearblade.cloud.iot_v1.pagers.ListDeviceRegistriesPager:
+                Response for ListDeviceRegistries.
+
+                Iterating over this object will yield results and
+                resolve additional pages automatically.
+
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.list(request=request)
 
-    def get_device_registry(self, request=GetDeviceRegistryRequest):
+    def get_device_registry(self, request=GetDeviceRegistryRequest)->DeviceRegistry:
+        r"""Gets a device registry configuration.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_get_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.GetDeviceRegistryRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                response = client.get_device_registry(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (Union[clearblade.cloud.iot_v1.registry_types.GetDeviceRegistryRequest, dict]):
+                The request object. Request for `GetDeviceRegistry`.
+
+        Returns:
+            clearblade.cloud.iot_v1.registry_types.DeviceRegistry:
+                A container for a group of devices.
+        """
+
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.get(request=request)
 
-    def create_device_registry(self, request=CreateDeviceRegistryRequest):
+    def create_device_registry(self, request=CreateDeviceRegistryRequest)->DeviceRegistry:
+        r"""Creates a device registry that contains devices.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_create_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.CreateDeviceRegistryRequest(
+                    parent="parent_value",
+                )
+
+                # Make the request
+                response = client.create_device_registry(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.CreateDeviceRegistryRequest):
+                The request object. Request for `CreateDeviceRegistry`.
+
+        Returns:
+            clearblade.cloud.iot_v1.registry_types.DeviceRegistry:
+                A container for a group of devices.
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.create(request=request)
 
     def delete_device_registry(self, request=DeleteDeviceRegistryRequest):
+        r"""Deletes a device registry configuration.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_delete_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.DeleteDeviceRegistryRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                client.delete_device_registry(request=request)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.DeleteDeviceRegistryRequest):
+                The request object. Request for `DeleteDeviceRegistry`.
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.delete(request=request)
 
     def update_device_registry(self, request=UpdateDeviceRegistryRequest):
+        r"""Updates a device registry configuration.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_update_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.UpdateDeviceRegistryRequest(
+                )
+
+                # Make the request
+                response = client.update_device_registry(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.UpdateDeviceRegistryRequest):
+                The request object. Request for `UpdateDeviceRegistry`.
+
+        Returns:
+            clearblade.cloud.iot_v1.registry_types.DeviceRegistry:
+                A container for a group of devices.
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return cb_registry_manager.patch(request=request)
 
@@ -697,37 +959,297 @@ class DeviceManagerAsyncClient():
         return await cb_device_manager.unbindGatewayFromDevice_async(request=request)
 
     async def list_device_states(self, request : ListDeviceStatesRequest):
+        r"""Lists the last few versions of the device state in
+        descending order (i.e.: newest first).
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_list_device_states():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDeviceStatesRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                response = client.list_device_states(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.ListDeviceStatesRequest):
+                The request object. Request for `ListDeviceStates`.
+        Returns:
+            clearblade.cloud.iot_v1.device_types.ListDeviceStatesResponse:
+                Response for ListDeviceStates.
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.states_list_async(request=request)
 
-    async def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest):
+    async def list_device_config_versions(self, request : ListDeviceConfigVersionsRequest) -> ListDeviceConfigVersionsResponse:
+        r"""Lists the last few versions of the device
+        configuration in descending order (i.e.: newest first).
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_list_device_config_versions():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDeviceConfigVersionsRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                response = client.list_device_config_versions(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.ListDeviceConfigVersionsRequest):
+                The request object. Request for
+                `ListDeviceConfigVersions`.
+
+        Returns:
+            clearblade.cloud.iot_v1.device_types.ListDeviceConfigVersionsResponse:
+                Response for ListDeviceConfigVersions.
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.config_versions_list_async(request=request)
 
-    async def list_devices(self, request : ListDevicesRequest):
+    async def list_devices(self, request : ListDevicesRequest) -> ListDevicesAsyncPager:
+        r"""List devices in a device registry.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            async def sample_list_devices():
+                # Create a client
+                client = iot_v1.DeviceManagerAsyncClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDevicesRequest(
+                    parent="parent_value",
+                )
+
+                # Make the request
+                page_result = client.list_devices(request=request)
+
+                # Handle the response
+                async for response in page_result:
+                    print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.ListDevicesRequest):
+                The request object. Request for `ListDevices`.
+        Returns:
+            clearblade.cloud.iot_v1.pagers.ListDevicesAsyncPager:
+                Response for ListDevices.
+
+                Iterating over this object will yield results and
+                resolve additional pages automatically.
+
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.list_async(request=request)
 
     async def update_device(self, request : UpdateDeviceRequest):
+        r"""Updates a device.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_update_device():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.UpdateDeviceRequest(
+                )
+
+                # Make the request
+                response = client.update_device(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.UpdateDeviceRequest):
+                The request object. Request for `UpdateDevice`.
+        Returns:
+            clearblade.cloud.iot_v1.device_types.Device:
+                The device resource.
+        """
         cb_device_manager = ClearBladeDeviceManager()
         return await cb_device_manager.update_async(request=request)
 
-    async def list_device_registries(self, request: ListDeviceRegistriesRequest):
+    async def list_device_registries(self, request: ListDeviceRegistriesRequest)->ListDeviceRegistriesAsyncPager:
+        r"""Lists device registries.
+
+            from clearblade.cloud import iot_v1
+
+            async def sample_list_device_registries():
+                # Create a client
+                client = iot_v1.DeviceManagerAsyncClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.ListDeviceRegistriesRequest(
+                    parent="parent_value",
+                )
+
+                # Make the request
+                page_result = client.list_device_registries(request=request)
+
+                # Handle the response
+                async for response in page_result:
+                    print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.device_types.ListDeviceRegistriesRequest):
+                The request object. Request for `ListDeviceRegistries`.
+        Returns:
+            clearblade.cloud.iot_v1.pagers.ListDeviceRegistriesAsyncPager:
+                Response for ListDeviceRegistries.
+
+                Iterating over this object will yield results and
+                resolve additional pages automatically.
+
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.list_async(request=request)
 
-    async def get_device_registry(self, request=GetDeviceRegistryRequest):
+    async def get_device_registry(self, request=GetDeviceRegistryRequest)->DeviceRegistry:
+        r"""Gets a device registry configuration.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_get_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.GetDeviceRegistryRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                response = client.get_device_registry(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.GetDeviceRegistryRequest):
+                The request object. Request for `GetDeviceRegistry`.
+
+        Returns:
+            clearblade.cloud.iot_v1.registry_types.DeviceRegistry:
+                A container for a group of devices.
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.get_async(request=request)
 
-    async def create_device_registry(self, request=CreateDeviceRegistryRequest):
+    async def create_device_registry(self, request=CreateDeviceRegistryRequest) -> DeviceRegistry:
+        r"""Creates a device registry that contains devices.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_create_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.CreateDeviceRegistryRequest(
+                    parent="parent_value",
+                )
+
+                # Make the request
+                response = client.create_device_registry(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.CreateDeviceRegistryRequest):
+                The request object. Request for `CreateDeviceRegistry`.
+
+        Returns:
+            clearblade.cloud.iot_v1.registry_types.DeviceRegistry:
+                A container for a group of devices.
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.create_async(request=request)
 
     async def delete_device_registry(self, request=DeleteDeviceRegistryRequest):
+        r"""Deletes a device registry configuration.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_delete_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.DeleteDeviceRegistryRequest(
+                    name="name_value",
+                )
+
+                # Make the request
+                client.delete_device_registry(request=request)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.DeleteDeviceRegistryRequest):
+                The request object. Request for `DeleteDeviceRegistry`.
+        """
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.delete_async(request=request)
 
-    async def update_device_registry(self, request=UpdateDeviceRegistryRequest):
+    async def update_device_registry(self, request=UpdateDeviceRegistryRequest)-> DeviceRegistry:
+        r"""Updates a device registry configuration.
+
+        .. code-block:: python
+
+            from clearblade.cloud import iot_v1
+
+            def sample_update_device_registry():
+                # Create a client
+                client = iot_v1.DeviceManagerClient()
+
+                # Initialize request argument(s)
+                request = iot_v1.UpdateDeviceRegistryRequest(
+                )
+
+                # Make the request
+                response = client.update_device_registry(request=request)
+
+                # Handle the response
+                print(response)
+
+        Args:
+            request (clearblade.cloud.iot_v1.registry_types.UpdateDeviceRegistryRequest):
+                The request object. Request for `UpdateDeviceRegistry`.
+
+        Returns:
+            clearblade.cloud.iot_v1.registry_types.DeviceRegistry:
+                A container for a group of devices.
+        """
+
         cb_registry_manager = ClearBladeRegistryManager()
         return await cb_registry_manager.patch_async(request=request)
