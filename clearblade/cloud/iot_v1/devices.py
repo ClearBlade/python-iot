@@ -98,6 +98,8 @@ class ClearBladeDeviceManager():
     def create(self, request: CreateDeviceRequest,
                      parent: str = None,
                      device: Device = None) -> Device:
+
+        #TODO: add valdation for parent and device
         body = self._create_device_body(request.device)
         sync_client = SyncClient(clearblade_config=self._config_manager.regional_config)
         response = sync_client.post(api_name="cloudiot_devices",
