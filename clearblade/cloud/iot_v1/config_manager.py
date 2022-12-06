@@ -7,8 +7,6 @@ class ClearBladeConfigManager:
     def __init__(self) -> None:
         self._admin_config:ClearBladeConfig = None
         self._regional_config:ClearBladeConfig = None
-        self._region_name:str = os.environ.get("CLEARBLADE_REGION")
-        self._registry_name:str = os.environ.get("CLEARBLADE_REGISTRY")
 
     def _set_admin_clearblade_config(self):
         if self._admin_config:
@@ -45,10 +43,13 @@ class ClearBladeConfigManager:
         self._set_admin_clearblade_config()
 
         if not region:
-            region = self._region_name
+            region = self.region_name
 
         if not registry:
             registry = self.registry_name
+
+        if not region or not registry:
+            raise Exception("Either location or registry name is not provided")
 
         sync_client = SyncClient(clearblade_config=self._admin_config)
         request_body = {'region':region,'registry':registry, 'project':self._admin_config.project}
@@ -116,3 +117,11 @@ class ClearBladeConfigManager:
     @property
     def region_name(self):
         return self._region_name
+
+    @registry_name.setter
+    def registry_name(self, registry_name):
+        self._registry_name = registry_name
+
+    @region_name.setter
+    def region_name(self, region_name):
+        self._region_name = region_name

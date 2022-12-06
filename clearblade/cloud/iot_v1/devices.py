@@ -73,6 +73,41 @@ class ClearBladeDeviceManager():
         if 'registries' in data:
             self._config_manager.registry_name = data['registries']
 
+    def device_path(self,
+        project, 
+        location, 
+        registry, 
+        device) -> str:
+        """Returns a fully-qualified device string."""
+        
+        # set the region name and registry name in config manager
+        self._config_manager.region_name = location
+        self._config_manager.registry_name = registry
+
+        return "projects/{project}/locations/{location}/registries/{registry}/devices/{device}".format(
+            project=project,
+            location=location,
+            registry=registry,
+            device=device,
+        )
+
+    def registry_path(self,
+        project: str,
+        location: str,
+        registry: str,
+        ) -> str:
+        """Returns a fully-qualified registry string."""
+
+        self._config_manager.region_name = location
+        self._config_manager.registry_name = registry
+        
+        return "projects/{project}/locations/{location}/registries/{registry}".format(
+            project=project,
+            location=location,
+            registry=registry,
+        )
+
+
     def send_command(self,
                     request: SendCommandToDeviceRequest,
                     name: str = None,
