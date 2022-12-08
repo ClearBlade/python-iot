@@ -1,12 +1,17 @@
-from .config import ClearBladeConfig
-from .http_client import SyncClient, AsyncClient
-import os
 import json
+import os
+
+from .config import ClearBladeConfig
+from .http_client import AsyncClient, SyncClient
+from .utils import find_project_region_registry_from_parent
+
 
 class ClearBladeConfigManager:
     def __init__(self) -> None:
-        self._admin_config:ClearBladeConfig = None
-        self._regional_config:ClearBladeConfig = None
+        self._admin_config: ClearBladeConfig = None
+        self._regional_config: ClearBladeConfig = None
+        self._registry_name: str = None
+        self._region_name: str = None
 
     def _set_admin_clearblade_config(self):
         if self._admin_config:
@@ -14,13 +19,16 @@ class ClearBladeConfigManager:
 
         service_account_file_path = os.environ.get("CLEARBLADE_CONFIGURATION")
         service_account_data = None
+        
+        if service_account_file_path is None:
+            raise Exception('CLEARBLADE_CONFIGURATION environment variable is not set')
+        
         #parse the file and get all te required details.
         with open(service_account_file_path, mode='r') as service_account_file:
             service_account_data = json.load(service_account_file)
 
         if service_account_data is None:
-            #TODO: raise exception
-            return None
+            raise Exception('ClearBlade Service account file is empty')
 
         system_key = service_account_data['systemKey']
         auth_token = service_account_data['token']
@@ -57,8 +65,9 @@ class ClearBladeConfigManager:
                                     request_body=request_body)
 
         if response.status_code != 200:
-            #TODO: raise some exceptions
-            return None
+            raise Exception(
+                f"\n\nRegistry Information not found! Please check if the given registry exists\nProject: {self._admin_config.project}\nRegistry: {registry}\nRegion: {region}"
+                )
 
         response_json = response.json()
         response_json['region'] = region
@@ -81,8 +90,9 @@ class ClearBladeConfigManager:
                                            request_body=request_body)
 
         if response.status_code != 200:
-            #TODO: raise some exceptions
-            return None
+            raise Exception(
+                f"\n\nRegistry Information not found! Please check if the given registry exists\nProject: {self._admin_config.project}\nRegistry: {registry}\nRegion: {region}"
+                )
 
         response_json = response.json()
         response_json['region'] = region
@@ -96,17 +106,17 @@ class ClearBladeConfigManager:
 
         return self._admin_config
 
-    @property
-    def regional_config(self):
+    def regional_config(self, parent: str):
         if not self._regional_config:
-            self._set_regional_config()
+            project = find_project_region_registry_from_parent(parent)
+            self._set_regional_config(region=project['location'], registry=project['registry'])
 
         return self._regional_config
 
-    @property
-    async def regional_config_async(self):
+    async def regional_config_async(self, parent: str):
         if not self._regional_config:
-            await self._set_regional_config_async()
+            project = find_project_region_registry_from_parent(parent)
+            await self._set_regional_config_async(region=project['location'], registry=project['registry'])
 
         return self._regional_config
 

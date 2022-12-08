@@ -1,10 +1,11 @@
+from .device_types import *
 from .devices import *
 from .registry import *
-from .device_types import *
 from .registry_types import *
 
 class Client():
     def device_path(
+        self,
         project: str,
         location: str,
         registry: str,
@@ -17,6 +18,7 @@ class Client():
                                              device=device)
     
     def registry_path(
+        self,
         project: str,
         location: str,
         registry: str
