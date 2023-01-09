@@ -118,6 +118,11 @@ Note about types of times and binaryData
 
 - If this environment variable is not set, or is set to any unexpeced values, then the default types listed previously are used.
 
+- By default calls to some SDK functions cause a REST request to be sent to acquire the Registry API Keys found on the IoTCore UI Registry Details page. Those keys are cached for subsequent operations in order to improve performance. However these caches do not persist if the application is stopped and restarted as would be the case with typical serverless functions (e.g. Google Cloud Functions, AWS Lambda etc.). In order to improve the performance of those functions, the REST call can be prevented by passing the API Keys as environment variables:
+1. **REGISTRY_URL**: **string**
+2. **REGISTRY_SYSKEY**: **string**
+3. **REGISTRY_TOKEN**: **string**
+
 Note about running from source instead of PyPi (pip) module:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - To temporarily use the source code in this repo. instead of the installed PyPi (pip) module do the following:

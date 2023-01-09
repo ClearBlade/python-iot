@@ -110,7 +110,7 @@ class ClearBladeConfigManager:
         
         system_key = os.environ.get("REGISTRY_SYSKEY")
         registry_token = os.environ.get("REGISTRY_TOKEN")
-        url = os.environ.get("URL")
+        url = os.environ.get("REGISTRY_URL")
         if (system_key and registry_token and url) :
             self._regional_config = self._create_regional_config_from_env(systemKey=system_key , serviceAccountToken = registry_token, url = url, region = region)
         else :
@@ -138,7 +138,7 @@ class ClearBladeConfigManager:
             registry = self.registry_name
         system_key = os.environ.get("REGISTRY_SYSKEY")
         registry_token = os.environ.get("REGISTRY_TOKEN")
-        url = os.environ.get("URL")
+        url = os.environ.get("REGISTRY_URL")
         if (system_key and registry_token) :
             self._regional_config = self._create_regional_config_from_env(systemKey=system_key , serviceAccountToken = registry_token, url = url, region = region)
         else :            
