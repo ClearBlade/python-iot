@@ -82,6 +82,11 @@ class ClearBladeConfigManager:
         self._admin_config = ClearBladeConfig(system_key=system_key, auth_token=auth_token,
                                                  api_url=api_url, project=project)
 
+    def _create_regional_config_from_env(self, systemKey:str = None, serviceAccountToken:str = None, url:str = None, region:str = None)-> ClearBladeConfig :
+        return ClearBladeConfig(system_key=systemKey, auth_token=serviceAccountToken, api_url=url,
+                                region=region, project=self._admin_config.project)
+
+    
     def _create_regional_config(self, regional_json: json = None)-> ClearBladeConfig :
         system_key = regional_json['systemKey']
         auth_token = regional_json['serviceAccountToken']
@@ -102,20 +107,25 @@ class ClearBladeConfigManager:
 
         if not region or not registry:
             raise Exception("Either location or registry name is not provided")
-
-        sync_client = SyncClient(clearblade_config=self._admin_config)
-        request_body = {'region':region,'registry':registry, 'project':self._admin_config.project}
-        response = sync_client.post(api_name="getRegistryCredentials", is_webhook_folder=False,
-                                    request_body=request_body)
-
-        if response.status_code != 200:
-            raise Exception(
-                f"\n\nRegistry Information not found! Please check if the given registry exists\nProject: {self._admin_config.project}\nRegistry: {registry}\nRegion: {region}"
-                )
-
-        response_json = response.json()
-        response_json['region'] = region
-        self._regional_config = self._create_regional_config(regional_json=response_json)
+        
+        system_key = os.environ.get("REGISTRY_SYSKEY")
+        registry_token = os.environ.get("REGISTRY_TOKEN")
+        url = os.environ.get("URL")
+        if (system_key and registry_token and url) :
+            self._regional_config = self._create_regional_config_from_env(systemKey=system_key , serviceAccountToken = registry_token, url = url, region = region)
+        else :
+            request_body = {'region':region,'registry':registry, 'project':self._admin_config.project}
+            sync_client = SyncClient(clearblade_config=self._admin_config)
+            response = sync_client.post(api_name="getRegistryCredentials", is_webhook_folder=False,
+                                        request_body=request_body)
+            if response.status_code != 200:
+                raise Exception(
+                    f"\n\nRegistry Information not found! Please check if the given registry exists\nProject: {self._admin_config.project}\nRegistry: {registry}\nRegion: {region}"
+                    )
+            response_json = response.json()
+            response_json['region'] = region
+            self._regional_config = self._create_regional_config(regional_json=response_json) 
+            
 
     async def _set_regional_config_async(self, region:str = None, registry:str = None):
 
@@ -126,21 +136,25 @@ class ClearBladeConfigManager:
 
         if not registry:
             registry = self.registry_name
+        system_key = os.environ.get("REGISTRY_SYSKEY")
+        registry_token = os.environ.get("REGISTRY_TOKEN")
+        url = os.environ.get("URL")
+        if (system_key and registry_token) :
+            self._regional_config = self._create_regional_config_from_env(systemKey=system_key , serviceAccountToken = registry_token, url = url, region = region)
+        else :            
+            async_client = AsyncClient(clearblade_config=self._admin_config)
+            request_body = {'region':region,'registry':registry, 'project':self._admin_config.project}
+            response = await async_client.post(api_name="getRegistryCredentials",
+                                            is_webhook_folder=False,
+                                            request_body=request_body)
 
-        async_client = AsyncClient(clearblade_config=self._admin_config)
-        request_body = {'region':region,'registry':registry, 'project':self._admin_config.project}
-        response = await async_client.post(api_name="getRegistryCredentials",
-                                           is_webhook_folder=False,
-                                           request_body=request_body)
-
-        if response.status_code != 200:
-            raise Exception(
-                f"\n\nRegistry Information not found! Please check if the given registry exists\nProject: {self._admin_config.project}\nRegistry: {registry}\nRegion: {region}"
-                )
-
-        response_json = response.json()
-        response_json['region'] = region
-        self._regional_config = self._create_regional_config(regional_json=response_json)
+            if response.status_code != 200:
+                raise Exception(
+                    f"\n\nRegistry Information not found! Please check if the given registry exists\nProject: {self._admin_config.project}\nRegistry: {registry}\nRegion: {region}"
+                    )
+            response_json = response.json()
+            response_json['region'] = region
+            self._regional_config = self._create_regional_config(regional_json=response_json)
 
 
     @property
