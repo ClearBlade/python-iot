@@ -84,8 +84,6 @@ Note about types of times and binaryData
 
 - By default time parameters (e.g. **cloudUpdateTime**, **deviceAckTime**, **updateTime**) are returned as **RFC3339** strings (e.g. "2023-01-12T23:38:07.732Z").
 - To return times formatted as **DatetimeWithNanoseconds** (defined in the **google.api_core.datetime_helpers** module) as returned by the **Google IoTCore Python SDK**, set environment variable **TIME_FORMAT** to exactly **datetimewithnanoseconds**.
-- If this environment variable is not set, or is set to any other value, then the default format is returned.
-
 - By default **CONFIG binaryData** is returned as a **base64-encoded string** and **STATE binaryData** is returned as a **NON-base64-encoded** string.
 - To return CONFIG and STATE binaryData as **BYTE ARRAYS** as returned by the Google IoTCore Python SDK, set environment variable **BINARYDATA_FORMAT** to exactly **bytes**.
-- If this environment variable is not set, or is set to any other value, then the default formats are returned.
+- If these environment variables are not set, or are set to any unexpeced values, then the default formats are returned.
