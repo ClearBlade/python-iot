@@ -1,7 +1,9 @@
 from typing import List
 from .resources import GatewayType, LogLevel
 from .utils import get_value
-
+import os
+from google.api_core.datetime_helpers import DatetimeWithNanoseconds
+import base64
 
 class Device():
     """
@@ -132,8 +134,23 @@ class DeviceState():
 
     @staticmethod
     def from_json(response_json):
-        return DeviceState(update_time=get_value(response_json, 'updateTime'),
-                           binary_data=get_value(response_json, 'binaryData'))
+        updateTimeFromJson = get_value(response_json, 'updateTime')
+        binaryDataFromJson = get_value(response_json, 'binaryData')
+        
+        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("TIME_FORMAT") == None else os.environ.get("TIME_FORMAT").lower() == "datetimewithnanoseconds")
+        if convert_times_to_datetime_with_nanoseconds:
+            update_time = None if updateTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(updateTimeFromJson)
+        else:
+            update_time = updateTimeFromJson
+
+        convert_binarydata_to_bytes = (False if os.environ.get("BINARYDATA_FORMAT") == None else os.environ.get("BINARYDATA_FORMAT").lower() == "bytes")
+        if convert_binarydata_to_bytes:
+            binary_data = binaryDataFromJson.encode('utf-8')
+        else:
+            binary_data = binaryDataFromJson
+
+        return DeviceState(update_time=update_time,
+                           binary_data=binary_data)
 
 
 class Request():
@@ -220,11 +237,27 @@ class DeviceConfig(Request):
 
     @staticmethod
     def from_json(json):
+        cloudUpdateTimeFromJson = get_value(json,'cloudUpdateTime')
+        deviceAckTimeFromJson = get_value(json, 'deviceAckTime')
+        binaryDataFromJson = get_value(json,'binaryData')
+
+        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("TIME_FORMAT") == None else os.environ.get("TIME_FORMAT").lower() == "datetimewithnanoseconds")
+        if convert_times_to_datetime_with_nanoseconds:
+            cloud_update_time = None if cloudUpdateTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(cloudUpdateTimeFromJson)
+            device_ack_time = None if deviceAckTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(deviceAckTimeFromJson)
+        else:
+            cloud_update_time = cloudUpdateTimeFromJson
+            device_ack_time = deviceAckTimeFromJson
+        
+        convert_binarydata_to_bytes = (False if os.environ.get("BINARYDATA_FORMAT") == None else os.environ.get("BINARYDATA_FORMAT").lower() == "bytes")
+        if convert_binarydata_to_bytes:
+            binary_data = base64.b64decode(binaryDataFromJson.encode('utf-8'))
+            
         return DeviceConfig(name='',
                             version=get_value(json, 'version'),
-                            cloud_update_time=get_value(json,'cloudUpdateTime'),
-                            device_ack_time=get_value(json, 'deviceAckTime'),
-                            binary_data=get_value(json,'binaryData'))
+                            cloud_update_time=cloud_update_time,
+                            device_ack_time=device_ack_time,
+                            binary_data=binary_data)
 
 
 class DeleteDeviceRequest(Request):
