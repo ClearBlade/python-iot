@@ -1,5 +1,3 @@
-import base64
-
 from .config_manager import ClearBladeConfigManager
 from .device_types import *
 from .http_client import AsyncClient, SyncClient
