@@ -31,7 +31,7 @@ from typing import List
 from .resources import GatewayType, LogLevel
 from .utils import get_value
 import os
-from google.api_core.datetime_helpers import DatetimeWithNanoseconds
+from proto.datetime_helpers import DatetimeWithNanoseconds
 import base64
 
 class Device():
