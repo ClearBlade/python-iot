@@ -91,8 +91,6 @@ class Device():
             last_config_send_time = lastConfigSendTimeFromJson
             last_error_time = lastErrorTimeFromJson
 
-        convert_binarydata_to_bytes = (False if os.environ.get("BINARYDATA_FORMAT") == None else os.environ.get("BINARYDATA_FORMAT").lower() == "bytes")
-        
         deviceConfig = DeviceConfig.from_json(get_value(json, 'config'))
         config = { "version": deviceConfig.version, "cloudUpdateTime": deviceConfig.cloud_update_time }
         if (deviceConfig.binary_data not in [None, ""]):
