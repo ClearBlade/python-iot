@@ -106,7 +106,7 @@ Note about types of times and binaryData
 - By default the following parameters are returned as the shown types:
 1. All time parameters (e.g. **cloudUpdateTime**, **deviceAckTime**, **updateTime**): **RFC3339** strings (e.g. "2023-01-12T23:38:07.732Z")
 2. **CONFIG binaryData**: **base64-encoded string**
-3. **STATE binaryData**: **NON-base64-encoded string**.
+3. **STATE binaryData**: **NON-base64-encoded string**
 
 - To return these parameters using the same types used by the **Google IoTCore Python SDK**, set environment variable **BINARYDATA_AND_TIME_GOOGLE_FORMAT** to **True** (case-insensitive string). This will ensure the following parameters are returned as the shown types:
 1. All times: **DatetimeWithNanoseconds** (defined in the **proto.datetime_helpers** module)
