@@ -30,8 +30,9 @@ In order to use this library, you first need to go through the following steps:
 1. Install pip package - ```pip install clearblade-cloud-iot```
 
 
-2. Set an environment variable CLEARBLADE_CONFIGURATION which should point to your clearblade service account json file.
+2. Set an environment variable **CLEARBLADE_CONFIGURATION** which should point to your clearblade service account json file.
 
+3. Optionally set an environment variable **BINARYDATA_AND_TIME_GOOGLE_FORMAT** to True. Look at **Note about types of times and binaryData** below for details. 
 
 Installation
 ~~~~~~~~~~~~
