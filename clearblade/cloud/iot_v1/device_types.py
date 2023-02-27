@@ -75,7 +75,7 @@ class Device():
         lastConfigSendTimeFromJson = get_value(json, 'lastConfigSendTime')
         lastErrorTimeFromJson = get_value(json, 'lastErrorTime')
         
-        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("TIME_FORMAT") == None else os.environ.get("TIME_FORMAT").lower() == "datetimewithnanoseconds")
+        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT") == None else os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT").lower() == "true")
         if convert_times_to_datetime_with_nanoseconds:
             last_heartbeat_time = None if lastHeartbeatTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(lastHeartbeatTimeFromJson)
             last_event_time = None if lastEventTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(lastEventTimeFromJson)
@@ -209,14 +209,14 @@ class DeviceState():
         updateTimeFromJson = get_value(response_json, 'updateTime')
         binaryDataFromJson = get_value(response_json, 'binaryData')
         
-        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("TIME_FORMAT") == None else os.environ.get("TIME_FORMAT").lower() == "datetimewithnanoseconds")
+        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT") == None else os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT").lower() == "true")
         if convert_times_to_datetime_with_nanoseconds:
             update_time = None if updateTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(updateTimeFromJson)
         else:
             update_time = updateTimeFromJson
 
         if (binaryDataFromJson not in [None, ""]):
-            convert_binarydata_to_bytes = (False if os.environ.get("BINARYDATA_FORMAT") == None else os.environ.get("BINARYDATA_FORMAT").lower() == "bytes")
+            convert_binarydata_to_bytes = (False if os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT") == None else os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT").lower() == "true")
             if convert_binarydata_to_bytes:
                 binary_data = binaryDataFromJson.encode('utf-8')
             else:
@@ -316,7 +316,7 @@ class DeviceConfig(Request):
         deviceAckTimeFromJson = get_value(json, 'deviceAckTime')
         binaryDataFromJson = get_value(json,'binaryData')
 
-        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("TIME_FORMAT") == None else os.environ.get("TIME_FORMAT").lower() == "datetimewithnanoseconds")
+        convert_times_to_datetime_with_nanoseconds = (False if os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT") == None else os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT").lower() == "true")
         if convert_times_to_datetime_with_nanoseconds:
             cloud_update_time = None if cloudUpdateTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(cloudUpdateTimeFromJson)
             device_ack_time = None if deviceAckTimeFromJson in [None, ""] else DatetimeWithNanoseconds.from_rfc3339(deviceAckTimeFromJson)
@@ -325,7 +325,7 @@ class DeviceConfig(Request):
             device_ack_time = deviceAckTimeFromJson
         
         if binaryDataFromJson not in [None, ""]:
-            convert_binarydata_to_bytes = (False if os.environ.get("BINARYDATA_FORMAT") == None else os.environ.get("BINARYDATA_FORMAT").lower() == "bytes")
+            convert_binarydata_to_bytes = (False if os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT") == None else os.environ.get("BINARYDATA_AND_TIME_GOOGLE_FORMAT").lower() == "true")
             if convert_binarydata_to_bytes:
                 binary_data = base64.b64decode(binaryDataFromJson.encode('utf-8'))
             else:
