@@ -189,6 +189,26 @@ class Device():
         return self._last_heartbeat_time
     
     @property
+    def last_event_time(self):
+        return self._last_event_time
+    
+    @property
+    def last_state_time(self):
+        return self._last_state_time
+
+    @property
+    def last_config_ack_time(self):
+        return self._last_config_ack_time
+
+    @property
+    def last_config_send_time(self):
+        return self._last_config_send_time
+    
+    @property
+    def last_error_time(self):
+        return self._last_error_time
+
+    @property
     def blocked(self):
         return self._blocked
 
