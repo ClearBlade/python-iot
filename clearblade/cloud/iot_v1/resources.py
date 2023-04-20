@@ -1,4 +1,6 @@
 
+from enum import Enum
+
 class MqttState():
     r"""Indicates whether an MQTT connection is enabled or disabled.
     See the field description for details.
@@ -56,7 +58,7 @@ class PublicKeyCertificateFormat():
     X509_CERTIFICATE_PEM = "X509_CERTIFICATE_PEM"
 
 
-class PublicKeyFormat:
+class PublicKeyFormat(Enum):
     r"""The supported formats for the public key."""
     UNSPECIFIED_PUBLIC_KEY_FORMAT = "UNSPECIFIED_PUBLIC_KEY_FORMAT"
     RSA_PEM = "RSA_PEM"
