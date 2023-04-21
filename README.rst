@@ -125,9 +125,11 @@ Note about running from source instead of PyPi (pip) module:
 1. Clone this repo.
 2. Checkout the desired branch using **git checkout <branch>**.
 3. In your code find where **clearblade** or **clearblade.cloud** is being imported.
-4. Precede that line with these (replace the path shown with the actual path on your machine. The path must end with "python-iot"):
+4. Precede that line with **import sys** and **sys.path.insert(0, <path_to_python-iot>)**. The path must end with "python-iot". So for example:
 
 .. code-block:: console
-    
+
     import sys
     sys.path.insert(0, "path/to/python-iot")
+
+    from clearblade.cloud import iot_v1
