@@ -128,5 +128,5 @@ Note about running from source instead of PyPi (pip) module:
 4. Precede that line with these (replace the path shown with the actual path on your machine. The path must end with "python-iot"):
 
 .. code-block:: console
-import sys
-sys.path.insert(0, "path/to/python-iot")
+    import sys
+    sys.path.insert(0, "path/to/python-iot")
