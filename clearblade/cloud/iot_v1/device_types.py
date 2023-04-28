@@ -35,9 +35,8 @@ from proto.datetime_helpers import DatetimeWithNanoseconds
 import base64
 
 def convertCredentialsFormatsFromString(credentials):
-    # Converts public Key Format from string to class PublicKeyFormat
+    # Converts public Key Format from string to object of class PublicKeyFormat
     for index, credential in enumerate(credentials):
-        credentialToReturn = {}
         if 'publicKey' in credential:
             credential['publicKey']['format'] = PublicKeyFormat(credential['publicKey']['format'])
             credentials[index] = DeviceCredential(credential)
@@ -502,7 +501,7 @@ class UpdateDeviceRequest(Request):
         if self._device._blocked is not None:
             body['blocked'] = self._device._blocked
         if self._device._credentials is not None:
-            body['credentials'] = self._device._credentials
+            body['credentials'] = DeviceCredential.convert_credentials_for_create_update(self._device._credentials)
 
         return params, body
 
