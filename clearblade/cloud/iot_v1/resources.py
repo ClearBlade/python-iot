@@ -78,7 +78,7 @@ class PublicKeyCredential():
 class DeviceCredential():
     def __init__(self, public_key, expiration_time=''):
         if isinstance(public_key, dict):
-            self.publicKey = PublicKeyCredential(public_key['publicKey']['key'], public_key['publicKey']['format'])
+            self.publicKey = PublicKeyCredential(public_key['publicKey']['format'], public_key['publicKey']['key'])
         else:
             self.publicKey = public_key
         self.expirationTime = expiration_time
@@ -93,3 +93,24 @@ class DeviceCredential():
     @property
     def expiration_time(self):
         return self.expirationTime
+
+    @classmethod
+    def convert_credentials_for_create_update(cls, credentials):
+        for index, credential in enumerate(credentials):
+            # Convert credential to dict if it is not
+            updateDeviceCredential = False
+            if (isinstance(credential, DeviceCredential)):
+                credential = credential.__dict__
+                updateDeviceCredential = True
+            
+            if 'publicKey' in credential:
+                if (isinstance(credential['publicKey'], PublicKeyCredential)):
+                    credential['publicKey'] = credential['publicKey'].__dict__
+                # Convert PublicKeyFormat to string
+                credential['publicKey']['format'] = PublicKeyFormat(credential['publicKey']['format']).value
+                updateDeviceCredential = True
+            
+            if updateDeviceCredential:
+                credentials[index] = credential
+        
+        return credentials
