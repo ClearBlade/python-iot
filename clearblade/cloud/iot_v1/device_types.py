@@ -28,37 +28,19 @@
 # limitations under the License.
 #
 from typing import List
-from .resources import GatewayType, LogLevel, PublicKeyFormat
+from .resources import GatewayType, LogLevel, PublicKeyFormat, PublicKeyCredential, DeviceCredential
 from .utils import get_value
 import os
 from proto.datetime_helpers import DatetimeWithNanoseconds
 import base64
 
-class dotdict(dict):
-    """
-    dot.notation access to dictionary attributes
-    This function is taken from stackoverflow answer by farrell
-    and derek - https://stackoverflow.com/questions/2352181/how-to-use-a-dot-to-access-members-of-dictionary
-    """
-    __getattr__ = dict.get
-    __setattr__ = dict.__setitem__
-    __delattr__ = dict.__delitem__
-
-
-def convertCredentialsFormatsToString(credentials):
-    # Converts public Key Format from class PublicKeyFormat to string
-    for credential in credentials:
-        credentialToReturn = {}
-        if 'publicKey' in credential:
-            credential['publicKey']['format'] = credential['publicKey']['format'].value
-    return credentials
-
 def convertCredentialsFormatsFromString(credentials):
-    # Converts public Key Format from class PublicKeyFormat to string
-    for credential in credentials:
+    # Converts public Key Format from string to class PublicKeyFormat
+    for index, credential in enumerate(credentials):
         credentialToReturn = {}
         if 'publicKey' in credential:
             credential['publicKey']['format'] = PublicKeyFormat(credential['publicKey']['format'])
+            credentials[index] = DeviceCredential(credential)
     return credentials
 
 class Device():
@@ -78,7 +60,7 @@ class Device():
 
         self._id = id
         self._num_id = num_id
-        self._credentials = convertCredentialsFormatsToString(credentials)
+        self._credentials = credentials
         self._last_heartbeat_time = last_heartbeat_time
         self._last_event_time = last_event_time
         self._last_state_time = last_state_time
@@ -135,7 +117,7 @@ class Device():
             state = { "updateTime": deviceState.update_time, "binaryData": deviceState.binary_data }
         else:
             state = stateFromJson
-
+        
         return Device(
             id=get_value(json, 'id'),
             num_id=get_value(json, 'numId'),
@@ -165,18 +147,7 @@ class Device():
 
     @property
     def credentials(self):
-        credsToReturn = []
-        # First make publicKey items accessible with dot notation
-        for cred in self._credentials:
-            if 'publicKey' in cred:
-                # cred['publicKey']['format'] = PublicKeyFormat(cred['publicKey']['format'])
-                cred['publicKey'] = dotdict(cred['publicKey'])
-                cred['public_key'] = dotdict(cred['publicKey'])
-            if 'expirationTime' in cred:
-                cred['expiration_time'] = cred['expirationTime']
-            credsToReturn.append(cred)
-
-        return list(map(dotdict, credsToReturn))
+        return self._credentials
 
     @credentials.setter
     def credentials(self, credentials):
@@ -292,8 +263,7 @@ class DeviceState():
 
         return DeviceState(update_time=update_time,
                            binary_data=binary_data)
-
-
+       
 class Request():
     def __init__(self, parent) -> None:
         self._parent = parent
@@ -531,8 +501,8 @@ class UpdateDeviceRequest(Request):
             body['metadata'] = self._device.meta_data
         if self._device._blocked is not None:
             body['blocked'] = self._device._blocked
-        if self._device.credentials is not None:
-            body['credentials'] = self._device.credentials
+        if self._device._credentials is not None:
+            body['credentials'] = self._device._credentials
 
         return params, body
 
