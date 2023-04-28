@@ -32,7 +32,7 @@ from .device_types import *
 from .http_client import AsyncClient, SyncClient
 from .pagers import ListDevicesAsyncPager, ListDevicesPager
 import base64
-
+from .resources import DeviceCredential
 
 class ClearBladeDeviceManager():
 
@@ -60,26 +60,8 @@ class ClearBladeDeviceManager():
         return params,body
 
     def _create_device_body(self, device: Device) :
-
-        for index, credential in enumerate(device.credentials):
-            # Convert credential to dict if it is not
-            updateDeviceCredential = False
-            if (isinstance(credential, DeviceCredential)):
-                credential = credential.__dict__
-                updateDeviceCredential = True
-            
-            if 'publicKey' in credential:
-                if (isinstance(credential['publicKey'], PublicKeyCredential)):
-                    credential['publicKey'] = credential['publicKey'].__dict__
-                # Convert PublicKeyFormat to string
-                credential['publicKey']['format'] = PublicKeyFormat(credential['publicKey']['format']).value
-                updateDeviceCredential = True
-            
-            if updateDeviceCredential:
-                device.credentials[index] = credential
-            
         return {'id':device.id,
-                'credentials':device.credentials,
+                'credentials':DeviceCredential.convert_credentials_for_create_update(device.credentials),
                 'config':device.config,
                 'blocked': device.blocked,
                 'logLevel':device.log_level, 'metadata':device.meta_data,
