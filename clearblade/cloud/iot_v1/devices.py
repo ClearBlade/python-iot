@@ -60,6 +60,24 @@ class ClearBladeDeviceManager():
         return params,body
 
     def _create_device_body(self, device: Device) :
+
+        for index, credential in enumerate(device.credentials):
+            # Convert credential to dict if it is not
+            updateDeviceCredential = False
+            if (isinstance(credential, DeviceCredential)):
+                credential = credential.__dict__
+                updateDeviceCredential = True
+            
+            if 'publicKey' in credential:
+                if (isinstance(credential['publicKey'], PublicKeyCredential)):
+                    credential['publicKey'] = credential['publicKey'].__dict__
+                # Convert PublicKeyFormat to string
+                credential['publicKey']['format'] = PublicKeyFormat(credential['publicKey']['format']).value
+                updateDeviceCredential = True
+            
+            if updateDeviceCredential:
+                device.credentials[index] = credential
+            
         return {'id':device.id,
                 'credentials':device.credentials,
                 'config':device.config,
