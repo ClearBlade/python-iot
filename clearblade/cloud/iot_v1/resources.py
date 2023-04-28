@@ -67,9 +67,9 @@ class PublicKeyFormat(Enum):
     ES256_X509_PEM = "ES256_X509_PEM"
 
 class PublicKeyCredential():
-    def __init__(self, publicKeyFormat: PublicKeyFormat, publicKey: bytes):
-        self.format = publicKeyFormat
-        self.key = publicKey
+    def __init__(self, format: PublicKeyFormat, key: bytes):
+        self.format = format
+        self.key = key
     
     def __getitem__(self, arg):
         return getattr(self, arg)
