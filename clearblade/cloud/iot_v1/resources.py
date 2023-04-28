@@ -65,3 +65,31 @@ class PublicKeyFormat(Enum):
     RSA_X509_PEM = "RSA_X509_PEM"
     ES256_PEM = "ES256_PEM"
     ES256_X509_PEM = "ES256_X509_PEM"
+
+class PublicKeyCredential():
+    def __init__(self, publicKeyFormat: PublicKeyFormat, publicKey: bytes):
+        self.format = publicKeyFormat
+        self.key = publicKey
+    
+    def __getitem__(self, arg):
+        return getattr(self, arg)
+
+
+class DeviceCredential():
+    def __init__(self, public_key, expiration_time=''):
+        if isinstance(public_key, dict):
+            self.publicKey = PublicKeyCredential(public_key['publicKey']['key'], public_key['publicKey']['format'])
+        else:
+            self.publicKey = public_key
+        self.expirationTime = expiration_time
+
+    def __getitem__(self, arg):
+        return getattr(self, arg)
+
+    @property
+    def public_key(self):
+        return self.publicKey
+
+    @property
+    def expiration_time(self):
+        return self.expirationTime
