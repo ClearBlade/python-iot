@@ -101,22 +101,6 @@ class Device():
             last_config_send_time = lastConfigSendTimeFromJson
             last_error_time = lastErrorTimeFromJson
 
-        if (configFromJson):
-            deviceConfig = DeviceConfig.from_json(configFromJson)
-            config = { "version": deviceConfig.version, "cloudUpdateTime": deviceConfig.cloud_update_time }
-            if (deviceConfig.binary_data not in [None, ""]):
-                config["binaryData"] = deviceConfig.binary_data
-            if (deviceConfig.device_ack_time not in [None, ""]):
-                config["deviceAckTime"] = deviceConfig.device_ack_time
-        else:
-            config = configFromJson
-        
-        if (stateFromJson):
-            deviceState = DeviceState.from_json(stateFromJson)
-            state = { "updateTime": deviceState.update_time, "binaryData": deviceState.binary_data }
-        else:
-            state = stateFromJson
-        
         return Device(
             id=get_value(json, 'id'),
             num_id=get_value(json, 'numId'),
@@ -129,8 +113,8 @@ class Device():
             last_error_time=last_error_time,
             blocked=get_value(json, 'blocked'),
             last_error_status_code=get_value(json, 'lastErrorStatus'),
-            config=config,
-            state=state,
+            config=DeviceConfig.from_json(configFromJson),
+            state=DeviceState.from_json(stateFromJson),
             log_level=get_value(json, 'logLevel'),
             meta_data=get_value(json, 'metadata'),
             gateway_config=get_value(json, 'gatewayConfig')
@@ -229,16 +213,22 @@ class Device():
 
 class DeviceState():
     def __init__(self, update_time: str = None, binary_data:str = None) -> None:
-        self._update_time = update_time
-        self._binary_data = binary_data
+        self.updateTime = update_time
+        self.binaryData = binary_data
+
+    def __getitem__(self, arg):
+        return getattr(self, arg)
+
+    def get(self, arg):
+        return getattr(self, arg)
 
     @property
     def update_time(self):
-        return self._update_time
+        return self.updateTime
 
     @property
     def binary_data(self):
-        return self._binary_data
+        return self.binaryData
 
     @staticmethod
     def from_json(response_json):
@@ -325,9 +315,15 @@ class DeviceConfig(Request):
                  binary_data) -> None:
         super().__init__(name)
         self._version = version
-        self._cloud_update_time = cloud_update_time
-        self._device_ack_time = device_ack_time
-        self._binary_data = binary_data
+        self.cloudUpdateTime = cloud_update_time
+        self.deviceAckTime = device_ack_time
+        self.binaryData = binary_data
+
+    def __getitem__(self, arg):
+        return getattr(self, arg)
+
+    def get(self, arg):
+        return getattr(self, arg)
 
     @property
     def version(self):
@@ -335,15 +331,15 @@ class DeviceConfig(Request):
 
     @property
     def cloud_update_time(self):
-        return self._cloud_update_time
+        return self.cloudUpdateTime
 
     @property
     def device_ack_time(self):
-        return self._device_ack_time
+        return self.deviceAckTime
 
     @property
     def binary_data(self):
-        return self._binary_data
+        return self.binaryData
 
     @staticmethod
     def from_json(json):
