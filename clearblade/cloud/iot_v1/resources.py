@@ -74,6 +74,9 @@ class PublicKeyCredential():
     def __getitem__(self, arg):
         return getattr(self, arg)
 
+    def get(self, arg):
+        return getattr(self, arg)
+
 
 class DeviceCredential():
     def __init__(self, public_key, expiration_time=''):
@@ -84,6 +87,9 @@ class DeviceCredential():
         self.expirationTime = expiration_time
 
     def __getitem__(self, arg):
+        return getattr(self, arg)
+
+    def get(self, arg):
         return getattr(self, arg)
 
     @property
