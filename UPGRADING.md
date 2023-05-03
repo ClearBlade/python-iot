@@ -1,157 +1,136 @@
+.. Copyright 2023 ClearBlade Inc.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+https://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+Copyright 2018 Google LLC
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+https://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+Copyright 2023 ClearBlade Inc.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+https://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+Copyright 2018 Google LLC
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+https://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
 # 2.0.0 Migration Guide
 
-The 2.0 release of the `google-cloud-iot` client is a significant upgrade based on a [next-gen code generator](https://github.com/googleapis/gapic-generator-python), and includes substantial interface changes. Existing code written for earlier versions of this library will likely require updates to use this version. This document describes the changes that have been made, and what you need to do to update your usage.
+The 2.0 release of the `clearblade-cloud-iot` client is a significant upgrade based on addition of two new classes in **iot_v1**:
+**DeviceCredential**
+**PublicKeyCredential**
 
-If you experience issues or have questions, please file an [issue](https://github.com/googleapis/python-iot/issues).
+The release also includes enhancements to these classes already present in **iot_v1**:
+**DeviceConfig**
+**DeviceState**
 
-## Supported Python Versions
+The version was made with the intent of minimizing required code changes. But some changes are Breaking.
 
-> **WARNING**: Breaking change
+1. If **device** is an object of class **Device**...
+   **Before**:
+   device.credentials is of type **[dict]** (i.e. list of dicts).
 
-The 2.0.0 release requires Python 3.6+.
+   **After**:
+   device.credentials is of type **[DeviceCredential]** (i.e. list of objects of class DeviceCredential).
 
+   The **DeviceCredential** class has these features for usability:
 
-## Method Calls
+   - A **get** method that mimics the **get** method of a dict.
+   - Allows accessing attributes using dot notation OR square-brackets.
+   - Supports camel-case as well as snake-case for accessing attributes:
 
-> **WARNING**: Breaking change
+   e.g. All these are valid for retrieving the public key:
 
-Methods expect request objects. We provide a script that will convert most common use cases.
+   public_key = device.credentials[0]['publicKey']
+   public_key = device.credentials[0]['public_key']
+   public_key = device.credentials[0].get('publicKey')
+   public_key = device.credentials[0].get('public_key')
+   public_key = device.credentials[0].publicKey
+   public_key = device.credentials[0].public_key
 
-* Install the library with `libcst`.
+   2. This refers to pub_key mentioned in the previous section.
+      **Before**:
+      public_key was of type **dict**.
 
-```py
-python3 -m pip install google-cloud-iot[libcst]
-```
+   **After**:
+   public_key is an object of class **PublicKeyCredential**.
 
-* The script `fixup_iot_v1_keywords.py` is shipped with the library. It expects
-an input directory (with the code to convert) and an empty destination directory.
+   The **PublicKeyCredential** class has these features for usability:
 
-```sh
-$ fixup_iot_v1_keywords.py --input-directory .samples/ --output-directory samples/
-```
+   - A **get** method that mimics the **get** method of a dict.
+   - Allows accessing attributes using dot notation OR square-brackets.
 
-**Before:**
-```py
-from google.cloud import iot_v1
+   e.g. All these are valid for retrieving the public key format:
 
-client = iot_v1.DeviceManagerClient()
+   format = public_key['format']
+   format = public_key.get('format')
+   format = public_key.format
 
-registry = client.get_device_registry("registry_name")
-```
+   3. This section refers to **dev_config** which holds device config...
+      **Before**:
+      dev_config is of type **dict**.
 
+   **After**:
+   dev_config is an object of class **DeviceConfig**.
 
-**After:**
-```py
-from google.cloud import iot_v1
+   The **DeviceConfig** class has these features for usability:
 
-client = iot_v1.DeviceManagerClient()
+   - A **get** method that mimics the **get** method of a dict.
+   - Allows accessing attributes using dot notation OR square-brackets.
+   - Supports camel-case as well as snake-case for accessing attributes:
 
-registry = client.get_device_registry(request={'name': "registry_name"})
-```
+   e.g. All these are valid for retrieving the cloud_update_time:
 
-### More Details
+   cloud_update_time = device.credentials[0]['cloudUpdateTime']
+   cloud_update_time = device.credentials[0]['cloud_update_time']
+   cloud_update_time = device.credentials[0].get('cloudUpdateTime')
+   cloud_update_time = device.credentials[0].get('cloud_update_time')
+   cloud_update_time = device.credentials[0].cloudUpdateTime
+   cloud_update_time = device.credentials[0].cloud_update_time
 
-In `google-cloud-iot<2.0.0`, parameters required by the API were positional parameters and optional parameters were keyword parameters.
+   3. This section referst to **dev_state** which contains device state...
+      **Before**:
+      dev_state is of type **dict**.
 
-**Before:**
-```py
-    def create_device(
-        self,
-        parent,
-        device,
-        retry=google.api_core.gapic_v1.method.DEFAULT,
-        timeout=google.api_core.gapic_v1.method.DEFAULT,
-        metadata=None,
-    ):
-```
+   **After**:
+   dev_state is an object of class **DeviceState**.
 
-In the 2.0.0 release, all methods have a single positional parameter `request`. Method docstrings indicate whether a parameter is required or optional.
+   The **DeviceState** class has these features for usability:
 
-Some methods have additional keyword only parameters. The available parameters depend on the `google.api.method_signature` annotation specified by the API producer.
+   - A **get** method that mimics the **get** method of a dict.
+   - Allows accessing attributes using dot notation OR square-brackets.
+   - Supports camel-case as well as snake-case for accessing attributes:
 
+   e.g. All these are valid for retrieving the binary_data:
 
-**After:**
-```py
-    def create_device(
-        self,
-        request: device_manager.CreateDeviceRequest = None,
-        *,
-        parent: str = None,
-        device: resources.Device = None,
-        retry: retries.Retry = gapic_v1.method.DEFAULT,
-        timeout: float = None,
-        metadata: Sequence[Tuple[str, str]] = (),
-    ) -> resources.Device:
-```
-
-> **NOTE:** The `request` parameter and flattened keyword parameters for the API are mutually exclusive.
-> Passing both will result in an error.
-
-
-Both of these calls are valid:
-
-```py
-response = client.create_device(
-    request={
-        "parent": parent,
-        "device": device,
-    }
-)
-```
-
-```py
-response = client.create_device(
-    parent=parent,
-    device=device,
-)
-```
-
-This call is invalid because it mixes `request` with a keyword argument `device`. Executing this code
-will result in an error.
-
-```py
-response = client.create_device(
-    request={
-        "parent": parent,
-    },
-    device=device
-)
-```
-
-
-
-## Enums and Types
-
-
-> **WARNING**: Breaking change
-
-The submodules `enums` and `types` have been removed.
-
-**Before:**
-```py
-from google.cloud import iot_v1
-
-gateway_type = iot_v1.enums.GatewayType.GATEWAY
-device = iot_v1.types.Device(name="name")
-```
-
-
-**After:**
-```py
-from google.cloud import iot_v1
-
-gateway_type = iot_v1.GatewayType.GATEWAY
-device = iot_v1.Device(name="name")
-```
-
-## Location Path Helper Method
-
-Location path helper method has been removed. Please construct
-the path manually.
-
-```py
-project = 'my-project'
-location = 'location'
-
-location_path = f'projects/{project}/locations/{location}'
-```
+   binary_data = device.credentials[0]['binaryData']
+   binary_data = device.credentials[0]['binary_data']
+   binary_data = device.credentials[0].get('binaryData')
+   binary_data = device.credentials[0].get('binary_data')
+   binary_data = device.credentials[0].binaryData
+   binary_data = device.credentials[0].binary_data
