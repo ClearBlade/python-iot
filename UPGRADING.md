@@ -74,9 +74,9 @@ The version was made with the intent of minimizing required code changes. But so
    - **public_key = device.credentials[0].publicKey**
    - **public_key = device.credentials[0].public_key**
 
-   2. This refers to pub_key mentioned in the previous section.
-      **Before**:
-      public_key was of type **dict**.
+2. This refers to pub_key mentioned in the previous section.
+   **Before**:
+   public_key was of type **dict**.
 
    **After**:
    public_key is an object of class **PublicKeyCredential**.
@@ -92,9 +92,9 @@ The version was made with the intent of minimizing required code changes. But so
    - **format = public_key.get('format')**
    - **format = public_key.format**
 
-   3. This section refers to **dev_config** which holds device config...
-      **Before**:
-      dev_config is of type **dict**.
+3. This section refers to **dev_config** which holds device config...
+   **Before**:
+   dev_config is of type **dict**.
 
    **After**:
    dev_config is an object of class **DeviceConfig**.
@@ -114,9 +114,9 @@ The version was made with the intent of minimizing required code changes. But so
    - **cloud_update_time = device.credentials[0].cloudUpdateTime**
    - **cloud_update_time = device.credentials[0].cloud_update_time**
 
-   3. This section referst to **dev_state** which contains device state...
-      **Before**:
-      dev_state is of type **dict**.
+4. This section refers to **dev_state** which contains device state...
+   **Before**:
+   dev_state is of type **dict**.
 
    **After**:
    dev_state is an object of class **DeviceState**.
