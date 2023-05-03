@@ -50,9 +50,13 @@ The release also includes enhancements to these classes already present in **iot
 **DeviceConfig**
 **DeviceState**
 
-The version was made with the intent of minimizing required code changes. But some changes are Breaking.
+The version was made with the intent of minimizing required code changes. **However these changes should be considrered Breaking changes**.
 
-1. If **device** is an object of class **Device**...
+#
+
+#
+
+1. If **device** is an object of class **Device**.
    **Before**:
    device.credentials is of type **[dict]** (i.e. list of dicts).
 
@@ -74,6 +78,10 @@ The version was made with the intent of minimizing required code changes. But so
    - **public_key = device.credentials[0].publicKey**
    - **public_key = device.credentials[0].public_key**
 
+#
+
+#
+
 2. This refers to pub_key mentioned in the previous section.
    **Before**:
    public_key was of type **dict**.
@@ -91,6 +99,10 @@ The version was made with the intent of minimizing required code changes. But so
    - **format = public_key['format']**
    - **format = public_key.get('format')**
    - **format = public_key.format**
+
+#
+
+#
 
 3. This section refers to **dev_config** which holds device config...
    **Before**:
@@ -113,6 +125,10 @@ The version was made with the intent of minimizing required code changes. But so
    - **cloud_update_time = device.credentials[0].get('cloud_update_time')**
    - **cloud_update_time = device.credentials[0].cloudUpdateTime**
    - **cloud_update_time = device.credentials[0].cloud_update_time**
+
+#
+
+#
 
 4. This section refers to **dev_state** which contains device state...
    **Before**:
