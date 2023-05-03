@@ -54,9 +54,8 @@ The version was made with the intent of minimizing required code changes. **Howe
 
 #
 
-#
-
 1. If **device** is an object of class **Device**.
+
    **Before**:
    device.credentials is of type **[dict]** (i.e. list of dicts).
 
@@ -80,9 +79,8 @@ The version was made with the intent of minimizing required code changes. **Howe
 
 #
 
-#
-
 2. This refers to pub_key mentioned in the previous section.
+
    **Before**:
    public_key was of type **dict**.
 
@@ -102,9 +100,8 @@ The version was made with the intent of minimizing required code changes. **Howe
 
 #
 
-#
+3. This section refers to **dev_config** which holds device config.
 
-3. This section refers to **dev_config** which holds device config...
    **Before**:
    dev_config is of type **dict**.
 
@@ -128,9 +125,8 @@ The version was made with the intent of minimizing required code changes. **Howe
 
 #
 
-#
+4. This section refers to **dev_state** which contains device state.
 
-4. This section refers to **dev_state** which contains device state...
    **Before**:
    dev_state is of type **dict**.
 
