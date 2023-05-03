@@ -67,12 +67,12 @@ The version was made with the intent of minimizing required code changes. But so
 
    e.g. All these are valid for retrieving the public key:
 
-   public_key = device.credentials[0]['publicKey']
-   public_key = device.credentials[0]['public_key']
-   public_key = device.credentials[0].get('publicKey')
-   public_key = device.credentials[0].get('public_key')
-   public_key = device.credentials[0].publicKey
-   public_key = device.credentials[0].public_key
+   - **public_key = device.credentials[0]['publicKey']**
+   - **public_key = device.credentials[0]['public_key']**
+   - **public_key = device.credentials[0].get('publicKey')**
+   - **public_key = device.credentials[0].get('public_key')**
+   - **public_key = device.credentials[0].publicKey**
+   - **public_key = device.credentials[0].public_key**
 
    2. This refers to pub_key mentioned in the previous section.
       **Before**:
@@ -88,9 +88,9 @@ The version was made with the intent of minimizing required code changes. But so
 
    e.g. All these are valid for retrieving the public key format:
 
-   format = public_key['format']
-   format = public_key.get('format')
-   format = public_key.format
+   - **format = public_key['format']**
+   - **format = public_key.get('format')**
+   - **format = public_key.format**
 
    3. This section refers to **dev_config** which holds device config...
       **Before**:
@@ -107,12 +107,12 @@ The version was made with the intent of minimizing required code changes. But so
 
    e.g. All these are valid for retrieving the cloud_update_time:
 
-   cloud_update_time = device.credentials[0]['cloudUpdateTime']
-   cloud_update_time = device.credentials[0]['cloud_update_time']
-   cloud_update_time = device.credentials[0].get('cloudUpdateTime')
-   cloud_update_time = device.credentials[0].get('cloud_update_time')
-   cloud_update_time = device.credentials[0].cloudUpdateTime
-   cloud_update_time = device.credentials[0].cloud_update_time
+   - **cloud_update_time = device.credentials[0]['cloudUpdateTime']**
+   - **cloud_update_time = device.credentials[0]['cloud_update_time']**
+   - **cloud_update_time = device.credentials[0].get('cloudUpdateTime')**
+   - **cloud_update_time = device.credentials[0].get('cloud_update_time')**
+   - **cloud_update_time = device.credentials[0].cloudUpdateTime**
+   - **cloud_update_time = device.credentials[0].cloud_update_time**
 
    3. This section referst to **dev_state** which contains device state...
       **Before**:
@@ -129,9 +129,9 @@ The version was made with the intent of minimizing required code changes. But so
 
    e.g. All these are valid for retrieving the binary_data:
 
-   binary_data = device.credentials[0]['binaryData']
-   binary_data = device.credentials[0]['binary_data']
-   binary_data = device.credentials[0].get('binaryData')
-   binary_data = device.credentials[0].get('binary_data')
-   binary_data = device.credentials[0].binaryData
-   binary_data = device.credentials[0].binary_data
+   - **binary_data = device.credentials[0]['binaryData']**
+   - **binary_data = device.credentials[0]['binary_data']**
+   - **binary_data = device.credentials[0].get('binaryData')**
+   - **binary_data = device.credentials[0].get('binary_data')**
+   - **binary_data = device.credentials[0].binaryData**
+   - **binary_data = device.credentials[0].binary_data**
