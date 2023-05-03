@@ -1,5 +1,6 @@
 
 from enum import Enum
+from datetime import datetime
 
 class MqttState():
     r"""Indicates whether an MQTT connection is enabled or disabled.
@@ -116,6 +117,11 @@ class DeviceCredential():
                 credential['publicKey']['format'] = PublicKeyFormat(credential['publicKey']['format']).value
                 updateDeviceCredential = True
             
+            if 'expirationTime' in credential:
+                if (isinstance(credential['expirationTime'], datetime)):
+                    credential['expirationTime'] = credential['expirationTime'].isoformat()
+                    updateDeviceCredential = True
+    
             if updateDeviceCredential:
                 credentials[index] = credential
         
