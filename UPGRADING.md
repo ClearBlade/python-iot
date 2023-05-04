@@ -43,12 +43,14 @@ limitations under the License. -->
 # 2.0.0 Migration Guide
 
 The 2.0 release of the `clearblade-cloud-iot` client is a significant upgrade based on addition of two new classes in **iot_v1**:
-**DeviceCredential**
-**PublicKeyCredential**
+
+- **DeviceCredential**
+- **PublicKeyCredential**
 
 The release also includes enhancements to these classes already present in **iot_v1**:
-**DeviceConfig**
-**DeviceState**
+
+- **DeviceConfig**
+- **DeviceState**
 
 The version was made with the intent of minimizing required code changes. **However these changes should be considrered Breaking changes**.
 
