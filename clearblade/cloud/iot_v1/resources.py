@@ -162,7 +162,7 @@ class DeviceCredential():
             
             if 'expirationTime' in credential:
                 if (isinstance(credential['expirationTime'], datetime)):
-                    credential['expirationTime'] = credential['expirationTime'].isoformat()
+                    credential['expirationTime'] = credential['expirationTime'].strftime('%Y-%m-%dT%H:%M:%SZ')
                     updateDeviceCredential = True
     
             if updateDeviceCredential:
