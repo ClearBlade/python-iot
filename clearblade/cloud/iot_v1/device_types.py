@@ -43,7 +43,7 @@ limitations under the License.
 """
 
 from typing import List
-from .resources import GatewayType, LogLevel, PublicKeyFormat, PublicKeyCredential, DeviceCredential
+from .resources import GatewayType, LogLevel, PublicKeyFormat, PublicKeyCredential, DeviceCredential, FieldMask
 from .utils import get_value
 import os
 from proto.datetime_helpers import DatetimeWithNanoseconds
@@ -589,7 +589,7 @@ class ListDevicesRequest(Request):
         if self.device_ids:
             params['deviceIds'] = self.device_ids
         if self.field_mask:
-            params['fieldMask'] = self.field_mask
+            params['fieldMask'] = FieldMask.convert_fieldmask_for_list(self.field_mask)
         if self.gateway_list_options :
             if 'associationsDeviceId' in self.gateway_list_options:
                 params['gatewayListOptions.associationsDeviceId'] = self.gateway_list_options['associationsDeviceId']
