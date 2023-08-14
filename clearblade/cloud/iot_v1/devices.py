@@ -78,6 +78,7 @@ class ClearBladeDeviceManager():
         return {'id':device.id,
                 'credentials':DeviceCredential.convert_credentials_for_create_update(device.credentials),
                 'config':device.config,
+                'numId':device.num_id,
                 'blocked': device.blocked,
                 'logLevel':device.log_level, 'metadata':device.meta_data,
                 'gatewayConfig':device.gateway_config}
