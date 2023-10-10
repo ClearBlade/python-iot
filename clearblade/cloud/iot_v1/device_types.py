@@ -73,7 +73,9 @@ class Device():
                  last_error_time: str = None, last_error_status_code: dict = None,
                  config: dict = {"cloudUpdateTime":None, "version":""} ,
                  state: dict = {"updateTime":None, "binaryData":None},
-                 log_level: str = LogLevel.NONE, meta_data: dict = {}, gateway_config : dict = {"gatewayType": GatewayType.NON_GATEWAY}) -> None:
+                 log_level: str = LogLevel.LOG_LEVEL_UNSPECIFIED,
+                 meta_data: dict = {},
+                 gateway_config: dict = {"gatewayType": GatewayType.NON_GATEWAY}) -> None:
 
         self._id = id
         self._name = ''
