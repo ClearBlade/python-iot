@@ -169,3 +169,21 @@ class DeviceCredential():
                 credentials[index] = credential
         
         return credentials
+
+class FieldMask():
+    def __init__(self, paths: [str]):
+        self.paths = paths
+    
+    def __getitem__(self, arg):
+        return getattr(self, arg)
+
+    def get(self, arg):
+        return getattr(self, arg)
+
+    @classmethod
+    def convert_fieldmask_for_list(cls, field_mask):
+        if (isinstance(field_mask, FieldMask)):
+            field_mask = field_mask.__dict__
+            if 'paths' in field_mask:
+                field_mask = field_mask['paths']
+        return field_mask
