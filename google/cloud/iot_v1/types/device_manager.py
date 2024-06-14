@@ -318,11 +318,11 @@ class ListDevicesRequest(proto.Message):
             ``projects/my-project/locations/us-central1/registries/my-registry``.
         device_num_ids (Sequence[int]):
             A list of device numeric IDs. If empty, this
-            field is ignored. Maximum IDs: 10,000.
+            field is ignored.
         device_ids (Sequence[str]):
             A list of device string IDs. For example,
             ``['device0', 'device12']``. If empty, this field is
-            ignored. Maximum IDs: 10,000
+            ignored.
         field_mask (google.protobuf.field_mask_pb2.FieldMask):
             The fields of the ``Device`` resource to be returned in the
             response. The fields ``id`` and ``num_id`` are always
