@@ -4,8 +4,11 @@ Python Client for ClearBlade IoT Core API
 Quick start
 -----------
 **Notes**
+
 1. This SDK is for use with ClearBlade IoT Core Standard and ClearBlade IoT Core Enterprise.
+
 2. ClearBlade IoT __Core__ Enterprise is different from ClearBlade IoT Enterprise.
+
 3. If you are using ClearBlade but not using ClearBlade IoT Core (Standard or Enterprise), then you need a different SDK that can be found here: https://github.com/ClearBlade/ClearBlade-Python-SDK/
 
 
@@ -20,7 +23,9 @@ To use this SDK, you first need to go through the following steps:
 
 
 To create a service account and download a credentials JSON file look at the appropriate link below:
+
 `Manage Service Accounts in a project - ClearBlade IoT Core Standard <https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-standard>`_
+
 `Manage Service Accounts in a project - ClearBlade IoT Core Enterprise <https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-enterprise>`
 
 
