@@ -7,7 +7,7 @@ Quick start
 
 1. This SDK is for use with ClearBlade IoT Core Standard and ClearBlade IoT Core Enterprise.
 
-2. ClearBlade IoT __Core__ Enterprise is different from ClearBlade IoT Enterprise.
+2. ClearBlade IoT **Core** Enterprise is different from ClearBlade IoT Enterprise.
 
 3. If you are using ClearBlade but not using ClearBlade IoT Core (Standard or Enterprise), then you need a different SDK that can be found here: https://github.com/ClearBlade/ClearBlade-Python-SDK/
 
