@@ -24,9 +24,11 @@ To use this SDK, you first need to go through the following steps:
 
 To create a service account and download a credentials JSON file look at the appropriate link below:
 
-`Manage Service Accounts in a project - ClearBlade IoT Core Standard <https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-standard>`_
+`ClearBlade IoT Core Standard`_.
+.._ClearBlade IoT Core Standard: https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-standard
 
-`Manage Service Accounts in a project - ClearBlade IoT Core Enterprise <https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-enterprise>`
+`ClearBlade IoT Core Enterprise`_.
+.._ClearBlade IoT Core Enterprise: https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-enterprise
 
 
 
