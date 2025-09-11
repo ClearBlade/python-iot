@@ -3,17 +3,25 @@ Python Client for ClearBlade IoT Core API
 
 Quick start
 -----------
-**Note: This SDK is for use with ClearBlade IoT Core and NOT ClearBlade IoT Enterprise. The Python SDK for ClearBlade IoT Enterprise can be found here: https://github.com/ClearBlade/ClearBlade-Python-SDK/.**
+**Note:
+- This SDK is for use with ClearBlade IoT Core Standard and ClearBlade IoT Core Enterprise.
+- ClearBlade IoT __Core__ Enterprise is different from ClearBlade IoT Enterprise.
+- If you are using ClearBlade but not using ClearBlade IoT Core (Standard or Enterprise), then you need a different SDK that can be found here: https://github.com/ClearBlade/ClearBlade-Python-SDK/.**
 
 To use this library, you first need to go through the following steps:
 
 1. Install pip package - ```pip install clearblade-cloud-iot```
 
-2. Set an environment variable **CLEARBLADE_CONFIGURATION**, pointing to your ClearBlade service account JSON file. Look `here`_ for how to create a service account and download a credentials JSON file.
+2. Set an environment variable **CLEARBLADE_CONFIGURATION**, pointing to your ClearBlade service account JSON file.
+To create a service account and download a credentials JSON file look at the appropriate link here:
+`Manage Service Accounts in a project (Standard)`_
+.. _`Manage Service Accounts in a project (Standard)`: https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-standard
+`Manage Service Accounts in a project (Enterprise)`_
+.. _`Manage Service Accounts in a project (Enterprise)`: https://docs.clearblade.com/iotcore/manage-service-accounts-in-a-project-enterprise
+
 
 3. Optionally set an environment variable **BINARYDATA_AND_TIME_GOOGLE_FORMAT** to True. Look at **Note about types of times and binaryData** below for details.
 
-.. _`here`: https://clearblade.atlassian.net/wiki/spaces/IC/pages/2240675843/Add+service+accounts+to+a+project
 
 Installation
 ~~~~~~~~~~~~
