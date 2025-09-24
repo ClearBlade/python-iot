@@ -9,9 +9,9 @@ Quick start
 
 2. ClearBlade IoT **Core** Enterprise is DIFFERENT from ClearBlade IoT Enterprise!!!
 
-3. If you are using ClearBlade but not using ClearBlade IoT Core (Standard or Enterprise), then you need a different SDK that can be found `here <https://github.com/ClearBlade/ClearBlade-Python-SDK>`_.
+3. If you are using ClearBlade but not using ClearBlade IoT Core (Standard or Enterprise), then you need this different SDK: `<https://github.com/ClearBlade/ClearBlade-Python-SDK>`_.
 
-4. To understand how IoT Core Enterprise differs from Standard, look `here <https://docs.clearblade.com/iotenterprise/iot-core>`_.
+4. To understand how IoT Core Enterprise differs from Standard, look here: `<https://docs.clearblade.com/iotenterprise/iot-core>`_.
 
 
 
