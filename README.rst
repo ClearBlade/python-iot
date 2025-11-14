@@ -111,6 +111,12 @@ Note about types of times and binaryData
 
 - If this environment variable is not set, or is set to any unexpected values, then the default types listed previously are used.
 
+
+- Additionally note the following difference in the use of **binaryData** when sending commands and config:
+
+1. When calling **send_command_to_device** the value of **binaryData** must NOT be a base64-encoded string. **binaryData** is used to create an object of class **SendCommandToDeviceRequest**.
+2. When calling **modify_cloud_to_device_config** the value of **binaryData** MUST be base64-encoded string. **binaryData** is used to create an obect of class **ModifyCloudToDeviceConfigRequest**.
+
 Note about performance:
 ~~~~~~~~~~~~~~~~~~~~~~~
 
