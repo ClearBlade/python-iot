@@ -1,3 +1,4 @@
+![GitHub last commit](https://img.shields.io/github/last-commit/ClearBlade/python-iot)
 Python Client for ClearBlade IoT Core API
 ================================================================
 
